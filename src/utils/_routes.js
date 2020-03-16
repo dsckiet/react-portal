@@ -17,6 +17,14 @@ let routes = [
 		name: "Events",
 		key: "events",
 		icon: "calendar"
+	},
+	{
+		path: "/participants",
+		exact: true,
+		component: EventsList,
+		name: "Participants",
+		key: "participants",
+		icon: "team"
 	}
 ];
 

@@ -5,7 +5,9 @@ import {
 	DELETE_EVENT,
 	ADD_EVENT,
 	GET_EVENT,
-	UPDATE_EVENT
+	UPDATE_EVENT,
+	CHANGE_EVENT_CODE,
+	TOGGLE_REGISTRATION
 } from "./routes";
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -70,6 +72,30 @@ export async function updateEventService(data, params) {
 	setUserToken();
 	try {
 		const response = await axios.put(`${UPDATE_EVENT}/${params}`, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		return err.response.data;
+	}
+}
+
+export async function refreshEventCodeService(data) {
+	setUserToken();
+	try {
+		const response = await axios.post(CHANGE_EVENT_CODE, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		return err.response.data;
+	}
+}
+
+export async function toggleRegistrationsService(data) {
+	setUserToken();
+	try {
+		const response = await axios.post(TOGGLE_REGISTRATION, data);
 		if (response.status === 200 && response.data.error === false) {
 			return response.data;
 		} else return response.data;

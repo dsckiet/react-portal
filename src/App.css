@@ -1,17 +1,3 @@
-/* @font-face {
-	font-family: GoogleSansRG;
-	src: url(../src/utils/assets/fonts/GoogleSansDisplayRegular.ttf);
-}
-
-@font-face {
-	font-family: GoogleSansMD;
-	src: url(../src/utils/assets/fonts/GoogleSansDisplayMedium.ttf);
-}
-
-@font-face {
-	font-family: GoogleSansBD;
-	src: url(../src/utils/assets/fonts/GoogleSansDisplayBold.ttf);
-} */
 @import url("https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap");
 @import "~antd/dist/antd.css";
 
