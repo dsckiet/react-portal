@@ -1,0 +1,33 @@
+/* @font-face {
+	font-family: GoogleSansRG;
+	src: url(../src/utils/assets/fonts/GoogleSansDisplayRegular.ttf);
+}
+
+@font-face {
+	font-family: GoogleSansMD;
+	src: url(../src/utils/assets/fonts/GoogleSansDisplayMedium.ttf);
+}
+
+@font-face {
+	font-family: GoogleSansBD;
+	src: url(../src/utils/assets/fonts/GoogleSansDisplayBold.ttf);
+} */
+@import url("https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap");
+@import "~antd/dist/antd.css";
+
+body {
+	overflow-x: hidden;
+	font-family: Sen !important;
+	background-color: #fafbfc;
+}
+
+.ant-layout-sider-dark,
+.ant-menu-dark {
+	background-color: #18202c !important;
+	color: #fff;
+}
+
+.ant-layout-sider {
+	min-height: 100vh;
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
