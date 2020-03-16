@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-	Table,
-	Divider,
-	Tag,
-	Card,
-	Icon,
-	Drawer,
-	Popconfirm,
 	Form,
 	Button,
 	Input,
@@ -46,14 +39,6 @@ const CreateEvent = props => {
 			endTime: moment(endTime, format)
 		});
 	}, []);
-
-	function range(start, end) {
-		const result = [];
-		for (let i = start; i < end; i++) {
-			result.push(i);
-		}
-		return result;
-	}
 
 	function disabledDate(current) {
 		// Can not select days before today and today
@@ -198,7 +183,6 @@ const CreateEvent = props => {
 								format="h:mm a"
 								onChange={onSTChange}
 								style={{ width: "100%" }}
-								format={format}
 							/>
 						)}
 					</Form.Item>
@@ -218,7 +202,6 @@ const CreateEvent = props => {
 								format="h:mm a"
 								onChange={onETChange}
 								style={{ width: "100%" }}
-								format={format}
 							/>
 						)}
 					</Form.Item>

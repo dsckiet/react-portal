@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-	Table,
-	Divider,
-	Tag,
-	Card,
-	Icon,
-	Drawer,
-	Popconfirm,
 	Form,
 	Button,
 	Input,
@@ -19,12 +12,12 @@ import {
 import moment from "moment";
 
 import "./style.css";
-import { getEventService, addEventService } from "../../utils/services";
+import { getEventService, updateEventService } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
-const CreateEvent = props => {
+const UpdateEvent = props => {
 	const format = "h:mm a";
 	const [event, setEvent] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +38,7 @@ const CreateEvent = props => {
 			try {
 				const id = props.eventId;
 				const res = await getEventService(id);
-				console.log(res);
+
 				if (res.message === "success") {
 					setEvent(res.data);
 				} else {
@@ -55,7 +48,7 @@ const CreateEvent = props => {
 				_notification("error", "Error", err.message);
 			}
 		})();
-	}, []);
+	}, [props.eventId]);
 
 	useEffect(() => {
 		if (event) {
@@ -70,11 +63,22 @@ const CreateEvent = props => {
 				venue
 			} = event;
 
+			startDate = startDate.split("T")[0];
+			endDate = endDate.split("T")[0];
+
+			setTitle(title);
+			setDescription(description);
+			setVenue(venue);
+			setIsRegOpen(isRegistrationOpened);
+			setIsRegReqd(isRegistrationRequired);
+			setStartDate(startDate);
+			setStartTime(time.split(" to ")[0]);
+			setEndDate(endDate);
+			setEndTime(time.split(" to ")[1]);
+
 			props.form.setFieldsValue({
 				startTime: moment(time.split(" to ")[0], format),
 				endTime: moment(time.split(" to ")[1], format),
-				// startDate: moment(startDate),
-				// endDate: moment(endDate),
 				dates: [
 					moment(startDate, "YYYY-MM-DD"),
 					moment(endDate, "YYYY-MM-DD")
@@ -127,10 +131,13 @@ const CreateEvent = props => {
 						isRegistrationOpened,
 						days
 					};
-					const res = await addEventService(data);
+					console.table(data);
+					let params = props.eventId;
+
+					const res = await updateEventService(data, params);
 					if (res.message === "success") {
-						_notification("success", "Success", "Event Added");
-						props.onAddEvent();
+						_notification("success", "Success", "Event Updated");
+						props.onUpdateEvent();
 					} else {
 						_notification("error", "Error", res.message);
 					}
@@ -231,7 +238,6 @@ const CreateEvent = props => {
 								format="h:mm a"
 								onChange={onSTChange}
 								style={{ width: "100%" }}
-								format={format}
 							/>
 						)}
 					</Form.Item>
@@ -251,7 +257,6 @@ const CreateEvent = props => {
 								format="h:mm a"
 								onChange={onETChange}
 								style={{ width: "100%" }}
-								format={format}
 							/>
 						)}
 					</Form.Item>
@@ -301,13 +306,13 @@ const CreateEvent = props => {
 					className="login-form-button"
 					loading={isLoading}
 				>
-					Add Event
+					Modify Event Details
 				</Button>
 			</Form.Item>
 		</Form>
 	);
 };
 
-const CreateEventForm = Form.create({ name: "event_form" })(CreateEvent);
+const UpdateEventForm = Form.create({ name: "event_form" })(UpdateEvent);
 
-export default CreateEventForm;
+export default UpdateEventForm;

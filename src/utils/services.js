@@ -4,13 +4,12 @@ import {
 	GET_EVENTS,
 	DELETE_EVENT,
 	ADD_EVENT,
-	GET_EVENT
+	GET_EVENT,
+	UPDATE_EVENT
 } from "./routes";
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-// const cors_url = "https://cors-anywhere.herokuapp.com";
-// const api = "https://cors-anywhere.herokuapp.com/" + BASE_URL;
 axios.defaults.baseURL = BASE_URL;
 
 function setUserToken(token) {
@@ -59,6 +58,18 @@ export async function addEventService(data) {
 	setUserToken();
 	try {
 		const response = await axios.post(ADD_EVENT, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		return err.response.data;
+	}
+}
+
+export async function updateEventService(data, params) {
+	setUserToken();
+	try {
+		const response = await axios.put(`${UPDATE_EVENT}/${params}`, data);
 		if (response.status === 200 && response.data.error === false) {
 			return response.data;
 		} else return response.data;

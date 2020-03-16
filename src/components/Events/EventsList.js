@@ -156,7 +156,7 @@ export default props => {
 					_id,
 					title,
 					venue,
-					description,
+					// description,
 					startDate,
 					endDate,
 					time,
@@ -179,6 +179,11 @@ export default props => {
 		  })
 		: null;
 
+	const handleUpdateEvent = () => {
+		toggleRefresh(!refresh);
+		setEditDrawer(false);
+	};
+
 	return (
 		<>
 			<PageTitle title="Events" />
@@ -199,7 +204,10 @@ export default props => {
 				onClose={() => setEditDrawer(false)}
 				visible={editDrawer}
 			>
-				<UpdateEvent eventId={eventId} />
+				<UpdateEvent
+					eventId={eventId}
+					onUpdateEvent={handleUpdateEvent}
+				/>
 			</Drawer>
 		</>
 	);
