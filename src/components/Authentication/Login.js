@@ -31,8 +31,8 @@ const Login = props => {
 					const data = { email, password };
 					const res = await loginService(data);
 
-					if (res.res.error) {
-						_notification("error", "Error", res.res.message);
+					if (res.error) {
+						_notification("error", "Error", res.message);
 						updatePassword("");
 					} else if (res.res.message === "success") {
 						const { role, _id } = res.res.data;
