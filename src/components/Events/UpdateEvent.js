@@ -12,33 +12,85 @@ import {
 import moment from "moment";
 
 import "./style.css";
-import { addEventService } from "../../utils/services";
+import { getEventService, updateEventService } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
-const CreateEvent = props => {
+const UpdateEvent = props => {
 	const format = "h:mm a";
-
+	const [event, setEvent] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [title, setTitle] = useState(null);
 	const [description, setDescription] = useState(null);
 	const [venue, setVenue] = useState(null);
 	const [startDate, setStartDate] = useState(null);
 	const [endDate, setEndDate] = useState(null);
-	const [startTime, setStartTime] = useState("5:00 pm");
-	const [endTime, setEndTime] = useState("07:00 pm");
-	const [isRegistrationRequired, setIsRegReqd] = useState(true);
-	const [isRegistrationOpened, setIsRegOpen] = useState(false);
+	const [startTime, setStartTime] = useState(null);
+	const [endTime, setEndTime] = useState(null);
+	const [isRegistrationRequired, setIsRegReqd] = useState(null);
+	const [isRegistrationOpened, setIsRegOpen] = useState(null);
 
 	const { getFieldDecorator } = props.form;
 
 	useEffect(() => {
-		props.form.setFieldsValue({
-			startTime: moment(startTime, format),
-			endTime: moment(endTime, format)
-		});
-	}, []);
+		(async () => {
+			try {
+				const id = props.eventId;
+				const res = await getEventService(id);
+
+				if (res.message === "success") {
+					setEvent(res.data);
+				} else {
+					_notification("warning", "Error", res.message);
+				}
+			} catch (err) {
+				_notification("error", "Error", err.message);
+			}
+		})();
+	}, [props.eventId]);
+
+	useEffect(() => {
+		if (event) {
+			let {
+				startDate,
+				endDate,
+				time,
+				title,
+				description,
+				isRegistrationOpened,
+				isRegistrationRequired,
+				venue
+			} = event;
+
+			startDate = startDate.split("T")[0];
+			endDate = endDate.split("T")[0];
+
+			setTitle(title);
+			setDescription(description);
+			setVenue(venue);
+			setIsRegOpen(isRegistrationOpened);
+			setIsRegReqd(isRegistrationRequired);
+			setStartDate(startDate);
+			setStartTime(time.split(" to ")[0]);
+			setEndDate(endDate);
+			setEndTime(time.split(" to ")[1]);
+
+			props.form.setFieldsValue({
+				startTime: moment(time.split(" to ")[0], format),
+				endTime: moment(time.split(" to ")[1], format),
+				dates: [
+					moment(startDate, "YYYY-MM-DD"),
+					moment(endDate, "YYYY-MM-DD")
+				],
+				title,
+				description,
+				isRegistrationOpened,
+				isRegistrationRequired,
+				venue
+			});
+		}
+	}, [event]);
 
 	function disabledDate(current) {
 		// Can not select days before today and today
@@ -79,10 +131,13 @@ const CreateEvent = props => {
 						isRegistrationOpened,
 						days
 					};
-					const res = await addEventService(data);
+					console.table(data);
+					let params = props.eventId;
+
+					const res = await updateEventService(data, params);
 					if (res.message === "success") {
-						_notification("success", "Success", "Event Added");
-						props.onAddEvent();
+						_notification("success", "Success", "Event Updated");
+						props.onUpdateEvent();
 					} else {
 						_notification("error", "Error", res.message);
 					}
@@ -251,13 +306,13 @@ const CreateEvent = props => {
 					className="login-form-button"
 					loading={isLoading}
 				>
-					Add Event
+					Modify Event Details
 				</Button>
 			</Form.Item>
 		</Form>
 	);
 };
 
-const CreateEventForm = Form.create({ name: "event_form" })(CreateEvent);
+const UpdateEventForm = Form.create({ name: "event_form" })(UpdateEvent);
 
-export default CreateEventForm;
+export default UpdateEventForm;

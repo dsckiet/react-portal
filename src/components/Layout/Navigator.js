@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Menu, Icon, Modal } from "antd";
+import { Layout, Menu, Icon } from "antd";
 import routes from "../../utils/_routes";
 import {
 	Redirect,
@@ -13,11 +13,14 @@ import logo from "../../utils/assets/images/logo-white.svg";
 const { Content, Sider } = Layout;
 
 const Dashboard = props => {
-	const [isCollapsed, setIsCollapsed] = useState(false);
+	const [isCollapsed] = useState(false);
 	const routeKey = localStorage.getItem("routeKey");
 
 	useEffect(() => {
-		if (!localStorage.getItem("token")) {
+		if (
+			!localStorage.getItem("token") ||
+			localStorage.getItem("token") === "undefined"
+		) {
 			props.history.push("/login");
 		}
 	});
