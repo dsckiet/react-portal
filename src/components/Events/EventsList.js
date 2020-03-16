@@ -6,11 +6,13 @@ import "./style.css";
 import { getEventsService, deleteEventsService } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
 import { Link } from "react-router-dom";
+import UpdateEvent from "./UpdateEvent";
 
 export default props => {
 	const [events, setEvents] = useState([]);
 	const [editDrawer, setEditDrawer] = useState(false);
 	const [eventId, setEventId] = useState(null);
+	const [refresh, toggleRefresh] = useState(false);
 
 	useEffect(() => {
 		(async () => {
@@ -21,18 +23,24 @@ export default props => {
 				_notification("warning", "Error", err.message);
 			}
 		})();
-	}, []);
+	}, [refresh]);
 
 	const handleDelete = async id => {
 		try {
 			const res = await deleteEventsService(id);
 			if (res.message === "success") {
-				setEvents([...events.filter(event => event._id !== id)]);
-				_notification("sucess", "Success", "Event Deleted");
+				toggleRefresh(!refresh);
+				_notification("success", "Success", "Event Deleted");
+			} else {
+				_notification("warning", "Error", res.message);
 			}
 		} catch (err) {
 			_notification("error", "Error", err.message);
 		}
+	};
+
+	const handleAddEvent = () => {
+		toggleRefresh(!refresh);
 	};
 
 	function cancel(e) {
@@ -44,7 +52,17 @@ export default props => {
 			title: "Event Name",
 			dataIndex: "event_name",
 			key: "event_name",
-			render: text => <Link to="#">{text}</Link>
+			render: text => (
+				<Link
+					to="#"
+					onClick={() => {
+						setEditDrawer(true);
+						setEventId(text[1]);
+					}}
+				>
+					{text[0]}
+				</Link>
+			)
 		},
 		{
 			title: "Venue",
@@ -148,7 +166,7 @@ export default props => {
 				} = event;
 				return {
 					key: _id,
-					event_name: title,
+					event_name: [title, _id],
 					venue,
 					time,
 					startDate: new Date(startDate).toDateString(),
@@ -166,7 +184,7 @@ export default props => {
 			<PageTitle title="Events" />
 
 			<div className="table-wrapper-card">
-				<EventOptions />
+				<EventOptions onAddEvent={handleAddEvent} />
 				<Card style={{ padding: 0, width: "100%", overflowX: "auto" }}>
 					<Table columns={columns} dataSource={data} />
 				</Card>
@@ -176,12 +194,12 @@ export default props => {
 				title="Update Event Information"
 				placement="right"
 				closable={true}
-				width="60%"
+				width="40%"
 				destroyOnClose={true}
 				onClose={() => setEditDrawer(false)}
 				visible={editDrawer}
 			>
-				hey
+				<UpdateEvent eventId={eventId} />
 			</Drawer>
 		</>
 	);

@@ -19,41 +19,74 @@ import {
 import moment from "moment";
 
 import "./style.css";
-import { addEventService } from "../../utils/services";
+import { getEventService, addEventService } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
 const CreateEvent = props => {
 	const format = "h:mm a";
-
+	const [event, setEvent] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [title, setTitle] = useState(null);
 	const [description, setDescription] = useState(null);
 	const [venue, setVenue] = useState(null);
 	const [startDate, setStartDate] = useState(null);
 	const [endDate, setEndDate] = useState(null);
-	const [startTime, setStartTime] = useState("5:00 pm");
-	const [endTime, setEndTime] = useState("07:00 pm");
-	const [isRegistrationRequired, setIsRegReqd] = useState(true);
-	const [isRegistrationOpened, setIsRegOpen] = useState(false);
+	const [startTime, setStartTime] = useState(null);
+	const [endTime, setEndTime] = useState(null);
+	const [isRegistrationRequired, setIsRegReqd] = useState(null);
+	const [isRegistrationOpened, setIsRegOpen] = useState(null);
 
 	const { getFieldDecorator } = props.form;
 
 	useEffect(() => {
-		props.form.setFieldsValue({
-			startTime: moment(startTime, format),
-			endTime: moment(endTime, format)
-		});
+		(async () => {
+			try {
+				const id = props.eventId;
+				const res = await getEventService(id);
+				console.log(res);
+				if (res.message === "success") {
+					setEvent(res.data);
+				} else {
+					_notification("warning", "Error", res.message);
+				}
+			} catch (err) {
+				_notification("error", "Error", err.message);
+			}
+		})();
 	}, []);
 
-	function range(start, end) {
-		const result = [];
-		for (let i = start; i < end; i++) {
-			result.push(i);
+	useEffect(() => {
+		if (event) {
+			let {
+				startDate,
+				endDate,
+				time,
+				title,
+				description,
+				isRegistrationOpened,
+				isRegistrationRequired,
+				venue
+			} = event;
+
+			props.form.setFieldsValue({
+				startTime: moment(time.split(" to ")[0], format),
+				endTime: moment(time.split(" to ")[1], format),
+				// startDate: moment(startDate),
+				// endDate: moment(endDate),
+				dates: [
+					moment(startDate, "YYYY-MM-DD"),
+					moment(endDate, "YYYY-MM-DD")
+				],
+				title,
+				description,
+				isRegistrationOpened,
+				isRegistrationRequired,
+				venue
+			});
 		}
-		return result;
-	}
+	}, [event]);
 
 	function disabledDate(current) {
 		// Can not select days before today and today

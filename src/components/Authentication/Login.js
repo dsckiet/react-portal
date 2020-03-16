@@ -19,7 +19,7 @@ const Login = props => {
 		if (localStorage.getItem("token")) {
 			props.history.push("/");
 		}
-	}, [props.history, email, password]);
+	}, []);
 
 	const handleSubmit = e => {
 		e.preventDefault();
@@ -31,18 +31,15 @@ const Login = props => {
 					const data = { email, password };
 					const res = await loginService(data);
 
-					if (res.error) {
-						_notification("error", "Error", res.message);
+					if (res.res.error) {
+						_notification("error", "Error", res.res.message);
 						updatePassword("");
-					} else if (res.message === "success") {
-						const { role, _id } = res.data;
+					} else if (res.res.message === "success") {
+						const { role, _id } = res.res.data;
 						localStorage.setItem("role", role);
 						localStorage.setItem("user_id", _id);
-						_notification(
-							"success",
-							"Success",
-							"Successfully Logged In"
-						);
+						localStorage.setItem("token", res.token);
+						_notification("success", "Success", "Logged In");
 						updateEmail("");
 						updatePassword("");
 						setTimeout(() => {

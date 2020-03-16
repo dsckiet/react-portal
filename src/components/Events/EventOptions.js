@@ -4,7 +4,10 @@ import CreateEvent from "../Events/CreateEvent";
 
 export default props => {
 	const [isDrawerVisible, setIsDrawerVisible] = useState(false);
-
+	const handleEventAdd = () => {
+		setIsDrawerVisible(false);
+		props.onAddEvent();
+	};
 	return (
 		<div style={{ marginBottom: 12 }}>
 			<Button onClick={() => setIsDrawerVisible(true)}>
@@ -14,12 +17,12 @@ export default props => {
 				title="Create Event"
 				placement="right"
 				closable={true}
-				width="50%"
+				width="40%"
 				destroyOnClose={true}
 				onClose={() => setIsDrawerVisible(false)}
 				visible={isDrawerVisible}
 			>
-				<CreateEvent />
+				<CreateEvent onAddEvent={handleEventAdd} />
 			</Drawer>
 		</div>
 	);

@@ -17,7 +17,10 @@ const Dashboard = props => {
 	const routeKey = localStorage.getItem("routeKey");
 
 	useEffect(() => {
-		if (!localStorage.getItem("token")) {
+		if (
+			!localStorage.getItem("token") ||
+			localStorage.getItem("token") === "undefined"
+		) {
 			props.history.push("/login");
 		}
 	});
