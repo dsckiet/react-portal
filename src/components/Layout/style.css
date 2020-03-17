@@ -2,3 +2,7 @@
 	font-size: 24px !important;
 	color: #ffffff;
 }
+
+.ant-card-body {
+	padding: 16px !important;
+}
