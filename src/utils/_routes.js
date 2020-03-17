@@ -1,5 +1,6 @@
 import EventsList from "../components/Events/EventsList";
 import Dashboard from "../components/Layout/Dashboard";
+import TeamList from "../components/Team/TeamList";
 
 let routes = [
 	{
@@ -24,6 +25,14 @@ let routes = [
 		component: EventsList,
 		name: "Participants",
 		key: "participants",
+		icon: "team"
+	},
+	{
+		path: "/team",
+		exact: true,
+		component: TeamList,
+		name: "Team",
+		key: "team",
 		icon: "team"
 	}
 ];
