@@ -9,7 +9,9 @@ let routes = [
 		name: "Dashboard",
 		component: Dashboard,
 		key: "dashboard",
-		icon: "appstore"
+		icon: "appstore",
+		description: "List of all the events",
+		color: "#F4B400"
 	},
 	{
 		path: "/events",
@@ -17,7 +19,9 @@ let routes = [
 		component: EventsList,
 		name: "Events",
 		key: "events",
-		icon: "calendar"
+		icon: "calendar",
+		description: "List of all the events",
+		color: "#DB4437"
 	},
 	{
 		path: "/participants",
@@ -25,7 +29,9 @@ let routes = [
 		component: EventsList,
 		name: "Participants",
 		key: "participants",
-		icon: "team"
+		icon: "team",
+		description: "List of all the participants",
+		color: "#4285F4"
 	},
 	{
 		path: "/team",
@@ -33,7 +39,9 @@ let routes = [
 		component: TeamList,
 		name: "Team",
 		key: "team",
-		icon: "team"
+		icon: "team",
+		description: "List of all the members",
+		color: "#0F9D58"
 	}
 ];
 
