@@ -8,7 +8,10 @@ import {
 	Row,
 	Checkbox,
 	Col,
-	Skeleton
+	Skeleton,
+	Upload,
+	message,
+	Icon
 } from "antd";
 import moment from "moment";
 
@@ -24,6 +27,7 @@ const UpdateEvent = props => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [title, setTitle] = useState(null);
 	const [description, setDescription] = useState(null);
+	const [image, setImage] = useState(null);
 	const [venue, setVenue] = useState(null);
 	const [startDate, setStartDate] = useState(null);
 	const [endDate, setEndDate] = useState(null);
@@ -33,7 +37,24 @@ const UpdateEvent = props => {
 	const [isRegistrationOpened, setIsRegOpen] = useState(null);
 	const [showSkeleton, setShowSkeleton] = useState(false);
 	const { getFieldDecorator } = props.form;
-
+	const uploadprops = {
+		name: "file",
+		action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
+		headers: {
+			authorization: "authorization-text"
+		},
+		onChange(info) {
+			if (info.file.status !== "uploading") {
+				console.log(info.file, info.fileList);
+			}
+			if (info.file.status === "done") {
+				setImage(info.file.originFileObj);
+				message.success(`${info.file.name} file uploaded successfully`);
+			} else if (info.file.status === "error") {
+				message.error(`${info.file.name} file upload failed.`);
+			}
+		}
+	};
 	useEffect(() => {
 		(async () => {
 			setShowSkeleton(true);
@@ -123,21 +144,28 @@ const UpdateEvent = props => {
 			if (!err) {
 				try {
 					let days = endDate.split("-")[2] - startDate.split("-")[2];
-					let data = {
-						title,
-						description,
-						startDate,
-						endDate,
-						time: startTime + " to " + endTime,
-						venue,
-						isRegistrationRequired,
-						isRegistrationOpened,
-						days
-					};
-					console.table(data);
+					let xtime = startTime + " to " + endTime;
+
+					const formData = new FormData();
+					formData.append("image", image);
+					formData.append("title", title);
+					formData.append("description", description);
+					formData.append("startDate", startDate);
+					formData.append("endDate", endDate);
+					formData.append("time", xtime);
+					formData.append("venue", venue);
+					formData.append(
+						"isRegistrationRequired",
+						isRegistrationRequired
+					);
+					formData.append(
+						"isRegistrationOpened",
+						isRegistrationOpened
+					);
+					formData.append("days", days);
 					let params = props.eventId;
 
-					const res = await updateEventService(data, params);
+					const res = await updateEventService(formData, params);
 					if (res.message === "success") {
 						_notification("success", "Success", "Event Updated");
 						props.onUpdateEvent();
@@ -189,6 +217,23 @@ const UpdateEvent = props => {
 							onChange={e => setDescription(e.target.value)}
 						/>
 					)}
+				</Form.Item>
+
+				{event ? (
+					<img
+						width="100%"
+						style={{ borderRadius: 4, marginBottom: 8 }}
+						src={event.image}
+						alt={event.name}
+					/>
+				) : null}
+
+				<Form.Item label="Update Picture" required>
+					<Upload {...uploadprops} listType="picture">
+						<Button>
+							<Icon type="upload" /> Click to Upload
+						</Button>
+					</Upload>
 				</Form.Item>
 
 				<Form.Item label="Event Venue" required>

@@ -63,7 +63,12 @@ export async function getEventService(id) {
 export async function addEventService(data) {
 	setUserToken();
 	try {
-		const response = await axios.post(ADD_EVENT, data);
+		const config = {
+			headers: {
+				"content-type": "multipart/form-data"
+			}
+		};
+		const response = await axios.post(ADD_EVENT, data, config);
 		if (response.status === 200 && response.data.error === false) {
 			return response.data;
 		} else return response.data;
@@ -75,7 +80,16 @@ export async function addEventService(data) {
 export async function updateEventService(data, params) {
 	setUserToken();
 	try {
-		const response = await axios.put(`${UPDATE_EVENT}/${params}`, data);
+		const config = {
+			headers: {
+				"content-type": "multipart/form-data"
+			}
+		};
+		const response = await axios.put(
+			`${UPDATE_EVENT}/${params}`,
+			data,
+			config
+		);
 		if (response.status === 200 && response.data.error === false) {
 			return response.data;
 		} else return response.data;
