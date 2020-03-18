@@ -19,13 +19,15 @@ export default props => {
 	const [eventId, setEventId] = useState(null);
 	const [refresh, toggleRefresh] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [allEvents, setAllEvents] = useState([]);
 
 	useEffect(() => {
 		(async () => {
 			setIsLoading(true);
 			try {
 				const { data } = await getEventsService();
-				setEvents(data);
+				setEvents(data.upcomingEvents);
+				setAllEvents(data);
 				setIsLoading(false);
 			} catch (err) {
 				_notification("warning", "Error", err.message);
@@ -251,12 +253,25 @@ export default props => {
 		setEditDrawer(false);
 	};
 
+	const handleEventTypeChange = val => {
+		if (val === "past") {
+			setEvents(allEvents.previousEvents);
+		} else if (val === "upcoming") {
+			setEvents(allEvents.upcomingEvents);
+		} else if (val === "running") {
+			setEvents(allEvents.runningEvents);
+		}
+	};
+
 	return (
 		<>
 			<PageTitle title="Events" />
 
 			<div className="table-wrapper-card">
-				<EventOptions onAddEvent={handleAddEvent} />
+				<EventOptions
+					onAddEvent={handleAddEvent}
+					onTypeChange={handleEventTypeChange}
+				/>
 				<Card style={{ padding: 0, width: "100%", overflowX: "auto" }}>
 					<Table
 						loading={isLoading}
