@@ -14,10 +14,10 @@ export const LOGIN_PARTICIPANT = "/events/part_login"; // POST
 export const REGISTER_FOR_EVENT = "/events/register_in_event"; // POST
 export const UPDATE_PARTICIPANT =
 	"/events/update_part/5e6a67b4890fda16986ae843"; // PUT
-export const PARTICIPANT_DETAILS =
-	"/events/part_data?participantId=5e6bc1dec3988900640bd922"; // GET
-export const PARTICIPANT_DETAILS_BY_LEAD =
-	"/events/get_part?query=ritik&eventId=5e6dfb7caad4441a9ceb5b2e"; // GET
+export const GET_PARTICIPANT_DETAILS = "/events/part_data"; // GET
+// ?participantId=5e6bc1dec3988900640bd922
+export const GET_PARTICIPANTS = "/events/get_part"; // GET
+// ?query=ritik&eventId=5e6dfb7caad4441a9ceb5b2e
 
 /** EVENTS MODULE : EVENTS **/
 export const GET_EVENTS = "/events/get_events"; // GET

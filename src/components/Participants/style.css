@@ -1,0 +1,50 @@
+.table-wrapper-card {
+	margin-top: 12px;
+	display: block;
+	overflow-x: auto;
+	white-space: nowrap;
+}
+
+.table-wrapper-card .ant-card-body {
+	padding: 0;
+}
+
+.ant-table-thead tr th {
+	background-color: #e6f7ff;
+}
+
+.ant-pagination,
+.ant-table-pagination {
+	margin: 16px 32px !important;
+}
+
+.ant-menu-item {
+	max-width: 180px !important;
+	border-top-right-radius: 20px;
+	border-bottom-right-radius: 20px;
+}
+.ant-menu-item-selected {
+	max-width: 180px !important;
+	background-color: #0f9d58 !important;
+	border-top-right-radius: 20px;
+	border-bottom-right-radius: 20px;
+}
+
+.ant-table-column-title {
+	font-weight: 700;
+}
+
+.ant-card,
+.ant-table {
+	border-radius: 4px !important;
+}
+
+.ant-btn {
+	background-color: #4285f4 !important;
+	color: #ffffff !important;
+	border: 0 !important;
+}
+
+.ant-btn:hover {
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
