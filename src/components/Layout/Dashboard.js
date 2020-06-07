@@ -6,6 +6,7 @@ import "./style.css";
 import { DashCards } from "./DashCards";
 
 export default (props) => {
+  const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState(
     localStorage.getItem("todos")
       ? JSON.parse(localStorage.getItem("todos"))
@@ -21,7 +22,7 @@ export default (props) => {
   const handleAddTodo = (val) => {
     let el = { value: val, isChecked: false };
     setTodos([...todos, el]);
-    setTodos("");
+    setTodo("");
   };
 
   const handleCheckChange = (todo) => {
@@ -92,6 +93,8 @@ export default (props) => {
                 <Input
                   placeholder="Type your To Do"
                   allowClear
+                  value={todo}
+                  onChange={(e) => setTodo(e.target.value)}
                   onPressEnter={(e) => handleAddTodo(e.target.value)}
                 />
               </Card>
