@@ -1,4 +1,5 @@
 import axios from "axios";
+import jwt from "jwt-decode";
 import {
   LOGIN,
   GET_EVENTS,
@@ -19,13 +20,13 @@ const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 axios.defaults.baseURL = BASE_URL;
 
 function setUserToken(token) {
-  let AUTH_TOKEN = localStorage.getItem("token");
-  if (AUTH_TOKEN) {
-    if (AUTH_TOKEN.includes("Logout")) {
+  let AUTH_TOKEN = JSON.parse(localStorage.getItem("token"));
+  if (AUTH_TOKEN.token !== "") {
+    if (AUTH_TOKEN.token.includes("Logout")) {
       localStorage.clear();
       window.location.push("/login");
     }
-    axios.defaults.headers.common["x-auth-token"] = AUTH_TOKEN;
+    axios.defaults.headers.common["x-auth-token"] = AUTH_TOKEN.token;
   }
 }
 
@@ -131,7 +132,7 @@ export async function toggleRegistrationsService(data) {
 export async function deleteEventsService(eventId) {
   setUserToken();
   try {
-    const response = await axios.delete(`${DELETE_EVENT}/${eventId}`);
+    const response = await axios.delete(`${DELETE_EVENT}${eventId}`);
     if (response.status === 200 && response.data.error === false) {
       return response.data;
     } else return response.data;
@@ -188,3 +189,9 @@ export async function getParticipantsDetailService(params) {
     return err.response.data;
   }
 }
+
+export const getRole = () => {
+  let AUTH_TOKEN = JSON.parse(localStorage.getItem("token"));
+  let decode = jwt(AUTH_TOKEN.token);
+  return decode;
+};

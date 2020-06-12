@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import PageTitle from "../Layout/PageTitle";
 import EventOptions from "./EventOptions";
 import { Table, Divider, Tag, Card, Icon, Drawer, Popconfirm } from "antd";
@@ -12,6 +12,7 @@ import {
 import { _notification } from "../../utils/_helpers";
 import { Link } from "react-router-dom";
 import UpdateEvent from "./UpdateEvent";
+import { AuthContext } from "./../../contexts/userContext";
 
 export default (props) => {
   const [events, setEvents] = useState([]);
@@ -37,7 +38,6 @@ export default (props) => {
 
   const handleDelete = async (id) => {
     try {
-      console.log(id);
       const res = await deleteEventsService(id);
       if (res.message === "success") {
         toggleRefresh(!refresh);
