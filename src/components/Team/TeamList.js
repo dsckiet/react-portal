@@ -18,6 +18,9 @@ const StyledTable = styled(Table)`
 	.websiteShow {
 		display: ${props => (props.role === "lead" ? "block" : "none")};
 	}
+	.userAction {
+		display: ${props => (props.role === "lead" ? "block" : "none")};
+	}
 `;
 
 export default props => {
@@ -121,11 +124,6 @@ export default props => {
 			render: role => <Tag color="geekblue">{role}</Tag>
 		},
 		{
-			title: "Designation",
-			dataIndex: "designation",
-			key: "designation"
-		},
-		{
 			title: "Show on website",
 			dataIndex: "show",
 			key: "show",
@@ -145,9 +143,15 @@ export default props => {
 			)
 		},
 		{
+			title: "Designation",
+			dataIndex: "designation",
+			key: "designation"
+		},
+		{
 			title: "Action",
 			key: "action",
 			dataIndex: "action",
+			className: "userAction",
 			render: action => (
 				<span>
 					<Popconfirm
