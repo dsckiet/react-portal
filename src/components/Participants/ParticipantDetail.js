@@ -21,6 +21,7 @@ export default props => {
 				_notification("warning", "Error", err.message);
 			}
 		})();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (

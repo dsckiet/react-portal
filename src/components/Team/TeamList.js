@@ -2,13 +2,18 @@ import React, { useEffect, useState } from "react";
 import PageTitle from "../Layout/PageTitle";
 import { Table, Divider, Tag, Card, Icon, Drawer, Popconfirm } from "antd";
 import "./style.css";
-import { getUsersService } from "../../utils/services";
+import {
+	getUsersService,
+	toggleWebsiteSeen,
+	getRole
+} from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
 import UserOptions from "./UserOptions";
 import { Link } from "react-router-dom";
 
 export default props => {
 	const [users, setUsers] = useState([]);
+	const [userData] = useState(getRole());
 	// const [editDrawer, setEditDrawer] = useState(false);
 	// const [eventId, setEventId] = useState(null);
 	const [refresh, toggleRefresh] = useState(false);
@@ -31,11 +36,25 @@ export default props => {
 		toggleRefresh(!refresh);
 	};
 
+	const handleChangeWebsiteSeen = async userId => {
+		try {
+			const res = await toggleWebsiteSeen(userId);
+			if (res.message === "success") {
+				toggleRefresh(!refresh);
+				_notification("success", "Success", "Show on website changed");
+			} else {
+				_notification("warning", "Error", res.message);
+			}
+		} catch (err) {
+			_notification("error", "Error", err.message);
+		}
+	};
+
 	const columns = [
 		{
 			title: "#",
-			dataIndex: "index",
-			key: "index"
+			dataIndex: "key",
+			key: "key"
 		},
 		{
 			title: "Name",
@@ -69,20 +88,55 @@ export default props => {
 			dataIndex: "designation",
 			key: "designation"
 		}
+		// userData.role === "lead"
+		// 	? {
+		// 			title: "Show on website",
+		// 			dataIndex: "show",
+		// 			key: "show",
+		// 			render: show => (
+		// 				<>
+		// 					<Tag color="green">
+		// 						{show[0] ? "Shown" : "Not shown"}
+		// 					</Tag>
+		// 					<Popconfirm
+		// 						title="Do you want to toggle website seen?"
+		// 						onConfirm={() =>
+		// 							handleChangeWebsiteSeen(show[1])
+		// 						}
+		// 						okText="Yes"
+		// 						cancelText="No"
+		// 					>
+		// 						<Icon type="redo" />
+		// 					</Popconfirm>
+		// 				</>
+		// 			)
+		// 	  }
+		// 	: null
 	];
 
 	const data = users
 		? users.map((user, id) => {
-				const { _id, name, email, role, designation } = user;
-				return {
-					index: ++id,
+				const {
+					_id,
 					name,
 					email,
 					role,
-					designation
+					designation,
+					showOnWebsite
+				} = user;
+				return {
+					key: ++id,
+					_id,
+					name,
+					email,
+					role,
+					designation,
+					show: [showOnWebsite, _id]
 				};
 		  })
 		: null;
+
+	console.log(data);
 
 	return (
 		<>

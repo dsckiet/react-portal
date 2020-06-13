@@ -42,6 +42,7 @@ const CreateEvent = props => {
 			startTime: moment(startTime, format),
 			endTime: moment(endTime, format)
 		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const uploadprops = {
