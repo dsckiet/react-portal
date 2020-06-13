@@ -14,7 +14,8 @@ import {
 	GET_PARTICIPANTS,
 	GET_PARTICIPANT_DETAILS,
 	TOGGLE_WEBSITE_SEEN,
-	TOGGLE_REVOKE
+	TOGGLE_REVOKE,
+	DELETE_USER
 } from "./routes";
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -187,6 +188,18 @@ export const toggleUserRevoke = async id => {
 	setUserToken();
 	try {
 		const response = await axios.put(`${TOGGLE_REVOKE}/${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (error) {
+		return error.response.data;
+	}
+};
+
+export const deleteUser = async id => {
+	setUserToken();
+	try {
+		const response = await axios.delete(`${DELETE_USER}/${id}`);
 		if (response.status === 200 && response.data.error === false) {
 			return response.data;
 		} else return response.data;

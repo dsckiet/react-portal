@@ -12,6 +12,7 @@ import { _notification } from "../../utils/_helpers";
 import UserOptions from "./UserOptions";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { deleteUser } from "./../../utils/services";
 
 const StyledTable = styled(Table)`
 	.websiteShow {
@@ -64,6 +65,20 @@ export default props => {
 			if (res.message === "success") {
 				toggleRefresh(!refresh);
 				_notification("success", "Success", "Toggle User Revoke");
+			} else {
+				_notification("warning", "Error", res.message);
+			}
+		} catch (err) {
+			_notification("error", "Error", err.message);
+		}
+	};
+
+	const handleUserDelete = async userId => {
+		try {
+			const res = await deleteUser(userId);
+			if (res.message === "success") {
+				toggleRefresh(!refresh);
+				_notification("success", "Success", "User deleted");
 			} else {
 				_notification("warning", "Error", res.message);
 			}
@@ -149,8 +164,8 @@ export default props => {
 					</Popconfirm>
 					<Divider type="vertical" />
 					<Popconfirm
-						title="Are you sure delete this event?"
-						// onConfirm={() => handleDelete(_id)}
+						title="Are you sure delete this user?"
+						onConfirm={() => handleUserDelete(action[1])}
 						okText="Yes"
 						cancelText="No"
 					>
