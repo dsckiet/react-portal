@@ -1,24 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Form, Icon, Input, Button, Card } from "antd";
 import logo from "../../utils/assets/images/logo-black.svg";
 // import useInputState from "../../hooks/useInputState";
 import "./style.css";
 import { _notification } from "../../utils/_helpers";
 import { loginService } from "../../utils/services";
+import { DispatchContext } from "../../contexts/userContext";
 
 const Login = props => {
 	const [email, updateEmail] = useState("");
 	const [password, updatePassword] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
+	const Dispatch = useContext(DispatchContext);
 
 	useEffect(() => {
 		props.form.setFieldsValue({
 			email,
 			password
 		});
-		if (localStorage.getItem("token")) {
-			props.history.push("/");
-		}
+		// if (localStorage.getItem("token")) {
+		//   props.history.push("/");
+		// }
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const handleSubmit = e => {
@@ -35,10 +38,13 @@ const Login = props => {
 						_notification("error", "Error", res.message);
 						updatePassword("");
 					} else if (res.res.message === "success") {
-						const { role, _id } = res.res.data;
-						localStorage.setItem("role", role);
-						localStorage.setItem("user_id", _id);
-						localStorage.setItem("token", res.token);
+						Dispatch({
+							type: "IN",
+							token: res.token
+						});
+						// localStorage.setItem("role", role);
+						// localStorage.setItem("user_id", _id);
+						// localStorage.setItem("token", res.token);
 						_notification("success", "Success", "Logged In");
 						updateEmail("");
 						updatePassword("");

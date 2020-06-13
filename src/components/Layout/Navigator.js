@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Layout, Menu, Icon } from "antd";
 import routes from "../../utils/_routes";
 import {
@@ -16,14 +16,14 @@ const Dashboard = props => {
 	const [isCollapsed] = useState(false);
 	const routeKey = localStorage.getItem("routeKey");
 
-	useEffect(() => {
-		if (
-			!localStorage.getItem("token") ||
-			localStorage.getItem("token") === "undefined"
-		) {
-			props.history.push("/login");
-		}
-	});
+	// useEffect(() => {
+	//   if (
+	//     !localStorage.getItem("token") ||
+	//     localStorage.getItem("token") === "undefined"
+	//   ) {
+	//     props.history.push("/login");
+	//   }
+	// });
 
 	return (
 		<>

@@ -1,4 +1,5 @@
 import axios from "axios";
+import jwt from "jwt-decode";
 import {
 	LOGIN,
 	GET_EVENTS,
@@ -11,7 +12,8 @@ import {
 	VIEW_USERS,
 	ADD_USER,
 	GET_PARTICIPANTS,
-	GET_PARTICIPANT_DETAILS
+	GET_PARTICIPANT_DETAILS,
+	TOGGLE_WEBSITE_SEEN
 } from "./routes";
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -19,13 +21,13 @@ const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 axios.defaults.baseURL = BASE_URL;
 
 function setUserToken(token) {
-	let AUTH_TOKEN = localStorage.getItem("token");
-	if (AUTH_TOKEN) {
-		if (AUTH_TOKEN.includes("Logout")) {
+	let AUTH_TOKEN = JSON.parse(localStorage.getItem("token"));
+	if (AUTH_TOKEN.token !== "") {
+		if (AUTH_TOKEN.token.includes("Logout")) {
 			localStorage.clear();
 			window.location.push("/login");
 		}
-		axios.defaults.headers.common["x-auth-token"] = AUTH_TOKEN;
+		axios.defaults.headers.common["x-auth-token"] = AUTH_TOKEN.token;
 	}
 }
 
@@ -58,9 +60,9 @@ export async function getEventsService() {
 
 export async function getEventService(id) {
 	try {
-		const params = { id };
-		const response = await axios.get(GET_EVENT, { params });
+		const response = await axios.get(`${GET_EVENT}?eid=${id}`);
 		if (response.status === 200 && response.data.error === false) {
+			console.log(response);
 			return response.data;
 		} else if (response.status === 500)
 			return { response: { data: { message: "Something went wrong" } } };
@@ -168,6 +170,18 @@ export async function addUserService(data) {
 	}
 }
 
+export const toggleWebsiteSeen = async id => {
+	setUserToken();
+	try {
+		const response = await axios.put(`${TOGGLE_WEBSITE_SEEN}/${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (error) {
+		return error.response.data;
+	}
+};
+
 /******************PARTICIPANTS SERVICES********************/
 export async function getParticipantsService(params) {
 	setUserToken();
@@ -192,3 +206,9 @@ export async function getParticipantsDetailService(params) {
 		return err.response.data;
 	}
 }
+
+export const getRole = () => {
+	let AUTH_TOKEN = JSON.parse(localStorage.getItem("token"));
+	let decode = jwt(AUTH_TOKEN.token);
+	return decode;
+};

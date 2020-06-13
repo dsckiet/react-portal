@@ -61,7 +61,7 @@ const UpdateEvent = props => {
 			try {
 				const id = props.eventId;
 				const res = await getEventService(id);
-
+				console.log(res);
 				if (res.message === "success") {
 					setEvent(res.data);
 					setShowSkeleton(false);
@@ -74,6 +74,7 @@ const UpdateEvent = props => {
 		})();
 	}, [props.eventId]);
 
+	console.log(event);
 	useEffect(() => {
 		if (event) {
 			let {
@@ -114,6 +115,7 @@ const UpdateEvent = props => {
 				venue
 			});
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [event]);
 
 	function disabledDate(current) {

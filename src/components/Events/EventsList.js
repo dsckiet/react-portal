@@ -39,7 +39,7 @@ export default props => {
 		try {
 			const res = await deleteEventsService(id);
 			if (res.message === "success") {
-				toggleRefresh(!refresh);
+				// toggleRefresh(!refresh);
 				_notification("success", "Success", "Event Deleted");
 			} else {
 				_notification("warning", "Error", res.message);
@@ -59,7 +59,7 @@ export default props => {
 
 	const handleToggleEventStatus = async eventId => {
 		try {
-			const res = await toggleRegistrationsService({ id: eventId });
+			const res = await toggleRegistrationsService({ eid: eventId });
 			if (res.message === "success") {
 				toggleRefresh(!refresh);
 				_notification("success", "Success", "Event Status Changed");
@@ -73,7 +73,7 @@ export default props => {
 
 	const handleChangeAttCode = async eventId => {
 		try {
-			const res = await refreshEventCodeService({ id: eventId });
+			const res = await refreshEventCodeService({ eid: eventId });
 			if (res.message === "success") {
 				toggleRefresh(!refresh);
 				_notification(
@@ -143,7 +143,7 @@ export default props => {
 					<Popconfirm
 						title="Do you want refresh the event attendance code?"
 						onConfirm={() => handleChangeAttCode(code[1])}
-						onCancel={cancel}
+						// onCancel={cancel}
 						okText="Yes"
 						cancelText="No"
 					>

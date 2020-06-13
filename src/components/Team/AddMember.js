@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Form, Button, Input, Select } from "antd";
 
 import "./style.css";
@@ -8,7 +8,7 @@ import { _notification } from "../../utils/_helpers";
 const { Option } = Select;
 
 const AddMember = props => {
-	const format = "h:mm a";
+	// const format = "h:mm a";
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [name, setName] = useState(null);
