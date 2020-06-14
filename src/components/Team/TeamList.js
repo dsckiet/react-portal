@@ -6,13 +6,13 @@ import {
 	getUsersService,
 	toggleWebsiteSeen,
 	getRole,
-	toggleUserRevoke
+	toggleUserRevoke,
+	deleteUser
 } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
 import UserOptions from "./UserOptions";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { deleteUser } from "./../../utils/services";
 
 const StyledTable = styled(Table)`
 	.websiteShow {
@@ -23,7 +23,7 @@ const StyledTable = styled(Table)`
 	}
 `;
 
-export default props => {
+const TeamList = props => {
 	const [users, setUsers] = useState([]);
 	const [userData] = useState(getRole());
 	// const [editDrawer, setEditDrawer] = useState(false);
@@ -213,6 +213,7 @@ export default props => {
 
 			<div className="table-wrapper-card">
 				<UserOptions onAddMember={handleAddMember} />
+
 				<Card style={{ padding: 0, width: "100%", overflowX: "auto" }}>
 					<StyledTable
 						loading={isLoading}
@@ -225,3 +226,5 @@ export default props => {
 		</>
 	);
 };
+
+export default TeamList;

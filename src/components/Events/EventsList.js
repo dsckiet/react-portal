@@ -13,7 +13,7 @@ import { _notification } from "../../utils/_helpers";
 import { Link } from "react-router-dom";
 import UpdateEvent from "./UpdateEvent";
 
-export default props => {
+const EventsList = props => {
 	const [events, setEvents] = useState([]);
 	const [editDrawer, setEditDrawer] = useState(false);
 	const [eventId, setEventId] = useState(null);
@@ -298,3 +298,5 @@ export default props => {
 		</>
 	);
 };
+
+export default EventsList;

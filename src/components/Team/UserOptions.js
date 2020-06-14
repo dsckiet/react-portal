@@ -1,33 +1,86 @@
 import React, { useState } from "react";
-import { Button, Drawer } from "antd";
+import { Button, Drawer, Menu, Dropdown, message, Icon } from "antd";
 import AddMember from "./AddMember";
 import { getRole } from "./../../utils/services";
+import styled from "styled-components";
 
-export default props => {
+const UserContainer = styled.div`
+	display: flex;
+	justify-content: space-between;
+`;
+
+const DropdownContainer = styled.div`
+	margin-right: 5px;
+	margin-top: 5px;
+`;
+
+const UserName = styled.p`
+	font-size: 18px;
+	font-weight: 700;
+`;
+
+const UserOptions = props => {
 	const [isDrawerVisible, setIsDrawerVisible] = useState(false);
+	const [profileDrawer, setProfileDrawer] = useState(false);
 	const [userData] = useState(getRole());
 	const handleUserAdd = () => {
 		setIsDrawerVisible(false);
 		props.onAddMember();
 	};
+
+	const menu = (
+		<Menu>
+			<Menu.Item key="1" onClick={() => setProfileDrawer(true)}>
+				<Icon type="user" />
+				Update Profile
+			</Menu.Item>
+			<Menu.Item key="2">
+				<Icon type="edit" />
+				Reset Password
+			</Menu.Item>
+		</Menu>
+	);
 	return (
-		<div style={{ marginBottom: 12 }}>
-			{userData.role === "lead" || userData.role === "core" ? (
-				<Button onClick={() => setIsDrawerVisible(true)}>
-					Add Member
-				</Button>
-			) : null}
-			<Drawer
-				title="Add New Member"
-				placement="right"
-				closable={true}
-				width="40%"
-				destroyOnClose={true}
-				onClose={() => setIsDrawerVisible(false)}
-				visible={isDrawerVisible}
-			>
-				<AddMember onAddMember={handleUserAdd} />
-			</Drawer>
-		</div>
+		<>
+			<div style={{ marginBottom: 12 }}>
+				<UserContainer>
+					{userData.role === "lead" || userData.role === "core" ? (
+						<Button onClick={() => setIsDrawerVisible(true)}>
+							Add Member
+						</Button>
+					) : null}
+					<DropdownContainer>
+						<Dropdown overlay={menu} placement="bottomCenter">
+							<UserName>{userData.name}</UserName>
+						</Dropdown>
+					</DropdownContainer>
+				</UserContainer>
+
+				<Drawer
+					title="Add New Member"
+					placement="right"
+					closable={true}
+					width="40%"
+					destroyOnClose={true}
+					onClose={() => setIsDrawerVisible(false)}
+					visible={isDrawerVisible}
+				>
+					<AddMember onAddMember={handleUserAdd} />
+				</Drawer>
+				<Drawer
+					title="Update Profile"
+					placement="right"
+					closable={true}
+					width="30%"
+					destroyOnClose={true}
+					onClose={() => setProfileDrawer(false)}
+					visible={profileDrawer}
+				>
+					<AddMember onAddMember={handleUserAdd} />
+				</Drawer>
+			</div>
+		</>
 	);
 };
+
+export default UserOptions;
