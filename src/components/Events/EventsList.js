@@ -39,7 +39,7 @@ const EventsList = props => {
 		try {
 			const res = await deleteEventsService(id);
 			if (res.message === "success") {
-				// toggleRefresh(!refresh);
+				toggleRefresh(!refresh);
 				_notification("success", "Success", "Event Deleted");
 			} else {
 				_notification("warning", "Error", res.message);

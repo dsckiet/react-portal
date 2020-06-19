@@ -10,7 +10,8 @@ import {
 	Col,
 	Upload,
 	message,
-	Icon
+	Icon,
+	InputNumber
 } from "antd";
 import moment from "moment";
 
@@ -34,13 +35,15 @@ const CreateEvent = props => {
 	const [endTime, setEndTime] = useState("07:00 pm");
 	const [isRegistrationRequired, setIsRegReqd] = useState(true);
 	const [isRegistrationOpened, setIsRegOpen] = useState(false);
+	const [maxRegister, setMaxRegister] = useState(1);
 
 	const { getFieldDecorator } = props.form;
 
 	useEffect(() => {
 		props.form.setFieldsValue({
 			startTime: moment(startTime, format),
-			endTime: moment(endTime, format)
+			endTime: moment(endTime, format),
+			maxRegister: 1
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -111,6 +114,7 @@ const CreateEvent = props => {
 						isRegistrationOpened
 					);
 					formData.append("days", days);
+					formData.append("maxRegister", maxRegister);
 
 					const res = await addEventService(formData);
 					if (res.message === "success") {
@@ -283,6 +287,21 @@ const CreateEvent = props => {
 					</Form.Item>
 				</Col>
 			</Row>
+			<Form.Item label="Max Registerations">
+				{getFieldDecorator("maxRegister", {
+					rules: [
+						{
+							required: true,
+							message: "Please enter maximum registrations."
+						}
+					]
+				})(
+					<InputNumber
+						min={1}
+						onChange={value => setMaxRegister(value)}
+					/>
+				)}
+			</Form.Item>
 
 			<Form.Item>
 				<Button

@@ -1,17 +1,14 @@
 import React, { useState } from "react";
-import { Button, Drawer, Menu, Dropdown, message, Icon } from "antd";
+import { Button, Drawer, Menu, Dropdown, Row, Icon, Col } from "antd";
 import AddMember from "./AddMember";
 import { getRole } from "./../../utils/services";
 import styled from "styled-components";
-
-const UserContainer = styled.div`
-	display: flex;
-	justify-content: space-between;
-`;
+import UpdateProfile from "./UpdateProfile";
 
 const DropdownContainer = styled.div`
 	margin-right: 5px;
 	margin-top: 5px;
+	float: right;
 `;
 
 const UserName = styled.p`
@@ -43,18 +40,23 @@ const UserOptions = props => {
 	return (
 		<>
 			<div style={{ marginBottom: 12 }}>
-				<UserContainer>
-					{userData.role === "lead" || userData.role === "core" ? (
-						<Button onClick={() => setIsDrawerVisible(true)}>
-							Add Member
-						</Button>
-					) : null}
-					<DropdownContainer>
-						<Dropdown overlay={menu} placement="bottomCenter">
-							<UserName>{userData.name}</UserName>
-						</Dropdown>
-					</DropdownContainer>
-				</UserContainer>
+				<Row justify="space-between">
+					<Col span={12}>
+						{userData.role === "lead" ||
+						userData.role === "core" ? (
+							<Button onClick={() => setIsDrawerVisible(true)}>
+								Add Member
+							</Button>
+						) : null}
+					</Col>
+					<Col span={12}>
+						<DropdownContainer>
+							<Dropdown overlay={menu} placement="bottomCenter">
+								<UserName>{userData.name}</UserName>
+							</Dropdown>
+						</DropdownContainer>
+					</Col>
+				</Row>
 
 				<Drawer
 					title="Add New Member"
@@ -76,7 +78,7 @@ const UserOptions = props => {
 					onClose={() => setProfileDrawer(false)}
 					visible={profileDrawer}
 				>
-					<AddMember onAddMember={handleUserAdd} />
+					<UpdateProfile />
 				</Drawer>
 			</div>
 		</>
