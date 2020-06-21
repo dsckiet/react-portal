@@ -4,32 +4,36 @@ import {
 	Button,
 	Input,
 	DatePicker,
-	TimePicker,
 	Row,
-	Checkbox,
 	Col,
 	Skeleton,
 	message,
 	Upload,
-	Icon
+	Icon,
+	Select,
+	Divider
 } from "antd";
+import styled from "styled-components";
 import "./style.css";
-const { RangePicker } = DatePicker;
-const { TextArea } = Input;
+const { Option } = Select;
+
+const UploadContainer = styled.div`
+	align-content: center !important;
+`;
 
 const UpdateProfile = props => {
-	const [event, setEvent] = useState(null);
+	const [name, setName] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
-	const [title, setTitle] = useState(null);
-	const [description, setDescription] = useState(null);
+	const [email, setEmail] = useState(null);
+	const [password, setPassword] = useState(null);
 	const [image, setImage] = useState(null);
-	const [venue, setVenue] = useState(null);
-	const [startDate, setStartDate] = useState(null);
-	const [endDate, setEndDate] = useState(null);
-	const [startTime, setStartTime] = useState(null);
-	const [endTime, setEndTime] = useState(null);
-	const [isRegistrationRequired, setIsRegReqd] = useState(null);
-	const [isRegistrationOpened, setIsRegOpen] = useState(null);
+	const [contact, setContact] = useState(null);
+	const [designation, setDesignation] = useState(null);
+	const [github, setGithub] = useState(null);
+	const [linkedin, setLinkedIn] = useState(null);
+	const [twitter, setTwitter] = useState(null);
+	const [portfolio, setPortfolio] = useState(null);
+	const [dob, setDOB] = useState(null);
 	const [showSkeleton, setShowSkeleton] = useState(false);
 	const { getFieldDecorator } = props.form;
 	const { loading, setLoading } = useState(false);
@@ -81,38 +85,17 @@ const UpdateProfile = props => {
 			// setLoading(false);
 			message.success(`${info.file.name} file uploaded successfully`);
 			// Get this url from response in real world.
-			getBase64(
-				info.file.originFileObj,
-				imageUrl => {
-					setImage(imageUrl);
-					setLoading(true);
-				}
-				// this.setState({
-				//   imageUrl,
-				//   loading: false,
-				// }),
-			);
+			getBase64(info.file.originFileObj, imageUrl => {
+				setImage(imageUrl);
+			});
 		}
 	};
 
-	const uploadButton = (
-		<div>
-			{loading ? <Icon type="loading" /> : <Icon type="plus" />}
-			<div className="ant-upload-text">Upload</div>
-		</div>
-	);
 	return (
 		<Skeleton loading={showSkeleton} active>
 			<Form layout="vertical">
-				<Form.Item label="Event Title" required>
-					{getFieldDecorator("title", {
-						rules: [
-							{
-								required: true,
-								message: "Please input event title!"
-							}
-						]
-					})(
+				<UploadContainer>
+					<Form.Item>
 						<Upload
 							name="avatar"
 							listType="picture-card"
@@ -141,159 +124,170 @@ const UpdateProfile = props => {
 								</div>
 							)}
 						</Upload>
-					)}
-				</Form.Item>
-				<Form.Item label="Description" required>
-					{getFieldDecorator("description", {
+					</Form.Item>
+				</UploadContainer>
+
+				<Divider style={{ color: "rgba(0,0,0,.25)" }}>
+					Personal Information
+				</Divider>
+
+				<Row gutter={16}>
+					<Col span={12}>
+						<Form.Item label="Name" required>
+							{getFieldDecorator("name", {
+								rules: [
+									{
+										require: true,
+										message: "Please enter your name!"
+									}
+								]
+							})(<Input type="text" placeholder="Name" />)}
+						</Form.Item>
+					</Col>
+					<Col span={12}>
+						<Form.Item label="Email" required>
+							{getFieldDecorator("email", {
+								rules: [
+									{
+										required: true,
+										message: "Please input email!"
+									}
+								]
+							})(<Input type="text" placeholder="Email" />)}
+						</Form.Item>
+					</Col>
+				</Row>
+
+				<Form.Item label="Password" required>
+					{getFieldDecorator("password", {
 						rules: [
 							{
-								require: true,
-								message: "Please enter description!"
+								required: true,
+								message: "Please input password!"
 							}
 						]
 					})(
-						<TextArea
-							rows={4}
-							placeholder="Enter event description"
-							onChange={e => setDescription(e.target.value)}
+						<Input.Password
+							type="password"
+							placeholder="Password"
 						/>
 					)}
 				</Form.Item>
 
-				{event ? (
-					<img
-						width="100%"
-						style={{ borderRadius: 4, marginBottom: 8 }}
-						src={event.image}
-						alt={event.name}
-					/>
-				) : null}
+				<Form.Item label="Contact" required>
+					{getFieldDecorator(
+						"contact",
+						{}
+					)(<Input type="number" placeholder="Contact" />)}
+				</Form.Item>
 
-				{/* <Form.Item label="Update Picture" required>
-					<Upload {...uploadprops} listType="picture">
-						<Button>
-							<Icon type="upload" /> Click to Upload
-						</Button>
-					</Upload>
-				</Form.Item> */}
-
-				<Form.Item label="Event Venue" required>
-					{getFieldDecorator("venue", {
+				<Form.Item label="Designation" required>
+					{getFieldDecorator("designation", {
 						rules: [
 							{
 								required: true,
-								message: "Please input event venue!"
+								message: "Please input Designation"
+							}
+						]
+					})(<Input type="text" placeholder="Designation" />)}
+				</Form.Item>
+
+				<Form.Item label="Date of Birth">
+					{getFieldDecorator(
+						"dob",
+						{}
+					)(
+						<DatePicker
+							style={{ width: "100%" }}
+							// disabledDate={disabledDate}
+							format="YYYY-MM-DD"
+						/>
+					)}
+				</Form.Item>
+
+				<Divider style={{ color: "rgba(0,0,0,.25)" }}>
+					Social Handles
+				</Divider>
+
+				<Form.Item label="Github">
+					{getFieldDecorator("github", {
+						rules: [
+							{
+								message: "Please input github handle"
 							}
 						]
 					})(
 						<Input
+							prefix={
+								<Icon
+									type="github"
+									style={{ color: "rgba(0,0,0,.25)" }}
+								/>
+							}
 							type="text"
-							placeholder="Event venue"
-							onChange={e => setVenue(e.target.value)}
 						/>
 					)}
 				</Form.Item>
 
-				<Form.Item label="Event Dates" required>
-					{getFieldDecorator("dates", {
+				<Form.Item label="Twitter">
+					{getFieldDecorator("twitter", {
 						rules: [
 							{
-								required: true,
-								message: "Please select event dates!"
+								message: "Please input twitter handle"
 							}
 						]
 					})(
-						<RangePicker
-							style={{ width: "100%" }}
-							// disabledDate={disabledDate}
-							format="YYYY-MM-DD"
-							// onChange={onDateRangeChange}
+						<Input
+							prefix={
+								<Icon
+									type="twitter"
+									style={{ color: "rgba(0,0,0,.25)" }}
+								/>
+							}
+							type="text"
 						/>
 					)}
 				</Form.Item>
 
-				<Row gutter={16}>
-					<Col span={12}>
-						<Form.Item label="Start Time" required>
-							{getFieldDecorator("startTime", {
-								rules: [
-									{
-										required: true,
-										message: "Please select event timings!"
-									}
-								]
-							})(
-								<TimePicker
-									use12Hours
-									format="h:mm a"
-									// onChange={onSTChange}
-									style={{ width: "100%" }}
-								/>
-							)}
-						</Form.Item>
-					</Col>
-					<Col span={12}>
-						<Form.Item label="End Time" required>
-							{getFieldDecorator("endTime", {
-								rules: [
-									{
-										required: true,
-										message: "Please select event timings!"
-									}
-								]
-							})(
-								<TimePicker
-									use12Hours
-									format="h:mm a"
-									// onChange={onETChange}
-									style={{ width: "100%" }}
-								/>
-							)}
-						</Form.Item>
-					</Col>
-				</Row>
-
-				<Row gutter={16}>
-					<Col span={12}>
-						<Form.Item>
-							{getFieldDecorator(
-								"isRegistrationRequired",
-								{}
-							)(
-								<Checkbox
-									checked={isRegistrationRequired}
-									onChange={e =>
-										setIsRegReqd(e.target.checked)
-									}
-								>
-									Is Registration Required?
-								</Checkbox>
-							)}
-						</Form.Item>
-					</Col>
-
-					<Col span={12}>
-						<Form.Item
-							hidden={
-								isRegistrationRequired === false ? true : false
+				<Form.Item label="LinkedIn">
+					{getFieldDecorator("linkedin", {
+						rules: [
+							{
+								message: "Please input linkedin handle"
 							}
-						>
-							{getFieldDecorator(
-								"isRegistrationOpened",
-								{}
-							)(
-								<Checkbox
-									checked={isRegistrationOpened}
-									onChange={e =>
-										setIsRegOpen(e.target.checked)
-									}
-								>
-									Is Registration Open?
-								</Checkbox>
-							)}
-						</Form.Item>
-					</Col>
-				</Row>
+						]
+					})(
+						<Input
+							prefix={
+								<Icon
+									type="linkedin"
+									style={{ color: "rgba(0,0,0,.25)" }}
+								/>
+							}
+							type="text"
+						/>
+					)}
+				</Form.Item>
+
+				<Form.Item label="Portfolio">
+					{getFieldDecorator("portfolio", {
+						rules: [
+							{
+								message: "Please input portfolio handle"
+							}
+						]
+					})(
+						<Input
+							prefix={
+								<Icon
+									type="link"
+									style={{ color: "rgba(0,0,0,.25)" }}
+								/>
+							}
+							type="text"
+						/>
+					)}
+				</Form.Item>
 
 				<Form.Item>
 					<Button
@@ -302,7 +296,7 @@ const UpdateProfile = props => {
 						className="login-form-button"
 						loading={isLoading}
 					>
-						Modify Event Details
+						Update Details
 					</Button>
 				</Form.Item>
 			</Form>

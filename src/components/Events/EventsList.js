@@ -176,6 +176,12 @@ const EventsList = props => {
 			}
 		},
 		{
+			title: "Max Registrations",
+			dataIndex: "maxRegister",
+			key: "maxRegister",
+			className: "registrations"
+		},
+		{
 			title: "Registration",
 			dataIndex: "reg",
 			key: "reg",
@@ -224,13 +230,13 @@ const EventsList = props => {
 					_id,
 					title,
 					venue,
-					// description,
 					startDate,
 					endDate,
 					time,
 					code,
 					isRegistrationRequired,
-					isRegistrationOpened
+					isRegistrationOpened,
+					maxRegister
 				} = event;
 				return {
 					index: ++id,
@@ -243,7 +249,8 @@ const EventsList = props => {
 					code: [code, _id],
 					status: [isRegistrationOpened, _id],
 					reg: isRegistrationRequired,
-					action: _id
+					action: _id,
+					maxRegister
 				};
 		  })
 		: null;
