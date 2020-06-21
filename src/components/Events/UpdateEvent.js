@@ -11,7 +11,8 @@ import {
 	Skeleton,
 	Upload,
 	message,
-	Icon
+	Icon,
+	InputNumber
 } from "antd";
 import moment from "moment";
 
@@ -36,6 +37,7 @@ const UpdateEvent = props => {
 	const [isRegistrationRequired, setIsRegReqd] = useState(null);
 	const [isRegistrationOpened, setIsRegOpen] = useState(null);
 	const [showSkeleton, setShowSkeleton] = useState(false);
+	const [maxRegister, setMaxRegister] = useState(null);
 	const { getFieldDecorator } = props.form;
 	const uploadprops = {
 		name: "file",
@@ -74,7 +76,6 @@ const UpdateEvent = props => {
 		})();
 	}, [props.eventId]);
 
-	console.log(event);
 	useEffect(() => {
 		if (event) {
 			let {
@@ -85,7 +86,8 @@ const UpdateEvent = props => {
 				description,
 				isRegistrationOpened,
 				isRegistrationRequired,
-				venue
+				venue,
+				maxRegister
 			} = event;
 
 			startDate = startDate.split("T")[0];
@@ -100,6 +102,7 @@ const UpdateEvent = props => {
 			setStartTime(time.split(" to ")[0]);
 			setEndDate(endDate);
 			setEndTime(time.split(" to ")[1]);
+			setMaxRegister(maxRegister);
 
 			props.form.setFieldsValue({
 				startTime: moment(time.split(" to ")[0], format),
@@ -112,7 +115,8 @@ const UpdateEvent = props => {
 				description,
 				isRegistrationOpened,
 				isRegistrationRequired,
-				venue
+				venue,
+				maxRegister
 			});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -165,6 +169,8 @@ const UpdateEvent = props => {
 						isRegistrationOpened
 					);
 					formData.append("days", days);
+					formData.append("maxRegister", maxRegister);
+
 					let params = props.eventId;
 
 					const res = await updateEventService(formData, params);
@@ -355,6 +361,21 @@ const UpdateEvent = props => {
 						</Form.Item>
 					</Col>
 				</Row>
+				<Form.Item label="Max Registerations">
+					{getFieldDecorator("maxRegister", {
+						rules: [
+							{
+								required: true,
+								message: "Please enter maximum registrations."
+							}
+						]
+					})(
+						<InputNumber
+							min={1}
+							onChange={value => setMaxRegister(value)}
+						/>
+					)}
+				</Form.Item>
 
 				<Form.Item>
 					<Button

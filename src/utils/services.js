@@ -15,7 +15,9 @@ import {
 	GET_PARTICIPANT_DETAILS,
 	TOGGLE_WEBSITE_SEEN,
 	TOGGLE_REVOKE,
-	DELETE_USER
+	DELETE_USER,
+	GET_PROFILE,
+	UPDATE_PROFILE
 } from "./routes";
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -160,6 +162,18 @@ export async function getUsersService() {
 	}
 }
 
+export const getUserService = async id => {
+	setUserToken();
+	try {
+		const response = await axios.get(`${GET_PROFILE}?uid=${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (error) {
+		return error.response.data;
+	}
+};
+
 export async function addUserService(data) {
 	setUserToken();
 	try {
@@ -171,6 +185,18 @@ export async function addUserService(data) {
 		return err.response.data;
 	}
 }
+
+export const updateUserService = async data => {
+	setUserToken();
+	try {
+		const response = await axios.post(UPDATE_PROFILE, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (error) {
+		return error.response.data;
+	}
+};
 
 export const toggleWebsiteSeen = async id => {
 	setUserToken();

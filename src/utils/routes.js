@@ -7,8 +7,8 @@ export const TOGGLE_WEBSITE_SEEN = "/users/approve";
 export const TOGGLE_REVOKE = "/users/revoke";
 export const DELETE_USER = "/users";
 // @queryParams userId
-export const VIEW_PROFILE = "/users/profile/?id=5deab2193026f30ec826a0cc"; // GET
-export const UPDATE_PROFILE = "/users/profile/?id=5deab2193026f30ec826a0cc"; // POST
+export const GET_PROFILE = "/users/profile"; // GET
+export const UPDATE_PROFILE = "/users/profile"; // POST
 export const VIEW_USERS = "/users?sortBy=createdAt&sortType=asc"; // GET
 
 /** EVENTS MODULE : PARTICIPANTS **/

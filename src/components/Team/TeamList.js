@@ -205,8 +205,6 @@ const TeamList = props => {
 		  })
 		: null;
 
-	console.log(data);
-
 	return (
 		<>
 			<PageTitle title="Events" />

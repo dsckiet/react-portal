@@ -25,6 +25,10 @@ const UserOptions = props => {
 		props.onAddMember();
 	};
 
+	const handleUpdateUser = () => {
+		setProfileDrawer(false);
+	};
+
 	const menu = (
 		<Menu>
 			<Menu.Item key="1" onClick={() => setProfileDrawer(true)}>
@@ -78,7 +82,10 @@ const UserOptions = props => {
 					onClose={() => setProfileDrawer(false)}
 					visible={profileDrawer}
 				>
-					<UpdateProfile />
+					<UpdateProfile
+						uid={userData.id}
+						onUpdateUser={handleUpdateUser}
+					/>
 				</Drawer>
 			</div>
 		</>
