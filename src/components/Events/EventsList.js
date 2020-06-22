@@ -13,7 +13,7 @@ import { _notification } from "../../utils/_helpers";
 import { Link } from "react-router-dom";
 import UpdateEvent from "./UpdateEvent";
 
-export default props => {
+const EventsList = props => {
 	const [events, setEvents] = useState([]);
 	const [editDrawer, setEditDrawer] = useState(false);
 	const [eventId, setEventId] = useState(null);
@@ -39,7 +39,7 @@ export default props => {
 		try {
 			const res = await deleteEventsService(id);
 			if (res.message === "success") {
-				// toggleRefresh(!refresh);
+				toggleRefresh(!refresh);
 				_notification("success", "Success", "Event Deleted");
 			} else {
 				_notification("warning", "Error", res.message);
@@ -176,6 +176,12 @@ export default props => {
 			}
 		},
 		{
+			title: "Max Registrations",
+			dataIndex: "maxRegister",
+			key: "maxRegister",
+			className: "registrations"
+		},
+		{
 			title: "Registration",
 			dataIndex: "reg",
 			key: "reg",
@@ -224,13 +230,13 @@ export default props => {
 					_id,
 					title,
 					venue,
-					// description,
 					startDate,
 					endDate,
 					time,
 					code,
 					isRegistrationRequired,
-					isRegistrationOpened
+					isRegistrationOpened,
+					maxRegister
 				} = event;
 				return {
 					index: ++id,
@@ -243,7 +249,8 @@ export default props => {
 					code: [code, _id],
 					status: [isRegistrationOpened, _id],
 					reg: isRegistrationRequired,
-					action: _id
+					action: _id,
+					maxRegister
 				};
 		  })
 		: null;
@@ -298,3 +305,5 @@ export default props => {
 		</>
 	);
 };
+
+export default EventsList;

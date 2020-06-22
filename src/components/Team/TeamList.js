@@ -1,17 +1,29 @@
 import React, { useEffect, useState } from "react";
 import PageTitle from "../Layout/PageTitle";
-import { Table, Divider, Tag, Card, Icon, Drawer, Popconfirm } from "antd";
+import { Table, Divider, Tag, Card, Icon, Popconfirm } from "antd";
 import "./style.css";
 import {
 	getUsersService,
 	toggleWebsiteSeen,
-	getRole
+	getRole,
+	toggleUserRevoke,
+	deleteUser
 } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
 import UserOptions from "./UserOptions";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 
-export default props => {
+const StyledTable = styled(Table)`
+	.websiteShow {
+		display: ${props => (props.role === "lead" ? "block" : "none")};
+	}
+	.userAction {
+		display: ${props => (props.role === "lead" ? "block" : "none")};
+	}
+`;
+
+const TeamList = props => {
 	const [users, setUsers] = useState([]);
 	const [userData] = useState(getRole());
 	// const [editDrawer, setEditDrawer] = useState(false);
@@ -42,6 +54,34 @@ export default props => {
 			if (res.message === "success") {
 				toggleRefresh(!refresh);
 				_notification("success", "Success", "Show on website changed");
+			} else {
+				_notification("warning", "Error", res.message);
+			}
+		} catch (err) {
+			_notification("error", "Error", err.message);
+		}
+	};
+
+	const handleUserRevoke = async userId => {
+		try {
+			const res = await toggleUserRevoke(userId);
+			if (res.message === "success") {
+				toggleRefresh(!refresh);
+				_notification("success", "Success", "Toggle User Revoke");
+			} else {
+				_notification("warning", "Error", res.message);
+			}
+		} catch (err) {
+			_notification("error", "Error", err.message);
+		}
+	};
+
+	const handleUserDelete = async userId => {
+		try {
+			const res = await deleteUser(userId);
+			if (res.message === "success") {
+				toggleRefresh(!refresh);
+				_notification("success", "Success", "User deleted");
 			} else {
 				_notification("warning", "Error", res.message);
 			}
@@ -84,34 +124,60 @@ export default props => {
 			render: role => <Tag color="geekblue">{role}</Tag>
 		},
 		{
+			title: "Show on website",
+			dataIndex: "show",
+			key: "show",
+			className: "websiteShow",
+			render: show => (
+				<>
+					<Tag color="green">{show[0] ? "Shown" : "Not shown"}</Tag>
+					<Popconfirm
+						title="Do you want to toggle website seen?"
+						onConfirm={() => handleChangeWebsiteSeen(show[1])}
+						okText="Yes"
+						cancelText="No"
+					>
+						<Icon type="redo" />
+					</Popconfirm>
+				</>
+			)
+		},
+		{
 			title: "Designation",
 			dataIndex: "designation",
 			key: "designation"
+		},
+		{
+			title: "Action",
+			key: "action",
+			dataIndex: "action",
+			className: "userAction",
+			render: action => (
+				<span>
+					<Popconfirm
+						title="Do you want to toggle user revoke?"
+						onConfirm={() => handleUserRevoke(action[1])}
+						okText="Yes"
+						cancelText="No"
+					>
+						{action[0] ? (
+							<Icon type="close" style={{ color: "#F4B400" }} />
+						) : (
+							<Icon type="check" style={{ color: "green" }} />
+						)}
+					</Popconfirm>
+					<Divider type="vertical" />
+					<Popconfirm
+						title="Are you sure delete this user?"
+						onConfirm={() => handleUserDelete(action[1])}
+						okText="Yes"
+						cancelText="No"
+					>
+						<Icon style={{ color: "#DB4437" }} type="delete" />
+					</Popconfirm>
+				</span>
+			)
 		}
-		// userData.role === "lead"
-		// 	? {
-		// 			title: "Show on website",
-		// 			dataIndex: "show",
-		// 			key: "show",
-		// 			render: show => (
-		// 				<>
-		// 					<Tag color="green">
-		// 						{show[0] ? "Shown" : "Not shown"}
-		// 					</Tag>
-		// 					<Popconfirm
-		// 						title="Do you want to toggle website seen?"
-		// 						onConfirm={() =>
-		// 							handleChangeWebsiteSeen(show[1])
-		// 						}
-		// 						okText="Yes"
-		// 						cancelText="No"
-		// 					>
-		// 						<Icon type="redo" />
-		// 					</Popconfirm>
-		// 				</>
-		// 			)
-		// 	  }
-		// 	: null
 	];
 
 	const data = users
@@ -122,7 +188,8 @@ export default props => {
 					email,
 					role,
 					designation,
-					showOnWebsite
+					showOnWebsite,
+					isRevoked
 				} = user;
 				return {
 					key: ++id,
@@ -131,12 +198,12 @@ export default props => {
 					email,
 					role,
 					designation,
-					show: [showOnWebsite, _id]
+					isRevoked,
+					show: [showOnWebsite, _id],
+					action: [isRevoked, _id]
 				};
 		  })
 		: null;
-
-	console.log(data);
 
 	return (
 		<>
@@ -144,14 +211,18 @@ export default props => {
 
 			<div className="table-wrapper-card">
 				<UserOptions onAddMember={handleAddMember} />
+
 				<Card style={{ padding: 0, width: "100%", overflowX: "auto" }}>
-					<Table
+					<StyledTable
 						loading={isLoading}
 						columns={columns}
 						dataSource={data}
+						role={userData.role}
 					/>
 				</Card>
 			</div>
 		</>
 	);
 };
+
+export default TeamList;
