@@ -18,9 +18,12 @@ const Login = props => {
 			email,
 			password
 		});
-		// if (localStorage.getItem("token")) {
-		//   props.history.push("/");
-		// }
+		const token = JSON.parse(localStorage.getItem("token"));
+		if (token) {
+			if (token.token !== "") {
+				props.history.push("/");
+			}
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 

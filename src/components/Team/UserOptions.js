@@ -41,6 +41,7 @@ const UserOptions = props => {
 			</Menu.Item>
 		</Menu>
 	);
+
 	return (
 		<>
 			<div style={{ marginBottom: 12 }}>
