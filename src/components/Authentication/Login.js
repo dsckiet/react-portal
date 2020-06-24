@@ -15,10 +15,10 @@ const Login = props => {
 	const { getFieldDecorator } = props.form;
 
 	useEffect(() => {
-		props.form.setFieldsValue({
-			email,
-			password
-		});
+		// props.form.setFieldsValue({
+		// 	email,
+		// 	password: "vdsvsdv"
+		// });
 		const token = JSON.parse(localStorage.getItem("token"));
 		if (token) {
 			if (token.token !== "") {
@@ -43,22 +43,28 @@ const Login = props => {
 
 					if (res.error) {
 						_notification("error", "Error", res.message);
-						updatePassword("");
+						props.form.setFieldsValue({
+							password: ""
+						});
 					} else if (res.res.message === "success") {
 						Dispatch({
 							type: "IN",
 							token: res.token
 						});
 						_notification("success", "Success", "Logged In");
-						updateEmail("");
-						updatePassword("");
+						props.form.setFieldsValue({
+							email: "",
+							password: ""
+						});
 						setTimeout(() => {
 							props.history.push("/");
 						}, 200);
 					}
 					setIsLoading(false);
 				} catch (err) {
-					updatePassword("");
+					props.form.setFieldsValue({
+						password: ""
+					});
 					_notification("error", "Error", err.message);
 					setIsLoading(false);
 				}

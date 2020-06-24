@@ -5,12 +5,10 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import AuthProvider from "./contexts/userContext";
 import NetworkServices from "./utils/network-services";
-import { createBrowserHistory } from "history";
-const history = createBrowserHistory();
 
 NetworkServices();
 ReactDOM.render(
-	<AuthProvider history={history}>
+	<AuthProvider>
 		<App />
 	</AuthProvider>,
 	document.getElementById("root")

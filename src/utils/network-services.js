@@ -1,6 +1,4 @@
 import axios from "axios";
-import { _notification } from "./_helpers";
-import history from "../App";
 
 const NetworkServices = () => {
 	// Add a response interceptor
@@ -13,9 +11,9 @@ const NetworkServices = () => {
 			if (error.response.data.message.includes("Logout")) {
 				console.log(error.response.data.message);
 				localStorage.clear();
-				// _notification("error", "Error", error.response.data.message);
-				// console.log(history.push);
-				history.push("/login");
+				setTimeout(() => {
+					window.location = "/login";
+				}, 500);
 			}
 			return Promise.reject(error);
 		}
