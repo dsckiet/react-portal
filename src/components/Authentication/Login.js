@@ -1,24 +1,17 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Form, Icon, Input, Button, Card } from "antd";
 import logo from "../../utils/assets/images/logo-black.svg";
-// import useInputState from "../../hooks/useInputState";
 import "./style.css";
 import { _notification } from "../../utils/_helpers";
 import { loginService } from "../../utils/services";
 import { DispatchContext } from "../../contexts/userContext";
 
 const Login = props => {
-	const [email, updateEmail] = useState("");
-	const [password, updatePassword] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const Dispatch = useContext(DispatchContext);
 	const { getFieldDecorator } = props.form;
 
 	useEffect(() => {
-		// props.form.setFieldsValue({
-		// 	email,
-		// 	password: "vdsvsdv"
-		// });
 		const token = JSON.parse(localStorage.getItem("token"));
 		if (token) {
 			if (token.token !== "") {
@@ -97,9 +90,6 @@ const Login = props => {
 								}
 								type="email"
 								placeholder="Email"
-								// onChange={e =>
-								// 	updateEmail(e.target.value.toLowerCase())
-								// }
 							/>
 						)}
 					</Form.Item>
@@ -121,7 +111,6 @@ const Login = props => {
 								}
 								type="password"
 								placeholder="Password"
-								// onChange={e => updatePassword(e.target.value)}
 							/>
 						)}
 					</Form.Item>
@@ -134,15 +123,6 @@ const Login = props => {
 						>
 							Log in
 						</Button>
-
-						{/* <Divider />
-						<Link to="/signup">Create an account!</Link>
-						<Link
-							className="login-form-forgot"
-							to="/forgot-password"
-						>
-							Forgot password?
-						</Link> */}
 					</Form.Item>
 				</Form>
 			</Card>
