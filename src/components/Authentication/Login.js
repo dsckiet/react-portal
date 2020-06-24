@@ -13,6 +13,7 @@ const Login = props => {
 	const [isLoading, setIsLoading] = useState(false);
 	const Dispatch = useContext(DispatchContext);
 
+	console.log("hello");
 	useEffect(() => {
 		props.form.setFieldsValue({
 			email,
@@ -24,6 +25,7 @@ const Login = props => {
 				props.history.push("/");
 			}
 		}
+		console.log("helloooooooooooo");
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 

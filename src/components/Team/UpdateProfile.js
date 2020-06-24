@@ -178,10 +178,10 @@ const UpdateProfile = props => {
 					const res = await updateUserService(formData);
 					if (res.message === "success") {
 						_notification("success", "Success", "Event Updated");
-						if (newName !== null || newEmail !== null) {
-							localStorage.clear();
-							window.location = "/login";
-						}
+						// if (newName !== null || newEmail !== null) {
+						// 	localStorage.clear();
+						// 	window.location = "/login";
+						// }
 						props.onUpdateUser();
 					} else {
 						_notification("error", "Error", res.message);
@@ -196,8 +196,6 @@ const UpdateProfile = props => {
 			}
 		});
 	};
-
-	console.log(newName, newEmail);
 	return (
 		<Skeleton loading={showSkeleton} active>
 			<Form onSubmit={handleSubmit} layout="vertical">
