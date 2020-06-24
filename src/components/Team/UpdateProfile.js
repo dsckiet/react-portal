@@ -25,10 +25,7 @@ const UploadContainer = styled.div`
 const UpdateProfile = props => {
 	const [user, setUser] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
-	const [newName, setNewName] = useState(null);
-	const [newEmail, setNewEmail] = useState(null);
 	const [image, setImage] = useState(null);
-	const [dob, setDOB] = useState(null);
 	const [showSkeleton, setShowSkeleton] = useState(false);
 	const { getFieldDecorator } = props.form;
 	const uploadprops = {
@@ -123,10 +120,6 @@ const UpdateProfile = props => {
 		reader.readAsDataURL(img);
 	};
 
-	const onDateChange = (date, dateString) => {
-		setDOB(dateString);
-	};
-
 	const handleSubmit = e => {
 		e.preventDefault();
 		setIsLoading(true);
@@ -135,6 +128,10 @@ const UpdateProfile = props => {
 			if (!err) {
 				try {
 					const formData = new FormData();
+					formData.append("name", values.name);
+					formData.append("email", values.email);
+					formData.append("designation", values.designation);
+					formData.append("dob", values.dob.format("YYYY-MM-DD"));
 					if (values.image.file) {
 						formData.append(
 							"image",
@@ -143,8 +140,6 @@ const UpdateProfile = props => {
 					} else {
 						formData.append("image", values.image);
 					}
-					formData.append("name", values.name);
-					formData.append("email", values.email);
 					if (
 						values.password !== undefined &&
 						values.password !== ""
@@ -154,8 +149,6 @@ const UpdateProfile = props => {
 					if (values.contact !== undefined && values.contact !== "") {
 						formData.append("contact", values.contact);
 					}
-					formData.append("designation", values.designation);
-					// formData.append("dob", dob);
 					if (values.github !== undefined && values.github !== "") {
 						formData.append("github", values.github);
 					}
@@ -177,11 +170,7 @@ const UpdateProfile = props => {
 
 					const res = await updateUserService(formData);
 					if (res.message === "success") {
-						_notification("success", "Success", "Event Updated");
-						// if (newName !== null || newEmail !== null) {
-						// 	localStorage.clear();
-						// 	window.location = "/login";
-						// }
+						_notification("success", "Success", "Profile Updated");
 						props.onUpdateUser();
 					} else {
 						_notification("error", "Error", res.message);
@@ -244,13 +233,7 @@ const UpdateProfile = props => {
 										message: "Please enter your name!"
 									}
 								]
-							})(
-								<Input
-									type="text"
-									placeholder="Name"
-									onChange={e => setNewName(e.target.value)}
-								/>
-							)}
+							})(<Input type="text" placeholder="Name" />)}
 						</Form.Item>
 					</Col>
 					<Col span={12}>
@@ -262,13 +245,7 @@ const UpdateProfile = props => {
 										message: "Please input email!"
 									}
 								]
-							})(
-								<Input
-									type="text"
-									placeholder="Email"
-									onChange={e => setNewEmail(e.target.value)}
-								/>
-							)}
+							})(<Input type="text" placeholder="Email" />)}
 						</Form.Item>
 					</Col>
 				</Row>
@@ -281,7 +258,6 @@ const UpdateProfile = props => {
 						<Input.Password
 							type="password"
 							placeholder="Password"
-							// onChange={e => setPassword(e.target.value)}
 						/>
 					)}
 				</Form.Item>
@@ -290,13 +266,7 @@ const UpdateProfile = props => {
 					{getFieldDecorator(
 						"contact",
 						{}
-					)(
-						<Input
-							type="number"
-							placeholder="Contact"
-							// onChange={e => setContact(e.target.value)}
-						/>
-					)}
+					)(<Input type="number" placeholder="Contact" />)}
 				</Form.Item>
 
 				<Form.Item label="Designation">
@@ -307,25 +277,20 @@ const UpdateProfile = props => {
 								message: "Please input Designation"
 							}
 						]
-					})(
-						<Input
-							type="text"
-							placeholder="Designation"
-							// onChange={e => setDesignation(e.target.value)}
-						/>
-					)}
+					})(<Input type="text" placeholder="Designation" />)}
 				</Form.Item>
 
-				<Form.Item label="Date of Birth">
-					{getFieldDecorator(
-						"dob",
-						{}
-					)(
+				<Form.Item label="Date of Birth" name="date-picker">
+					{getFieldDecorator("dob", {
+						rules: [
+							{
+								type: "object"
+							}
+						]
+					})(
 						<DatePicker
 							style={{ width: "100%" }}
-							// disabledDate={disabledDate}
 							format="YYYY-MM-DD"
-							onChange={onDateChange}
 						/>
 					)}
 				</Form.Item>
@@ -347,7 +312,6 @@ const UpdateProfile = props => {
 								/>
 							}
 							type="text"
-							// onChange={e => setGithub(e.target.value)}
 						/>
 					)}
 				</Form.Item>
@@ -365,7 +329,6 @@ const UpdateProfile = props => {
 								/>
 							}
 							type="text"
-							// onChange={e => setTwitter(e.target.value)}
 						/>
 					)}
 				</Form.Item>
@@ -383,7 +346,6 @@ const UpdateProfile = props => {
 								/>
 							}
 							type="text"
-							// onChange={e => setLinkedIn(e.target.value)}
 						/>
 					)}
 				</Form.Item>
@@ -401,7 +363,6 @@ const UpdateProfile = props => {
 								/>
 							}
 							type="text"
-							// onChange={e => setPortfolio(e.target.value)}
 						/>
 					)}
 				</Form.Item>
