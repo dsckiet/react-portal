@@ -12,8 +12,8 @@ const Login = props => {
 	const [password, updatePassword] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const Dispatch = useContext(DispatchContext);
+	const { getFieldDecorator } = props.form;
 
-	console.log("hello");
 	useEffect(() => {
 		props.form.setFieldsValue({
 			email,
@@ -25,7 +25,6 @@ const Login = props => {
 				props.history.push("/");
 			}
 		}
-		console.log("helloooooooooooo");
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -36,7 +35,10 @@ const Login = props => {
 		props.form.validateFields(async (err, values) => {
 			if (!err) {
 				try {
-					const data = { email, password };
+					const data = {
+						email: values.email,
+						password: values.password
+					};
 					const res = await loginService(data);
 
 					if (res.error) {
@@ -47,9 +49,6 @@ const Login = props => {
 							type: "IN",
 							token: res.token
 						});
-						// localStorage.setItem("role", role);
-						// localStorage.setItem("user_id", _id);
-						// localStorage.setItem("token", res.token);
 						_notification("success", "Success", "Logged In");
 						updateEmail("");
 						updatePassword("");
@@ -68,7 +67,6 @@ const Login = props => {
 			}
 		});
 	};
-	const { getFieldDecorator } = props.form;
 	return (
 		<div style={{ height: "100vh", overflow: "hidden" }}>
 			<img src={logo} width={160} className="vidgyor-logo" alt="" />
@@ -93,9 +91,9 @@ const Login = props => {
 								}
 								type="email"
 								placeholder="Email"
-								onChange={e =>
-									updateEmail(e.target.value.toLowerCase())
-								}
+								// onChange={e =>
+								// 	updateEmail(e.target.value.toLowerCase())
+								// }
 							/>
 						)}
 					</Form.Item>
@@ -117,7 +115,7 @@ const Login = props => {
 								}
 								type="password"
 								placeholder="Password"
-								onChange={e => updatePassword(e.target.value)}
+								// onChange={e => updatePassword(e.target.value)}
 							/>
 						)}
 					</Form.Item>

@@ -10,12 +10,10 @@ import Navigator from "../src/components/Layout/Navigator";
 import "./App.css";
 import "./custom-antd.css";
 import { AuthContext } from "./contexts/userContext";
-import { createBrowserHistory } from "history";
-const history = createBrowserHistory();
 
 function App() {
 	return (
-		<Router history={history}>
+		<Router>
 			<Switch>
 				<Route exact path="/login" component={Login} />
 				<PrivateRoute path="/" component={Navigator} />
