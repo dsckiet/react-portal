@@ -13,6 +13,7 @@ import { _notification } from "../../utils/_helpers";
 import UserOptions from "./UserOptions";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import UserProfile from "./UserProfile";
 
 const StyledTable = styled(Table)`
 	.websiteShow {
@@ -25,11 +26,11 @@ const StyledTable = styled(Table)`
 
 const TeamList = props => {
 	const [users, setUsers] = useState([]);
-	const [userData] = useState(getRole());
-	// const [editDrawer, setEditDrawer] = useState(false);
-	// const [eventId, setEventId] = useState(null);
 	const [refresh, toggleRefresh] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [uid, setUID] = useState(null);
+	const [profileModal, setProfileModal] = useState(false);
+	const [userData] = useState(getRole());
 
 	useEffect(() => {
 		(async () => {
@@ -89,6 +90,10 @@ const TeamList = props => {
 			_notification("error", "Error", err.message);
 		}
 	};
+	const handleHover = (value, uid) => {
+		setProfileModal(value);
+		setUID(uid);
+	};
 
 	const columns = [
 		{
@@ -98,17 +103,18 @@ const TeamList = props => {
 		},
 		{
 			title: "Name",
-			dataIndex: "name",
-			key: "name",
-			render: text => (
+			dataIndex: "profile",
+			key: "profile",
+			render: profile => (
 				<Link
 					to="#"
+					onClick={() => handleHover(true, profile[1])}
 					// onClick={() => {
 					// 	setEditDrawer(true);
 					// 	setEventId(text[1]);
 					// }}
 				>
-					{text}
+					{profile[0]}
 				</Link>
 			)
 		},
@@ -194,7 +200,7 @@ const TeamList = props => {
 				return {
 					key: ++id,
 					_id,
-					name,
+					profile: [name, _id],
 					email,
 					role,
 					designation,
@@ -221,6 +227,11 @@ const TeamList = props => {
 					/>
 				</Card>
 			</div>
+			<UserProfile
+				openProfile={handleHover}
+				visible={profileModal}
+				uid={uid}
+			/>
 		</>
 	);
 };
