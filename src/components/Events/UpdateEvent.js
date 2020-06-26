@@ -38,6 +38,7 @@ const UpdateEvent = props => {
 	const [isRegistrationOpened, setIsRegOpen] = useState(null);
 	const [showSkeleton, setShowSkeleton] = useState(false);
 	const [maxRegister, setMaxRegister] = useState(null);
+	const [fileList, setFileList] = useState(null);
 	const { getFieldDecorator } = props.form;
 	const uploadprops = {
 		name: "file",
@@ -46,15 +47,16 @@ const UpdateEvent = props => {
 			authorization: "authorization-text"
 		},
 		onChange(info) {
-			if (info.file.status !== "uploading") {
-				console.log(info.file, info.fileList);
-			}
+			// if (info.file.status !== "uploading") {
+			// 	console.log(info.file, info.fileList);
+			// }
 			if (info.file.status === "done") {
-				setImage(info.file.originFileObj);
+				// setImage(info.file.originFileObj);
 				message.success(`${info.file.name} file uploaded successfully`);
 			} else if (info.file.status === "error") {
 				message.error(`${info.file.name} file upload failed.`);
 			}
+			setFileList(info.fileList);
 		}
 	};
 	useEffect(() => {
@@ -63,7 +65,6 @@ const UpdateEvent = props => {
 			try {
 				const id = props.eventId;
 				const res = await getEventService(id);
-				console.log(res);
 				if (res.message === "success") {
 					setEvent(res.data);
 					setShowSkeleton(false);
@@ -87,22 +88,23 @@ const UpdateEvent = props => {
 				isRegistrationOpened,
 				isRegistrationRequired,
 				venue,
-				maxRegister
+				maxRegister,
+				image
 			} = event;
 
 			startDate = startDate.split("T")[0];
 			endDate = endDate.split("T")[0];
 
-			setTitle(title);
-			setDescription(description);
-			setVenue(venue);
+			// setTitle(title);
+			// setDescription(description);
+			// setVenue(venue);
 			setIsRegOpen(isRegistrationOpened);
 			setIsRegReqd(isRegistrationRequired);
-			setStartDate(startDate);
-			setStartTime(time.split(" to ")[0]);
-			setEndDate(endDate);
-			setEndTime(time.split(" to ")[1]);
-			setMaxRegister(maxRegister);
+			// setStartDate(startDate);
+			// setStartTime(time.split(" to ")[0]);
+			// setEndDate(endDate);
+			// setEndTime(time.split(" to ")[1]);
+			// setMaxRegister(maxRegister);
 
 			props.form.setFieldsValue({
 				startTime: moment(time.split(" to ")[0], format),
@@ -116,11 +118,14 @@ const UpdateEvent = props => {
 				isRegistrationOpened,
 				isRegistrationRequired,
 				venue,
-				maxRegister
+				maxRegister,
+				image
 			});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [event]);
+
+	console.log(props.eventId);
 
 	function disabledDate(current) {
 		// Can not select days before today and today
@@ -147,29 +152,44 @@ const UpdateEvent = props => {
 			setIsRegOpen(false);
 		}
 		props.form.validateFields(async (err, values) => {
+			console.log(values);
 			if (!err) {
 				try {
-					let days = endDate.split("-")[2] - startDate.split("-")[2];
-					let xtime = startTime + " to " + endTime;
+					let xtime =
+						values.startTime.format("h:mm a") +
+						" to " +
+						values.endTime.format("h:mm a");
 
 					const formData = new FormData();
-					formData.append("image", image);
-					formData.append("title", title);
-					formData.append("description", description);
-					formData.append("startDate", startDate);
-					formData.append("endDate", endDate);
+					if (values.image.file) {
+						formData.append(
+							"image",
+							values.image.file.originFileObj
+						);
+					} else {
+						formData.append("image", values.image);
+					}
+					formData.append("title", values.title);
+					formData.append("description", values.description);
+					formData.append(
+						"startDate",
+						values.dates[0].format("YYYY-MM-DD")
+					);
+					formData.append(
+						"endDate",
+						values.dates[1].format("YYYY-MM-DD")
+					);
 					formData.append("time", xtime);
-					formData.append("venue", venue);
+					formData.append("venue", values.venue);
 					formData.append(
 						"isRegistrationRequired",
-						isRegistrationRequired
+						values.isRegistrationRequired
 					);
 					formData.append(
 						"isRegistrationOpened",
-						isRegistrationOpened
+						values.isRegistrationOpened
 					);
-					formData.append("days", days);
-					formData.append("maxRegister", maxRegister);
+					formData.append("maxRegister", values.maxRegister);
 
 					let params = props.eventId;
 
@@ -206,7 +226,7 @@ const UpdateEvent = props => {
 						<Input
 							type="text"
 							placeholder="Event title"
-							onChange={e => setTitle(e.target.value)}
+							// onChange={e => setTitle(e.target.value)}
 						/>
 					)}
 				</Form.Item>
@@ -222,7 +242,7 @@ const UpdateEvent = props => {
 						<TextArea
 							rows={4}
 							placeholder="Enter event description"
-							onChange={e => setDescription(e.target.value)}
+							// onChange={e => setDescription(e.target.value)}
 						/>
 					)}
 				</Form.Item>
@@ -237,11 +257,24 @@ const UpdateEvent = props => {
 				) : null}
 
 				<Form.Item label="Update Picture" required>
-					<Upload {...uploadprops} listType="picture">
-						<Button>
-							<Icon type="upload" /> Click to Upload
-						</Button>
-					</Upload>
+					{getFieldDecorator("image", {
+						rules: [
+							{
+								required: true,
+								message: "Please select!"
+							}
+						]
+					})(
+						<Upload
+							{...uploadprops}
+							fileList={fileList}
+							listType="picture"
+						>
+							<Button>
+								<Icon type="upload" /> Click to Upload
+							</Button>
+						</Upload>
+					)}
 				</Form.Item>
 
 				<Form.Item label="Event Venue" required>
@@ -256,7 +289,7 @@ const UpdateEvent = props => {
 						<Input
 							type="text"
 							placeholder="Event venue"
-							onChange={e => setVenue(e.target.value)}
+							// onChange={e => setVenue(e.target.value)}
 						/>
 					)}
 				</Form.Item>
@@ -274,7 +307,7 @@ const UpdateEvent = props => {
 							style={{ width: "100%" }}
 							disabledDate={disabledDate}
 							format="YYYY-MM-DD"
-							onChange={onDateRangeChange}
+							// onChange={onDateRangeChange}
 						/>
 					)}
 				</Form.Item>
@@ -293,7 +326,7 @@ const UpdateEvent = props => {
 								<TimePicker
 									use12Hours
 									format="h:mm a"
-									onChange={onSTChange}
+									// onChange={onSTChange}
 									style={{ width: "100%" }}
 								/>
 							)}
@@ -312,7 +345,7 @@ const UpdateEvent = props => {
 								<TimePicker
 									use12Hours
 									format="h:mm a"
-									onChange={onETChange}
+									// onChange={onETChange}
 									style={{ width: "100%" }}
 								/>
 							)}
@@ -372,7 +405,7 @@ const UpdateEvent = props => {
 					})(
 						<InputNumber
 							min={1}
-							onChange={value => setMaxRegister(value)}
+							// onChange={value => setMaxRegister(value)}
 						/>
 					)}
 				</Form.Item>

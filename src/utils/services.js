@@ -68,7 +68,6 @@ export async function getEventService(id) {
 	try {
 		const response = await axios.get(`${GET_EVENT}?eid=${id}`);
 		if (response.status === 200 && response.data.error === false) {
-			console.log(response);
 			return response.data;
 		} else if (response.status === 500)
 			return { response: { data: { message: "Something went wrong" } } };
