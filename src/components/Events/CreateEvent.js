@@ -22,6 +22,7 @@ const { RangePicker } = DatePicker;
 
 const CreateEvent = props => {
 	const [isLoading, setIsLoading] = useState(false);
+	const [fileList, setFileList] = useState(null);
 	const { getFieldDecorator } = props.form;
 
 	useEffect(() => {
@@ -43,6 +44,7 @@ const CreateEvent = props => {
 			} else if (info.file.status === "error") {
 				message.error(`${info.file.name} file upload failed.`);
 			}
+			setFileList(info.fileList);
 		}
 	};
 
@@ -145,7 +147,11 @@ const CreateEvent = props => {
 						}
 					]
 				})(
-					<Upload {...uploadprops} listType="picture">
+					<Upload
+						{...uploadprops}
+						fileList={fileList}
+						listType="picture"
+					>
 						<Button>
 							<Icon type="upload" /> Click to Upload
 						</Button>
@@ -228,16 +234,18 @@ const CreateEvent = props => {
 						)(<Checkbox>Is Registration Required?</Checkbox>)}
 					</Form.Item>
 				</Col>
-
 				<Col span={12}>
-					<Form.Item>
-						{getFieldDecorator(
-							"isRegistrationOpened",
-							{}
-						)(<Checkbox>Is Registration Open?</Checkbox>)}
-					</Form.Item>
+					<Checkbox.Group>
+						<Form.Item>
+							{getFieldDecorator(
+								"isRegistrationOpened",
+								{}
+							)(<Checkbox>Is Registration Open?</Checkbox>)}
+						</Form.Item>
+					</Checkbox.Group>
 				</Col>
 			</Row>
+
 			<Form.Item label="Max Registration">
 				{getFieldDecorator("maxRegister", {
 					rules: [

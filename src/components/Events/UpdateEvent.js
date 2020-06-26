@@ -26,18 +26,9 @@ const UpdateEvent = props => {
 	const format = "h:mm a";
 	const [event, setEvent] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
-	const [title, setTitle] = useState(null);
-	const [description, setDescription] = useState(null);
-	const [image, setImage] = useState(null);
-	const [venue, setVenue] = useState(null);
-	const [startDate, setStartDate] = useState(null);
-	const [endDate, setEndDate] = useState(null);
-	const [startTime, setStartTime] = useState(null);
-	const [endTime, setEndTime] = useState(null);
 	const [isRegistrationRequired, setIsRegReqd] = useState(null);
 	const [isRegistrationOpened, setIsRegOpen] = useState(null);
 	const [showSkeleton, setShowSkeleton] = useState(false);
-	const [maxRegister, setMaxRegister] = useState(null);
 	const [fileList, setFileList] = useState(null);
 	const { getFieldDecorator } = props.form;
 	const uploadprops = {
@@ -47,11 +38,7 @@ const UpdateEvent = props => {
 			authorization: "authorization-text"
 		},
 		onChange(info) {
-			// if (info.file.status !== "uploading") {
-			// 	console.log(info.file, info.fileList);
-			// }
 			if (info.file.status === "done") {
-				// setImage(info.file.originFileObj);
 				message.success(`${info.file.name} file uploaded successfully`);
 			} else if (info.file.status === "error") {
 				message.error(`${info.file.name} file upload failed.`);
@@ -95,16 +82,8 @@ const UpdateEvent = props => {
 			startDate = startDate.split("T")[0];
 			endDate = endDate.split("T")[0];
 
-			// setTitle(title);
-			// setDescription(description);
-			// setVenue(venue);
 			setIsRegOpen(isRegistrationOpened);
 			setIsRegReqd(isRegistrationRequired);
-			// setStartDate(startDate);
-			// setStartTime(time.split(" to ")[0]);
-			// setEndDate(endDate);
-			// setEndTime(time.split(" to ")[1]);
-			// setMaxRegister(maxRegister);
 
 			props.form.setFieldsValue({
 				startTime: moment(time.split(" to ")[0], format),
@@ -125,24 +104,9 @@ const UpdateEvent = props => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [event]);
 
-	console.log(props.eventId);
-
 	function disabledDate(current) {
 		// Can not select days before today and today
 		return current && current < moment().endOf("day");
-	}
-
-	const onDateRangeChange = (date, dateString) => {
-		setStartDate(dateString[0]);
-		setEndDate(dateString[1]);
-	};
-
-	function onSTChange(time, timeString) {
-		setStartTime(timeString);
-	}
-
-	function onETChange(time, timeString) {
-		setEndTime(timeString);
 	}
 
 	const handleSubmit = e => {
@@ -222,13 +186,7 @@ const UpdateEvent = props => {
 								message: "Please input event title!"
 							}
 						]
-					})(
-						<Input
-							type="text"
-							placeholder="Event title"
-							// onChange={e => setTitle(e.target.value)}
-						/>
-					)}
+					})(<Input type="text" placeholder="Event title" />)}
 				</Form.Item>
 				<Form.Item label="Description" required>
 					{getFieldDecorator("description", {
@@ -242,7 +200,6 @@ const UpdateEvent = props => {
 						<TextArea
 							rows={4}
 							placeholder="Enter event description"
-							// onChange={e => setDescription(e.target.value)}
 						/>
 					)}
 				</Form.Item>
@@ -285,13 +242,7 @@ const UpdateEvent = props => {
 								message: "Please input event venue!"
 							}
 						]
-					})(
-						<Input
-							type="text"
-							placeholder="Event venue"
-							// onChange={e => setVenue(e.target.value)}
-						/>
-					)}
+					})(<Input type="text" placeholder="Event venue" />)}
 				</Form.Item>
 
 				<Form.Item label="Event Dates" required>
@@ -307,7 +258,6 @@ const UpdateEvent = props => {
 							style={{ width: "100%" }}
 							disabledDate={disabledDate}
 							format="YYYY-MM-DD"
-							// onChange={onDateRangeChange}
 						/>
 					)}
 				</Form.Item>
@@ -326,7 +276,6 @@ const UpdateEvent = props => {
 								<TimePicker
 									use12Hours
 									format="h:mm a"
-									// onChange={onSTChange}
 									style={{ width: "100%" }}
 								/>
 							)}
@@ -345,7 +294,6 @@ const UpdateEvent = props => {
 								<TimePicker
 									use12Hours
 									format="h:mm a"
-									// onChange={onETChange}
 									style={{ width: "100%" }}
 								/>
 							)}
@@ -402,12 +350,7 @@ const UpdateEvent = props => {
 								message: "Please enter maximum registrations."
 							}
 						]
-					})(
-						<InputNumber
-							min={1}
-							// onChange={value => setMaxRegister(value)}
-						/>
-					)}
+					})(<InputNumber min={1} />)}
 				</Form.Item>
 
 				<Form.Item>

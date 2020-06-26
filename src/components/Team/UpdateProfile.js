@@ -27,9 +27,11 @@ const UpdateProfile = props => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [image, setImage] = useState(null);
 	const [showSkeleton, setShowSkeleton] = useState(false);
+	const [fileList, setFileList] = useState(null);
 	const { getFieldDecorator } = props.form;
 	const uploadprops = {
 		name: "avatar",
+		listType: "picture-card",
 		action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
 		headers: {
 			authorization: "authorization-text"
@@ -57,6 +59,7 @@ const UpdateProfile = props => {
 			} else if (info.file.status === "error") {
 				message.error(`${info.file.name} file upload failed.`);
 			}
+			setFileList(info.fileList);
 		}
 	};
 
@@ -195,8 +198,7 @@ const UpdateProfile = props => {
 							{}
 						)(
 							<Upload
-								listType="picture-card"
-								className="avatar-uploader"
+								fileList={fileList}
 								showUploadList={false}
 								{...uploadprops}
 							>
