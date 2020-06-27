@@ -42,7 +42,8 @@ const UpdateProfile = props => {
 			if (!isJpgOrPng) {
 				message.error("You can only upload JPG/PNG file!");
 			}
-			const isLt2M = file.size / 1024 / 1024 < 2;
+			console.log(file);
+			const isLt2M = file.size / 5120 / 5120 < 5;
 			if (!isLt2M) {
 				message.error("Image must smaller than 2MB!");
 			}
@@ -197,26 +198,31 @@ const UpdateProfile = props => {
 							"image",
 							{}
 						)(
-							<Upload
-								fileList={fileList}
-								showUploadList={false}
-								{...uploadprops}
-							>
-								{image ? (
-									<img
-										src={image}
-										alt="avatar"
-										style={{ width: "100%" }}
-									/>
-								) : (
-									<div>
-										<Icon type="plus" />
-										<div className="ant-upload-text">
-											Upload
+							<>
+								<Upload
+									fileList={fileList}
+									showUploadList={false}
+									{...uploadprops}
+								>
+									{image ? (
+										<img
+											src={image}
+											alt="avatar"
+											style={{ width: "100%" }}
+										/>
+									) : (
+										<div>
+											<Icon type="plus" />
+											<div className="ant-upload-text">
+												Upload
+											</div>
 										</div>
-									</div>
-								)}
-							</Upload>
+									)}
+								</Upload>
+								<small>
+									Photo should be in square dimension
+								</small>
+							</>
 						)}
 					</Form.Item>
 				</UploadContainer>
