@@ -26,8 +26,6 @@ const UpdateEvent = props => {
 	const format = "h:mm a";
 	const [event, setEvent] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
-	const [isRegistrationRequired, setIsRegReqd] = useState(null);
-	const [isRegistrationOpened, setIsRegOpen] = useState(null);
 	const [showSkeleton, setShowSkeleton] = useState(false);
 	const [fileList, setFileList] = useState(null);
 	const { getFieldDecorator } = props.form;
@@ -82,9 +80,6 @@ const UpdateEvent = props => {
 			startDate = startDate.split("T")[0];
 			endDate = endDate.split("T")[0];
 
-			setIsRegOpen(isRegistrationOpened);
-			setIsRegReqd(isRegistrationRequired);
-
 			props.form.setFieldsValue({
 				startTime: moment(time.split(" to ")[0], format),
 				endTime: moment(time.split(" to ")[1], format),
@@ -112,8 +107,8 @@ const UpdateEvent = props => {
 	const handleSubmit = e => {
 		e.preventDefault();
 		setIsLoading(true);
-		if (isRegistrationRequired === false) {
-			setIsRegOpen(false);
+		if (props.form.getFieldValue("isRegistrationRequired") === false) {
+			props.form.setFieldsValue({ isRegistrationOpened: false });
 		}
 		props.form.validateFields(async (err, values) => {
 			console.log(values);
@@ -309,10 +304,9 @@ const UpdateEvent = props => {
 								{}
 							)(
 								<Checkbox
-									checked={isRegistrationRequired}
-									onChange={e =>
-										setIsRegReqd(e.target.checked)
-									}
+									checked={props.form.getFieldValue(
+										"isRegistrationRequired"
+									)}
 								>
 									Is Registration Required?
 								</Checkbox>
@@ -323,7 +317,11 @@ const UpdateEvent = props => {
 					<Col span={12}>
 						<Form.Item
 							hidden={
-								isRegistrationRequired === false ? true : false
+								props.form.getFieldValue(
+									"isRegistrationRequired"
+								) === false
+									? true
+									: false
 							}
 						>
 							{getFieldDecorator(
@@ -331,10 +329,9 @@ const UpdateEvent = props => {
 								{}
 							)(
 								<Checkbox
-									checked={isRegistrationOpened}
-									onChange={e =>
-										setIsRegOpen(e.target.checked)
-									}
+									checked={props.form.getFieldValue(
+										"isRegistrationOpened"
+									)}
 								>
 									Is Registration Open?
 								</Checkbox>
