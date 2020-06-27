@@ -17,7 +17,8 @@ import {
 	TOGGLE_REVOKE,
 	DELETE_USER,
 	GET_PROFILE,
-	UPDATE_PROFILE
+	UPDATE_PROFILE,
+	FORGOTPASS
 } from "./routes";
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -50,6 +51,18 @@ export async function loginService(data) {
 		else return err.message;
 	}
 }
+
+export const forgotPassService = async data => {
+	try {
+		const response = await axios.post(FORGOTPASS, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) return err.response.data;
+		else return err.message;
+	}
+};
 
 /******************EVENT SERVICES********************/
 export async function getEventsService() {

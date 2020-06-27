@@ -1,21 +1,19 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Form, Icon, Input, Button, Card } from "antd";
+import React, { useState, useEffect } from "react";
+import { Card, Form, Input, Icon, Button } from "antd";
 import logo from "../../utils/assets/images/logo-black.svg";
 import "./style.css";
-import { _notification } from "../../utils/_helpers";
-import { loginService } from "../../utils/services";
-import { DispatchContext } from "../../contexts/userContext";
-import { Link } from "react-router-dom";
+import { _notification } from "./../../utils/_helpers";
+import { forgotPassService } from "../../utils/services";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const Forgot = styled.div`
 	float: right;
 	font-weight: 300;
 `;
 
-const Login = props => {
+const ForgotPassword = props => {
 	const [isLoading, setIsLoading] = useState(false);
-	const Dispatch = useContext(DispatchContext);
 	const { getFieldDecorator } = props.form;
 
 	useEffect(() => {
@@ -36,36 +34,28 @@ const Login = props => {
 			if (!err) {
 				try {
 					const data = {
-						email: values.email,
-						password: values.password
+						email: values.email
 					};
-					const res = await loginService(data);
-					console.log(res);
+					const res = await forgotPassService(data);
 
 					if (res.error) {
+						console.log(res);
 						_notification("error", "Error", res.message);
 						props.form.setFieldsValue({
-							password: ""
+							email: ""
 						});
-					} else if (res.res.message === "success") {
-						Dispatch({
-							type: "IN",
-							token: res.token
-						});
-						_notification("success", "Success", "Logged In");
+					} else if (res.message === "success") {
+						_notification("success", "Success", "Mail Sent");
 						props.form.setFieldsValue({
-							email: "",
-							password: ""
+							email: ""
 						});
-						setTimeout(() => {
-							props.history.push("/");
-						}, 200);
 					}
 					setIsLoading(false);
 				} catch (err) {
 					props.form.setFieldsValue({
-						password: ""
+						email: ""
 					});
+					console.log(err);
 					_notification("error", "Error", err.message);
 					setIsLoading(false);
 				}
@@ -74,11 +64,16 @@ const Login = props => {
 			}
 		});
 	};
+
 	return (
 		<div style={{ height: "100vh", overflow: "hidden" }}>
 			<img src={logo} width={160} className="vidgyor-logo" alt="" />
-			<Card title="Log in to your account" className="login-form-wrapper">
+			<Card title="Forgot Password" className="login-form-wrapper">
 				<Form onSubmit={handleSubmit} className="login-form">
+					<p style={{ textAlign: "center", fontWeight: "300" }}>
+						We will sent a mail to your email with reset password
+						link
+					</p>
 					<Form.Item>
 						{getFieldDecorator("email", {
 							rules: [
@@ -92,33 +87,12 @@ const Login = props => {
 							<Input
 								prefix={
 									<Icon
-										type="user"
+										type="mail"
 										style={{ color: "rgba(0,0,0,.25)" }}
 									/>
 								}
 								type="email"
 								placeholder="Email"
-							/>
-						)}
-					</Form.Item>
-					<Form.Item>
-						{getFieldDecorator("password", {
-							rules: [
-								{
-									required: true,
-									message: "Please input your Password!"
-								}
-							]
-						})(
-							<Input.Password
-								prefix={
-									<Icon
-										type="lock"
-										style={{ color: "rgba(0,0,0,.25)" }}
-									/>
-								}
-								type="password"
-								placeholder="Password"
 							/>
 						)}
 					</Form.Item>
@@ -129,21 +103,18 @@ const Login = props => {
 							className="login-form-button"
 							loading={isLoading}
 						>
-							Log in
+							Submit
 						</Button>
 					</Form.Item>
 					<Forgot>
-						<Link to="/forgot">Forgot Password</Link>
+						<Link to="/login">Log In</Link>
 					</Forgot>
 				</Form>
 			</Card>
-			<p style={{ textAlign: "center", marginTop: 12 }}>
-				Don't have an account? Contact your lead
-			</p>
 		</div>
 	);
 };
 
-const LoginForm = Form.create({ name: "login_form" })(Login);
+const ForgotPasswordForm = Form.create({ name: "forgot_form" })(ForgotPassword);
 
-export default LoginForm;
+export default ForgotPasswordForm;

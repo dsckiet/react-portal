@@ -1,6 +1,7 @@
 /** USERS MODULE **/
 export const ADD_USER = "/users"; // POST
 export const LOGIN = "/users/login"; // POST
+export const FORGOTPASS = "/users/forgot"; // POST
 // @queryParams userId
 export const UPDATE_USER = "/users/5deab2193026f30ec826a0cc"; // PUT
 export const TOGGLE_WEBSITE_SEEN = "/users/approve";

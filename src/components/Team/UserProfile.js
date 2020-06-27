@@ -12,22 +12,21 @@ import { AiFillLinkedin, AiFillPhone } from "react-icons/ai";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { getUserService } from "../../utils/services";
 import { _notification } from "./../../utils/_helpers";
-import { Link } from "react-router-dom";
 
-const Months = [
-	"Jan",
-	"Feb",
-	"Mar",
-	"April",
-	"May",
-	"June",
-	"July",
-	"Aug",
-	"Sep",
-	"Oct",
-	"Nov",
-	"Dec"
-];
+// const Months = [
+// 	"Jan",
+// 	"Feb",
+// 	"Mar",
+// 	"April",
+// 	"May",
+// 	"June",
+// 	"July",
+// 	"Aug",
+// 	"Sep",
+// 	"Oct",
+// 	"Nov",
+// 	"Dec"
+// ];
 
 const ImageContainer = styled.div`
 	align-items: center;
