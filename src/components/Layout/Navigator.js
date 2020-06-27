@@ -14,7 +14,6 @@ const { Content, Sider } = Layout;
 
 const Dashboard = props => {
 	const [isCollapsed] = useState(false);
-	const routeKey = localStorage.getItem("routeKey");
 
 	// useEffect(() => {
 	//   if (
@@ -54,7 +53,7 @@ const Dashboard = props => {
 							theme="dark"
 							height="100%"
 							mode="inline"
-							defaultSelectedKeys={routeKey || "dashboard"}
+							defaultSelectedKeys={"dashboard"}
 						>
 							{routes.map((route, idx) => (
 								<Menu.Item

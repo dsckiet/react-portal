@@ -213,7 +213,7 @@ const TeamList = props => {
 
 	return (
 		<>
-			<PageTitle title="Events" />
+			<PageTitle title="Team" />
 
 			<div className="table-wrapper-card">
 				<UserOptions onAddMember={handleAddMember} />
