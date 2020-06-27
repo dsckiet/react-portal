@@ -14,7 +14,6 @@ import {
 	InputNumber
 } from "antd";
 import moment from "moment";
-
 import "./style.css";
 import { addEventService } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
@@ -22,27 +21,12 @@ const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
 const CreateEvent = props => {
-	const format = "h:mm a";
-
 	const [isLoading, setIsLoading] = useState(false);
-	const [title, setTitle] = useState(null);
-	const [description, setDescription] = useState(null);
-	const [image, setImage] = useState(null);
-	const [venue, setVenue] = useState(null);
-	const [startDate, setStartDate] = useState(null);
-	const [endDate, setEndDate] = useState(null);
-	const [startTime, setStartTime] = useState("5:00 pm");
-	const [endTime, setEndTime] = useState("07:00 pm");
-	const [isRegistrationRequired, setIsRegReqd] = useState(true);
-	const [isRegistrationOpened, setIsRegOpen] = useState(false);
-	const [maxRegister, setMaxRegister] = useState(1);
-
+	const [fileList, setFileList] = useState(null);
 	const { getFieldDecorator } = props.form;
 
 	useEffect(() => {
 		props.form.setFieldsValue({
-			startTime: moment(startTime, format),
-			endTime: moment(endTime, format),
 			maxRegister: 1
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -55,15 +39,12 @@ const CreateEvent = props => {
 			authorization: "authorization-text"
 		},
 		onChange(info) {
-			if (info.file.status !== "uploading") {
-				console.log(info.file, info.fileList);
-			}
 			if (info.file.status === "done") {
-				setImage(info.file.originFileObj);
 				message.success(`${info.file.name} file uploaded successfully`);
 			} else if (info.file.status === "error") {
 				message.error(`${info.file.name} file upload failed.`);
 			}
+			setFileList(info.fileList);
 		}
 	};
 
@@ -72,50 +53,51 @@ const CreateEvent = props => {
 		return current && current < moment().endOf("day");
 	}
 
-	const onDateRangeChange = (date, dateString) => {
-		setStartDate(dateString[0]);
-		setEndDate(dateString[1]);
-	};
-
-	function onSTChange(time, timeString) {
-		setStartTime(timeString);
-	}
-
-	function onETChange(time, timeString) {
-		setEndTime(timeString);
-	}
-
 	const handleSubmit = e => {
 		e.preventDefault();
 		setIsLoading(true);
-		if (isRegistrationRequired === false) {
-			setIsRegOpen(false);
-		}
+
 		props.form.validateFields(async (err, values) => {
+			if (values.isRegistrationRequired === false) {
+				values.isRegistrationOpened = false;
+			}
 			if (!err) {
 				try {
-					let days = endDate.split("-")[2] - startDate.split("-")[2];
-					let xtime = startTime + " to " + endTime;
-
+					let xtime =
+						values.startTime.format("h:mm a") +
+						" to " +
+						values.endTime.format("h:mm a");
 					const formData = new FormData();
-					formData.append("image", image);
-					formData.append("title", title);
-					formData.append("description", description);
-					formData.append("startDate", startDate);
-					formData.append("endDate", endDate);
+					formData.append("image", values.image.file.originFileObj);
+					formData.append("title", values.title);
+					formData.append("description", values.description);
 					formData.append("time", xtime);
-					formData.append("venue", venue);
+					formData.append("venue", values.venue);
+					formData.append("maxRegister", values.maxRegister);
 					formData.append(
-						"isRegistrationRequired",
-						isRegistrationRequired
+						"startDate",
+						values.dates[0].format("YYYY-MM-DD")
 					);
 					formData.append(
-						"isRegistrationOpened",
-						isRegistrationOpened
+						"endDate",
+						values.dates[1].format("YYYY-MM-DD")
 					);
-					formData.append("days", days);
-					formData.append("maxRegister", maxRegister);
-
+					if (values.isRegistrationRequired === undefined) {
+						formData.append("isRegistrationRequired", false);
+					} else {
+						formData.append(
+							"isRegistrationRequired",
+							values.isRegistrationRequired
+						);
+					}
+					if (values.isRegistrationOpened === undefined) {
+						formData.append("isRegistrationOpened", false);
+					} else {
+						formData.append(
+							"isRegistrationOpened",
+							values.isRegistrationOpened
+						);
+					}
 					const res = await addEventService(formData);
 					if (res.message === "success") {
 						_notification("success", "Success", "Event Added");
@@ -144,36 +126,37 @@ const CreateEvent = props => {
 							message: "Please input event title!"
 						}
 					]
-				})(
-					<Input
-						type="text"
-						placeholder="Event title"
-						onChange={e => setTitle(e.target.value)}
-					/>
-				)}
+				})(<Input type="text" placeholder="Event title" />)}
 			</Form.Item>
 			<Form.Item label="Description" required>
 				{getFieldDecorator("description", {
 					rules: [
 						{
-							require: true,
+							required: true,
 							message: "Please enter description!"
 						}
 					]
-				})(
-					<TextArea
-						rows={4}
-						placeholder="Enter event description"
-						onChange={e => setDescription(e.target.value)}
-					/>
-				)}
+				})(<TextArea rows={4} placeholder="Enter event description" />)}
 			</Form.Item>
 			<Form.Item label="Upload Picture" required>
-				<Upload {...uploadprops} listType="picture">
-					<Button>
-						<Icon type="upload" /> Click to Upload
-					</Button>
-				</Upload>
+				{getFieldDecorator("image", {
+					rules: [
+						{
+							required: true,
+							message: "Please select image!"
+						}
+					]
+				})(
+					<Upload
+						{...uploadprops}
+						fileList={fileList}
+						listType="picture"
+					>
+						<Button>
+							<Icon type="upload" /> Click to Upload
+						</Button>
+					</Upload>
+				)}
 			</Form.Item>
 
 			<Form.Item label="Event Venue" required>
@@ -184,13 +167,7 @@ const CreateEvent = props => {
 							message: "Please input event venue!"
 						}
 					]
-				})(
-					<Input
-						type="text"
-						placeholder="Event venue"
-						onChange={e => setVenue(e.target.value)}
-					/>
-				)}
+				})(<Input type="text" placeholder="Event venue" />)}
 			</Form.Item>
 
 			<Form.Item label="Event Dates" required>
@@ -205,8 +182,6 @@ const CreateEvent = props => {
 					<RangePicker
 						style={{ width: "100%" }}
 						disabledDate={disabledDate}
-						format="YYYY-MM-DD"
-						onChange={onDateRangeChange}
 					/>
 				)}
 			</Form.Item>
@@ -225,7 +200,6 @@ const CreateEvent = props => {
 							<TimePicker
 								use12Hours
 								format="h:mm a"
-								onChange={onSTChange}
 								style={{ width: "100%" }}
 							/>
 						)}
@@ -244,7 +218,6 @@ const CreateEvent = props => {
 							<TimePicker
 								use12Hours
 								format="h:mm a"
-								onChange={onETChange}
 								style={{ width: "100%" }}
 							/>
 						)}
@@ -258,36 +231,22 @@ const CreateEvent = props => {
 						{getFieldDecorator(
 							"isRegistrationRequired",
 							{}
-						)(
-							<Checkbox
-								checked={isRegistrationRequired}
-								onChange={e => setIsRegReqd(e.target.checked)}
-							>
-								Is Registration Required?
-							</Checkbox>
-						)}
+						)(<Checkbox>Is Registration Required?</Checkbox>)}
 					</Form.Item>
 				</Col>
-
 				<Col span={12}>
-					<Form.Item
-						hidden={isRegistrationRequired === false ? true : false}
-					>
-						{getFieldDecorator(
-							"isRegistrationOpened",
-							{}
-						)(
-							<Checkbox
-								checked={isRegistrationOpened}
-								onChange={e => setIsRegOpen(e.target.checked)}
-							>
-								Is Registration Open?
-							</Checkbox>
-						)}
-					</Form.Item>
+					<Checkbox.Group>
+						<Form.Item>
+							{getFieldDecorator(
+								"isRegistrationOpened",
+								{}
+							)(<Checkbox>Is Registration Open?</Checkbox>)}
+						</Form.Item>
+					</Checkbox.Group>
 				</Col>
 			</Row>
-			<Form.Item label="Max Registerations">
+
+			<Form.Item label="Max Registration">
 				{getFieldDecorator("maxRegister", {
 					rules: [
 						{
@@ -295,12 +254,7 @@ const CreateEvent = props => {
 							message: "Please enter maximum registrations."
 						}
 					]
-				})(
-					<InputNumber
-						min={1}
-						onChange={value => setMaxRegister(value)}
-					/>
-				)}
+				})(<InputNumber min={1} />)}
 			</Form.Item>
 
 			<Form.Item>

@@ -46,7 +46,8 @@ export async function loginService(data) {
 			};
 		} else return response.data;
 	} catch (err) {
-		return err.response.data;
+		if (err.response) return err.response.data;
+		else return err.message;
 	}
 }
 
@@ -58,7 +59,8 @@ export async function getEventsService() {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		return err.response.data;
+		if (err.response) return err.response.data;
+		else return err.message;
 	}
 }
 
@@ -66,13 +68,13 @@ export async function getEventService(id) {
 	try {
 		const response = await axios.get(`${GET_EVENT}?eid=${id}`);
 		if (response.status === 200 && response.data.error === false) {
-			console.log(response);
 			return response.data;
 		} else if (response.status === 500)
 			return { response: { data: { message: "Something went wrong" } } };
 		else return response.data;
 	} catch (err) {
-		return err.response.data;
+		if (err.response) return err.response.data;
+		else return err.message;
 	}
 }
 
@@ -89,7 +91,8 @@ export async function addEventService(data) {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		return err.response.data;
+		if (err.response) return err.response.data;
+		else return err.message;
 	}
 }
 
@@ -110,7 +113,8 @@ export async function updateEventService(data, params) {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		return err.response.data;
+		if (err.response) return err.response.data;
+		else return err.message;
 	}
 }
 
@@ -122,7 +126,8 @@ export async function refreshEventCodeService(data) {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		return err.response.data;
+		if (err.response) return err.response.data;
+		else return err.message;
 	}
 }
 
@@ -134,7 +139,8 @@ export async function toggleRegistrationsService(data) {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		return err.response.data;
+		if (err.response) return err.response.data;
+		else return err.message;
 	}
 }
 
@@ -146,7 +152,8 @@ export async function deleteEventsService(eventId) {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		return err.response.data;
+		if (err.response) return err.response.data;
+		else return err.message;
 	}
 }
 
@@ -158,7 +165,8 @@ export async function getUsersService() {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		return err.response.data;
+		if (err.response) return err.response.data;
+		else return err.message;
 	}
 }
 
@@ -170,7 +178,8 @@ export const getUserService = async id => {
 			return response.data;
 		} else return response.data;
 	} catch (error) {
-		return error.response.data;
+		if (error.response) return error.response.data;
+		else return error.message;
 	}
 };
 
@@ -182,7 +191,8 @@ export async function addUserService(data) {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		return err.response.data;
+		if (err.response) return err.response.data;
+		else return err.message;
 	}
 }
 
@@ -194,7 +204,8 @@ export const updateUserService = async data => {
 			return response.data;
 		} else return response.data;
 	} catch (error) {
-		return error.response.data;
+		if (error.response) return error.response.data;
+		else return error.message;
 	}
 };
 
@@ -206,7 +217,8 @@ export const toggleWebsiteSeen = async id => {
 			return response.data;
 		} else return response.data;
 	} catch (error) {
-		return error.response.data;
+		if (error.response) return error.response.data;
+		else return error.message;
 	}
 };
 
@@ -218,7 +230,8 @@ export const toggleUserRevoke = async id => {
 			return response.data;
 		} else return response.data;
 	} catch (error) {
-		return error.response.data;
+		if (error.response) return error.response.data;
+		else return error.message;
 	}
 };
 
@@ -230,7 +243,8 @@ export const deleteUser = async id => {
 			return response.data;
 		} else return response.data;
 	} catch (error) {
-		return error.response.data;
+		if (error.response) return error.response.data;
+		else return error.message;
 	}
 };
 
@@ -243,7 +257,8 @@ export async function getParticipantsService(params) {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		return err.response.data;
+		if (err.response) return err.response.data;
+		else return err.message;
 	}
 }
 
@@ -255,7 +270,8 @@ export async function getParticipantsDetailService(params) {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		return err.response.data;
+		if (err.response) return err.response.data;
+		else return err.message;
 	}
 }
 

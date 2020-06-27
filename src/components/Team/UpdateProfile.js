@@ -24,24 +24,14 @@ const UploadContainer = styled.div`
 
 const UpdateProfile = props => {
 	const [user, setUser] = useState(null);
-	const [name, setName] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
-	const [email, setEmail] = useState(null);
-	const [password, setPassword] = useState(null);
 	const [image, setImage] = useState(null);
-	const [contact, setContact] = useState(null);
-	const [designation, setDesignation] = useState(null);
-	const [github, setGithub] = useState(null);
-	const [linkedin, setLinkedIn] = useState(null);
-	const [twitter, setTwitter] = useState(null);
-	const [portfolio, setPortfolio] = useState(null);
-	const [dob, setDOB] = useState(null);
-	const [imageLink, setImageLink] = useState(null);
 	const [showSkeleton, setShowSkeleton] = useState(false);
+	const [fileList, setFileList] = useState(null);
 	const { getFieldDecorator } = props.form;
-	const { loading, setLoading } = useState(false);
 	const uploadprops = {
 		name: "avatar",
+		listType: "picture-card",
 		action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
 		headers: {
 			authorization: "authorization-text"
@@ -66,10 +56,10 @@ const UpdateProfile = props => {
 				getBase64(info.file.originFileObj, imageUrl => {
 					setImage(imageUrl);
 				});
-				setImageLink(info.file.originFileObj);
 			} else if (info.file.status === "error") {
 				message.error(`${info.file.name} file upload failed.`);
 			}
+			setFileList(info.fileList);
 		}
 	};
 
@@ -105,17 +95,9 @@ const UpdateProfile = props => {
 				portfolio
 			} = user;
 
-			dob = dob.split("T")[0];
-
-			setName(name);
-			setEmail(email);
-			setContact(contact);
-			setDesignation(designation);
-			setDOB(dob);
-			setGithub(github);
-			setTwitter(twitter);
-			setLinkedIn(linkedin);
-			setPortfolio(portfolio);
+			if (dob) {
+				dob = dob.split("T")[0];
+			}
 			setImage(image);
 
 			props.form.setFieldsValue({
@@ -141,10 +123,6 @@ const UpdateProfile = props => {
 		reader.readAsDataURL(img);
 	};
 
-	const onDateChange = (date, dateString) => {
-		setDOB(dateString);
-	};
-
 	const handleSubmit = e => {
 		e.preventDefault();
 		setIsLoading(true);
@@ -153,23 +131,49 @@ const UpdateProfile = props => {
 			if (!err) {
 				try {
 					const formData = new FormData();
-					if (imageLink !== null) {
-						formData.append("image", imageLink);
+					formData.append("name", values.name);
+					formData.append("email", values.email);
+					formData.append("designation", values.designation);
+					formData.append("dob", values.dob.format("YYYY-MM-DD"));
+					if (values.image.file) {
+						formData.append(
+							"image",
+							values.image.file.originFileObj
+						);
+					} else {
+						formData.append("image", values.image);
 					}
-					formData.append("name", name);
-					formData.append("email", email);
-					formData.append("password", password);
-					formData.append("contact", contact);
-					formData.append("designation", designation);
-					formData.append("dob", dob);
-					formData.append("github", github);
-					formData.append("linkedin", linkedin);
-					formData.append("twitter", twitter);
-					formData.append("portfolio", portfolio);
+					if (
+						values.password !== undefined &&
+						values.password !== ""
+					) {
+						formData.append("password", values.password);
+					}
+					if (values.contact !== undefined && values.contact !== "") {
+						formData.append("contact", values.contact);
+					}
+					if (values.github !== undefined && values.github !== "") {
+						formData.append("github", values.github);
+					}
+					if (
+						values.linkedin !== undefined &&
+						values.linkedin !== ""
+					) {
+						formData.append("linkedin", values.linkedin);
+					}
+					if (values.twitter !== undefined && values.twitter !== "") {
+						formData.append("twitter", values.twitter);
+					}
+					if (
+						values.portfolio !== undefined &&
+						values.portfolio !== ""
+					) {
+						formData.append("portfolio", values.portfolio);
+					}
 
 					const res = await updateUserService(formData);
 					if (res.message === "success") {
-						_notification("success", "Success", "Event Updated");
+						_notification("success", "Success", "Profile Updated");
 						props.onUpdateUser();
 					} else {
 						_notification("error", "Error", res.message);
@@ -184,37 +188,36 @@ const UpdateProfile = props => {
 			}
 		});
 	};
-
 	return (
 		<Skeleton loading={showSkeleton} active>
 			<Form onSubmit={handleSubmit} layout="vertical">
 				<UploadContainer>
 					<Form.Item>
-						<Upload
-							listType="picture-card"
-							className="avatar-uploader"
-							showUploadList={false}
-							{...uploadprops}
-						>
-							{image ? (
-								<img
-									src={image}
-									alt="avatar"
-									style={{ width: "100%" }}
-								/>
-							) : (
-								<div>
-									{loading ? (
-										<Icon type="loading" />
-									) : (
+						{getFieldDecorator(
+							"image",
+							{}
+						)(
+							<Upload
+								fileList={fileList}
+								showUploadList={false}
+								{...uploadprops}
+							>
+								{image ? (
+									<img
+										src={image}
+										alt="avatar"
+										style={{ width: "100%" }}
+									/>
+								) : (
+									<div>
 										<Icon type="plus" />
-									)}
-									<div className="ant-upload-text">
-										Upload
+										<div className="ant-upload-text">
+											Upload
+										</div>
 									</div>
-								</div>
-							)}
-						</Upload>
+								)}
+							</Upload>
+						)}
 					</Form.Item>
 				</UploadContainer>
 
@@ -228,17 +231,11 @@ const UpdateProfile = props => {
 							{getFieldDecorator("name", {
 								rules: [
 									{
-										require: true,
+										required: true,
 										message: "Please enter your name!"
 									}
 								]
-							})(
-								<Input
-									type="text"
-									placeholder="Name"
-									onChange={e => setName(e.target.value)}
-								/>
-							)}
+							})(<Input type="text" placeholder="Name" />)}
 						</Form.Item>
 					</Col>
 					<Col span={12}>
@@ -250,13 +247,7 @@ const UpdateProfile = props => {
 										message: "Please input email!"
 									}
 								]
-							})(
-								<Input
-									type="text"
-									placeholder="Email"
-									onChange={e => setEmail(e.target.value)}
-								/>
-							)}
+							})(<Input type="text" placeholder="Email" />)}
 						</Form.Item>
 					</Col>
 				</Row>
@@ -269,7 +260,6 @@ const UpdateProfile = props => {
 						<Input.Password
 							type="password"
 							placeholder="Password"
-							onChange={e => setPassword(e.target.value)}
 						/>
 					)}
 				</Form.Item>
@@ -278,13 +268,7 @@ const UpdateProfile = props => {
 					{getFieldDecorator(
 						"contact",
 						{}
-					)(
-						<Input
-							type="number"
-							placeholder="Contact"
-							onChange={e => setContact(e.target.value)}
-						/>
-					)}
+					)(<Input type="number" placeholder="Contact" />)}
 				</Form.Item>
 
 				<Form.Item label="Designation">
@@ -295,25 +279,20 @@ const UpdateProfile = props => {
 								message: "Please input Designation"
 							}
 						]
-					})(
-						<Input
-							type="text"
-							placeholder="Designation"
-							onChange={e => setDesignation(e.target.value)}
-						/>
-					)}
+					})(<Input type="text" placeholder="Designation" />)}
 				</Form.Item>
 
-				<Form.Item label="Date of Birth">
-					{getFieldDecorator(
-						"dob",
-						{}
-					)(
+				<Form.Item label="Date of Birth" name="date-picker">
+					{getFieldDecorator("dob", {
+						rules: [
+							{
+								type: "object"
+							}
+						]
+					})(
 						<DatePicker
 							style={{ width: "100%" }}
-							// disabledDate={disabledDate}
 							format="YYYY-MM-DD"
-							onChange={onDateChange}
 						/>
 					)}
 				</Form.Item>
@@ -335,7 +314,6 @@ const UpdateProfile = props => {
 								/>
 							}
 							type="text"
-							onChange={e => setGithub(e.target.value)}
 						/>
 					)}
 				</Form.Item>
@@ -353,7 +331,6 @@ const UpdateProfile = props => {
 								/>
 							}
 							type="text"
-							onChange={e => setTwitter(e.target.value)}
 						/>
 					)}
 				</Form.Item>
@@ -371,7 +348,6 @@ const UpdateProfile = props => {
 								/>
 							}
 							type="text"
-							onChange={e => setLinkedIn(e.target.value)}
 						/>
 					)}
 				</Form.Item>
@@ -389,7 +365,6 @@ const UpdateProfile = props => {
 								/>
 							}
 							type="text"
-							onChange={e => setPortfolio(e.target.value)}
 						/>
 					)}
 				</Form.Item>

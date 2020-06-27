@@ -1,26 +1,23 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Form, Icon, Input, Button, Card } from "antd";
 import logo from "../../utils/assets/images/logo-black.svg";
-// import useInputState from "../../hooks/useInputState";
 import "./style.css";
 import { _notification } from "../../utils/_helpers";
 import { loginService } from "../../utils/services";
 import { DispatchContext } from "../../contexts/userContext";
 
 const Login = props => {
-	const [email, updateEmail] = useState("");
-	const [password, updatePassword] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const Dispatch = useContext(DispatchContext);
+	const { getFieldDecorator } = props.form;
 
 	useEffect(() => {
-		props.form.setFieldsValue({
-			email,
-			password
-		});
-		// if (localStorage.getItem("token")) {
-		//   props.history.push("/");
-		// }
+		const token = JSON.parse(localStorage.getItem("token"));
+		if (token) {
+			if (token.token !== "") {
+				props.history.push("/");
+			}
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -31,30 +28,36 @@ const Login = props => {
 		props.form.validateFields(async (err, values) => {
 			if (!err) {
 				try {
-					const data = { email, password };
+					const data = {
+						email: values.email,
+						password: values.password
+					};
 					const res = await loginService(data);
 
 					if (res.error) {
 						_notification("error", "Error", res.message);
-						updatePassword("");
+						props.form.setFieldsValue({
+							password: ""
+						});
 					} else if (res.res.message === "success") {
 						Dispatch({
 							type: "IN",
 							token: res.token
 						});
-						// localStorage.setItem("role", role);
-						// localStorage.setItem("user_id", _id);
-						// localStorage.setItem("token", res.token);
 						_notification("success", "Success", "Logged In");
-						updateEmail("");
-						updatePassword("");
+						props.form.setFieldsValue({
+							email: "",
+							password: ""
+						});
 						setTimeout(() => {
 							props.history.push("/");
 						}, 200);
 					}
 					setIsLoading(false);
 				} catch (err) {
-					updatePassword("");
+					props.form.setFieldsValue({
+						password: ""
+					});
 					_notification("error", "Error", err.message);
 					setIsLoading(false);
 				}
@@ -63,7 +66,6 @@ const Login = props => {
 			}
 		});
 	};
-	const { getFieldDecorator } = props.form;
 	return (
 		<div style={{ height: "100vh", overflow: "hidden" }}>
 			<img src={logo} width={160} className="vidgyor-logo" alt="" />
@@ -88,9 +90,6 @@ const Login = props => {
 								}
 								type="email"
 								placeholder="Email"
-								onChange={e =>
-									updateEmail(e.target.value.toLowerCase())
-								}
 							/>
 						)}
 					</Form.Item>
@@ -112,7 +111,6 @@ const Login = props => {
 								}
 								type="password"
 								placeholder="Password"
-								onChange={e => updatePassword(e.target.value)}
 							/>
 						)}
 					</Form.Item>
@@ -125,15 +123,6 @@ const Login = props => {
 						>
 							Log in
 						</Button>
-
-						{/* <Divider />
-						<Link to="/signup">Create an account!</Link>
-						<Link
-							className="login-form-forgot"
-							to="/forgot-password"
-						>
-							Forgot password?
-						</Link> */}
 					</Form.Item>
 				</Form>
 			</Card>

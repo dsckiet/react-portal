@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^7.1.2",
     "antd": "3.26.13",
     "axios": "^0.19.2",
+    "history": "^5.0.0",
     "jwt-decode": "^2.2.0",
     "less": "^3.11.1",
     "moment": "^2.24.0",

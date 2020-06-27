@@ -41,6 +41,7 @@ const UserOptions = props => {
 			</Menu.Item>
 		</Menu>
 	);
+
 	return (
 		<>
 			<div style={{ marginBottom: 12 }}>
@@ -53,13 +54,18 @@ const UserOptions = props => {
 							</Button>
 						) : null}
 					</Col>
-					<Col span={12}>
-						<DropdownContainer>
-							<Dropdown overlay={menu} placement="bottomCenter">
-								<UserName>{userData.name}</UserName>
-							</Dropdown>
-						</DropdownContainer>
-					</Col>
+					{userData.role !== "lead" ? (
+						<Col span={12}>
+							<DropdownContainer>
+								<Dropdown
+									overlay={menu}
+									placement="bottomCenter"
+								>
+									<UserName>{userData.name}</UserName>
+								</Dropdown>
+							</DropdownContainer>
+						</Col>
+					) : null}
 				</Row>
 
 				<Drawer
