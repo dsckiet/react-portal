@@ -8,8 +8,9 @@ import { getParticipantsService } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
 import { Link } from "react-router-dom";
 
-export default props => {
+const ParticipantsList = props => {
 	const [participants, setParticipants] = useState([]);
+	const [allParticipants, setAllParticipants] = useState([]);
 	const [viewDrawer, setViewDrawer] = useState(false);
 	const [participantId, setParticipantId] = useState(null);
 	const [eventId, setEventId] = useState(null);
@@ -22,7 +23,7 @@ export default props => {
 			setIsLoading(true);
 			try {
 				const { data } = await getParticipantsService();
-				// console.log(data);
+				setAllParticipants(data.participants);
 				setParticipants(data.participants);
 				setIsLoading(false);
 			} catch (err) {
@@ -32,12 +33,17 @@ export default props => {
 	}, []);
 
 	const handleEventChange = async id => {
-		setEventId(id);
 		setIsLoading(true);
 		try {
-			let params = { eventId: id };
-			const { data } = await getParticipantsService(params);
-			setParticipants(data.participants);
+			if (id === "All") {
+				setParticipants(allParticipants);
+			} else {
+				setEventId(id);
+				let params = { eid: id };
+				const { data } = await getParticipantsService(params);
+				console.log(data);
+				setParticipants(data.participants);
+			}
 			setIsLoading(false);
 		} catch (err) {
 			_notification("warning", "Error", err.message);
@@ -49,7 +55,7 @@ export default props => {
 		try {
 			let params = { eventId, query: val };
 			const { data } = await getParticipantsService(params);
-			setParticipants(data.participants);
+			// setParticipants(data.participants);
 			setIsLoading(false);
 		} catch (err) {
 			_notification("warning", "Error", err.message);
@@ -147,3 +153,5 @@ export default props => {
 		</>
 	);
 };
+
+export default ParticipantsList;

@@ -40,7 +40,6 @@ const Login = props => {
 						password: values.password
 					};
 					const res = await loginService(data);
-					console.log(res);
 
 					if (res.error) {
 						_notification("error", "Error", res.message);

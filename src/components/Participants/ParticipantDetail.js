@@ -3,7 +3,7 @@ import { Skeleton, Timeline, Card, Avatar, Icon, Tag } from "antd";
 import { getParticipantsDetailService } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
 
-export default props => {
+const ParticipantsDetails = props => {
 	const [info, setInfo] = useState(null);
 	const [eventsData, setEventsData] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
@@ -81,3 +81,5 @@ export default props => {
 		</>
 	);
 };
+
+export default ParticipantsDetails;

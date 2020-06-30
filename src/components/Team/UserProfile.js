@@ -87,7 +87,6 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 				if (uid) {
 					const res = await getUserService(uid);
 					if (res.message === "success") {
-						console.log(res.data);
 						setUser(res.data);
 						setShowSkeleton(false);
 					} else {
@@ -108,7 +107,10 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 				closable={false}
 				onCancel={() => openProfile(false)}
 			>
-				<IoIosArrowRoundBack style={{ fontSize: "28px" }} />
+				<IoIosArrowRoundBack
+					onClick={() => openProfile(false)}
+					style={{ fontSize: "28px", cursor: "pointer" }}
+				/>
 				<Skeleton loading={showSkeleton} active>
 					{user ? (
 						<Wrapper>
