@@ -18,7 +18,8 @@ import {
 	DELETE_USER,
 	GET_PROFILE,
 	UPDATE_PROFILE,
-	FORGOTPASS
+	FORGOTPASS,
+	RESETPASS
 } from "./routes";
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -55,6 +56,18 @@ export async function loginService(data) {
 export const forgotPassService = async data => {
 	try {
 		const response = await axios.post(FORGOTPASS, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) return err.response.data;
+		else return err.message;
+	}
+};
+
+export const resetPassService = async data => {
+	try {
+		const response = await axios.post(RESETPASS, data);
 		if (response.status === 200 && response.data.error === false) {
 			return response.data;
 		} else return response.data;
