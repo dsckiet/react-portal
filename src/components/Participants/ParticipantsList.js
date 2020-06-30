@@ -41,7 +41,6 @@ const ParticipantsList = props => {
 				setEventId(id);
 				let params = { eid: id };
 				const { data } = await getParticipantsService(params);
-				console.log(data);
 				setParticipants(data.participants);
 			}
 			setIsLoading(false);
