@@ -19,6 +19,8 @@ export const LOGIN_PARTICIPANT = "/events/participants/login"; // POST
 export const REGISTER_FOR_EVENT = "/events/register"; // POST
 export const UPDATE_PARTICIPANT =
 	"/events/participants/5e6a67b4890fda16986ae843"; // PUT
+export const DELETE_PARTICIPANT = "/events/participants"; //DELETE
+export const REVOKE_PARTICIPANT = "/events/participants/revoke"; //PUT
 export const GET_PARTICIPANT_DETAILS = "/events/participants/profile"; // GET
 // ?participantId=5e6bc1dec3988900640bd922
 export const GET_PARTICIPANTS = "/events/participants"; // GET
