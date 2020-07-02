@@ -1,6 +1,8 @@
 /** USERS MODULE **/
 export const ADD_USER = "/users"; // POST
 export const LOGIN = "/users/login"; // POST
+export const FORGOTPASS = "/users/forgot"; // POST
+export const RESETPASS = "/users/reset"; // POST
 // @queryParams userId
 export const UPDATE_USER = "/users/5deab2193026f30ec826a0cc"; // PUT
 export const TOGGLE_WEBSITE_SEEN = "/users/approve";
@@ -17,6 +19,8 @@ export const LOGIN_PARTICIPANT = "/events/participants/login"; // POST
 export const REGISTER_FOR_EVENT = "/events/register"; // POST
 export const UPDATE_PARTICIPANT =
 	"/events/participants/5e6a67b4890fda16986ae843"; // PUT
+export const DELETE_PARTICIPANT = "/events/participants"; //DELETE
+export const REVOKE_PARTICIPANT = "/events/participants/revoke"; //PUT
 export const GET_PARTICIPANT_DETAILS = "/events/participants/profile"; // GET
 // ?participantId=5e6bc1dec3988900640bd922
 export const GET_PARTICIPANTS = "/events/participants"; // GET

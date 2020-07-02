@@ -3,16 +3,16 @@ import { Skeleton, Timeline, Card, Avatar, Icon, Tag } from "antd";
 import { getParticipantsDetailService } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
 
-export default props => {
+const ParticipantsDetails = props => {
 	const [info, setInfo] = useState(null);
-	const [eventsData, setEventsData] = useState(null);
+	const [eventsData, setEventsData] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		(async () => {
 			setIsLoading(true);
 			try {
-				const params = { participantId: props.participantId };
+				const params = { pid: props.participantId };
 				const { data } = await getParticipantsDetailService(params);
 				setInfo(data.profileData);
 				setEventsData(data.events);
@@ -49,35 +49,40 @@ export default props => {
 				<h3>Events Information</h3>
 				<br />
 				<Timeline>
-					{eventsData
-						? eventsData.map(event => (
-								<Timeline.Item
-									color={
-										event.status === "not attended"
-											? "red"
-											: "green"
-									}
-								>
-									<p>
-										{event.details.title}{" "}
-										<Tag>{event.status.toUpperCase()}</Tag>
-									</p>
-									<p>{event.details.description}</p>
-									<p>
-										{new Date(
-											event.details.startDate
-										).toDateString()}{" "}
-										to{" "}
-										{new Date(
-											event.details.endDate
-										).toDateString()}{" "}
-										({event.details.venue})
-									</p>
-								</Timeline.Item>
-						  ))
-						: null}
+					{eventsData.length !== 0 ? (
+						eventsData.map((event, id) => (
+							<Timeline.Item
+								key={id}
+								color={
+									event.status === "not attended"
+										? "red"
+										: "green"
+								}
+							>
+								<p>
+									{event.details.title}{" "}
+									<Tag>{event.status.toUpperCase()}</Tag>
+								</p>
+								<p>{event.details.description}</p>
+								<p>
+									{new Date(
+										event.details.startDate
+									).toDateString()}{" "}
+									to{" "}
+									{new Date(
+										event.details.endDate
+									).toDateString()}{" "}
+									({event.details.venue})
+								</p>
+							</Timeline.Item>
+						))
+					) : (
+						<div>Not regeistered in any Event</div>
+					)}
 				</Timeline>
 			</Skeleton>
 		</>
 	);
 };
+
+export default ParticipantsDetails;

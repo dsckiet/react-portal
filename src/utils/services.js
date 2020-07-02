@@ -17,7 +17,11 @@ import {
 	TOGGLE_REVOKE,
 	DELETE_USER,
 	GET_PROFILE,
-	UPDATE_PROFILE
+	UPDATE_PROFILE,
+	FORGOTPASS,
+	RESETPASS,
+	DELETE_PARTICIPANT,
+	REVOKE_PARTICIPANT
 } from "./routes";
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -50,6 +54,30 @@ export async function loginService(data) {
 		else return err.message;
 	}
 }
+
+export const forgotPassService = async data => {
+	try {
+		const response = await axios.post(FORGOTPASS, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) return err.response.data;
+		else return err.message;
+	}
+};
+
+export const resetPassService = async data => {
+	try {
+		const response = await axios.post(RESETPASS, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) return err.response.data;
+		else return err.message;
+	}
+};
 
 /******************EVENT SERVICES********************/
 export async function getEventsService() {
@@ -274,6 +302,32 @@ export async function getParticipantsDetailService(params) {
 		else return err.message;
 	}
 }
+
+export const deleteParticipantServices = async id => {
+	setUserToken();
+	try {
+		const response = await axios.delete(`${DELETE_PARTICIPANT}/${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) return err.response.data;
+		else return err.message;
+	}
+};
+
+export const revokeParticipantServices = async id => {
+	setUserToken();
+	try {
+		const response = await axios.put(`${REVOKE_PARTICIPANT}/${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (error) {
+		if (error.response) return error.response.data;
+		else return error.message;
+	}
+};
 
 export const getRole = () => {
 	let AUTH_TOKEN = JSON.parse(localStorage.getItem("token"));

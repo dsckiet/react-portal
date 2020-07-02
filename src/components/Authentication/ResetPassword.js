@@ -1,21 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Form, Icon, Input, Button, Card } from "antd";
+import React, { useState, useEffect } from "react";
 import logo from "../../utils/assets/images/logo-black.svg";
-import "./style.css";
-import { _notification } from "../../utils/_helpers";
-import { loginService } from "../../utils/services";
-import { DispatchContext } from "../../contexts/userContext";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
+import { Card, Form, Input, Icon, Button } from "antd";
+import { _notification } from "./../../utils/_helpers";
+import { resetPassService } from "../../utils/services";
 
-const Forgot = styled.div`
-	float: right;
-	font-weight: 300;
-`;
-
-const Login = props => {
+const ResetPassword = props => {
 	const [isLoading, setIsLoading] = useState(false);
-	const Dispatch = useContext(DispatchContext);
 	const { getFieldDecorator } = props.form;
 
 	useEffect(() => {
@@ -35,35 +25,30 @@ const Login = props => {
 		props.form.validateFields(async (err, values) => {
 			if (!err) {
 				try {
+					if (values.password !== values.rePassword) {
+						throw new Error("Password not match");
+					}
 					const data = {
-						email: values.email,
-						password: values.password
+						token: props.match.params.token,
+						id: props.match.params.id,
+						pwd: values.password
 					};
-					const res = await loginService(data);
-
+					const res = await resetPassService(data);
 					if (res.error) {
+						console.log(res);
 						_notification("error", "Error", res.message);
 						props.form.setFieldsValue({
-							password: ""
+							password: "",
+							rePassword: ""
 						});
-					} else if (res.res.message === "success") {
-						Dispatch({
-							type: "IN",
-							token: res.token
-						});
-						_notification("success", "Success", "Logged In");
-						props.form.setFieldsValue({
-							email: "",
-							password: ""
-						});
-						setTimeout(() => {
-							props.history.push("/");
-						}, 200);
+					} else if (res.message === "success") {
+						_notification("success", "Success", "Password changed");
+						props.history.push("/login");
 					}
 					setIsLoading(false);
 				} catch (err) {
 					props.form.setFieldsValue({
-						password: ""
+						rePassword: ""
 					});
 					_notification("error", "Error", err.message);
 					setIsLoading(false);
@@ -73,39 +58,21 @@ const Login = props => {
 			}
 		});
 	};
+
 	return (
 		<div style={{ height: "100vh", overflow: "hidden" }}>
 			<img src={logo} width={160} className="vidgyor-logo" alt="" />
-			<Card title="Log in to your account" className="login-form-wrapper">
+			<Card title="Reset Password" className="login-form-wrapper">
 				<Form onSubmit={handleSubmit} className="login-form">
-					<Form.Item>
-						{getFieldDecorator("email", {
-							rules: [
-								{
-									type: "email",
-									required: true,
-									message: "Please input your email!"
-								}
-							]
-						})(
-							<Input
-								prefix={
-									<Icon
-										type="user"
-										style={{ color: "rgba(0,0,0,.25)" }}
-									/>
-								}
-								type="email"
-								placeholder="Email"
-							/>
-						)}
-					</Form.Item>
+					<p style={{ textAlign: "center", fontWeight: "300" }}>
+						Enter new password
+					</p>
 					<Form.Item>
 						{getFieldDecorator("password", {
 							rules: [
 								{
 									required: true,
-									message: "Please input your Password!"
+									message: "Please input your password!"
 								}
 							]
 						})(
@@ -117,7 +84,28 @@ const Login = props => {
 									/>
 								}
 								type="password"
-								placeholder="Password"
+								placeholder="New Password"
+							/>
+						)}
+					</Form.Item>
+					<Form.Item>
+						{getFieldDecorator("rePassword", {
+							rules: [
+								{
+									required: true,
+									message: "Please input your password!"
+								}
+							]
+						})(
+							<Input.Password
+								prefix={
+									<Icon
+										type="lock"
+										style={{ color: "rgba(0,0,0,.25)" }}
+									/>
+								}
+								type="password"
+								placeholder="Confirm New Password"
 							/>
 						)}
 					</Form.Item>
@@ -128,21 +116,14 @@ const Login = props => {
 							className="login-form-button"
 							loading={isLoading}
 						>
-							Log in
+							Submit
 						</Button>
 					</Form.Item>
-					<Forgot>
-						<Link to="/forgot">Forgot Password</Link>
-					</Forgot>
 				</Form>
 			</Card>
-			<p style={{ textAlign: "center", marginTop: 12 }}>
-				Don't have an account? Contact your lead
-			</p>
 		</div>
 	);
 };
+const ResetPasswordForm = Form.create({ name: "reset_form" })(ResetPassword);
 
-const LoginForm = Form.create({ name: "login_form" })(Login);
-
-export default LoginForm;
+export default ResetPasswordForm;
