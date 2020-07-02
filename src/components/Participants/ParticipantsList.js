@@ -99,14 +99,11 @@ const ParticipantsList = props => {
 
 	const columns = [
 		{
-			title: "#",
-			dataIndex: "index",
-			key: "index"
-		},
-		{
 			title: "Name",
 			dataIndex: "name",
 			key: "name",
+			sorter: (a, b) => a.name[0].localeCompare(b.name[0]),
+			sortDirections: ["descend"],
 			render: text => (
 				<Link
 					to="#"
@@ -128,14 +125,12 @@ const ParticipantsList = props => {
 			title: "Branch",
 			dataIndex: "branch",
 			key: "branch",
-			defaultSortOrder: "descend",
-			sorter: (a, b) => a.branch.length - b.branch.length
+			sorter: (a, b) => a.branch.localeCompare(b.branch)
 		},
 		{
 			title: "Year",
 			dataIndex: "year",
 			key: "year",
-			defaultSortOrder: "descend",
 			sorter: (a, b) => a.year - b.year
 		},
 		{
@@ -198,8 +193,6 @@ const ParticipantsList = props => {
 				};
 		  })
 		: null;
-
-	console.log(data);
 
 	return (
 		<>
