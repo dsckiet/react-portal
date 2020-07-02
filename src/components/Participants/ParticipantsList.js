@@ -127,12 +127,16 @@ const ParticipantsList = props => {
 		{
 			title: "Branch",
 			dataIndex: "branch",
-			key: "branch"
+			key: "branch",
+			defaultSortOrder: "descend",
+			sorter: (a, b) => a.branch.length - b.branch.length
 		},
 		{
 			title: "Year",
 			dataIndex: "year",
-			key: "year"
+			key: "year",
+			defaultSortOrder: "descend",
+			sorter: (a, b) => a.year - b.year
 		},
 		{
 			title: "Phone",
@@ -194,6 +198,8 @@ const ParticipantsList = props => {
 				};
 		  })
 		: null;
+
+	console.log(data);
 
 	return (
 		<>

@@ -24,7 +24,7 @@ import {
 	REVOKE_PARTICIPANT
 } from "./routes";
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const BASE_URL = "https://api.dsckiet.com/dev";
 
 axios.defaults.baseURL = BASE_URL;
 
@@ -285,8 +285,8 @@ export async function getParticipantsService(params) {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		if (err.response) return err.response.data;
-		else return err.message;
+		if (err.response) throw err.response.data;
+		else throw err.message;
 	}
 }
 
