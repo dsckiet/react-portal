@@ -72,10 +72,12 @@ const ParticipantsList = props => {
 
 	const handleBranchChange = async val => {
 		setIsLoading(true);
-
 		setBranch(val);
 		try {
 			let params = { branch: val };
+			if (year) {
+				params = { ...params, year };
+			}
 			const { data } = await getParticipantsService(params);
 			setParticipants(data.participants);
 			setIsLoading(false);
@@ -84,8 +86,20 @@ const ParticipantsList = props => {
 		}
 	};
 
-	const handleYearChange = val => {
-		console.log(val);
+	const handleYearChange = async val => {
+		setIsLoading(true);
+		setYear(val);
+		try {
+			let params = { year: val };
+			if (branch) {
+				params = { ...params, branch };
+			}
+			const { data } = await getParticipantsService(params);
+			setParticipants(data.participants);
+			setIsLoading(false);
+		} catch (error) {
+			_notification("warning", "Error", error.message);
+		}
 	};
 
 	const handleParticipantRevoke = async id => {
