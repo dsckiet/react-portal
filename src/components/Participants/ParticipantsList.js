@@ -20,6 +20,8 @@ const ParticipantsList = props => {
 	const [eventId, setEventId] = useState(null);
 	const [refresh, toggleRefresh] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [branch, setBranch] = useState(null);
+	const [year, setYear] = useState(null);
 	// const [allEvents, setAllEvents] = useState([]);
 
 	useEffect(() => {
@@ -41,6 +43,9 @@ const ParticipantsList = props => {
 		try {
 			if (id === "All") {
 				setParticipants(allParticipants);
+				setBranch(null);
+				setYear(null);
+				setEventId(null);
 			} else {
 				setEventId(id);
 				let params = { eid: id };
@@ -63,6 +68,24 @@ const ParticipantsList = props => {
 		} catch (err) {
 			_notification("warning", "Error", err.message);
 		}
+	};
+
+	const handleBranchChange = async val => {
+		setIsLoading(true);
+
+		setBranch(val);
+		try {
+			let params = { branch: val };
+			const { data } = await getParticipantsService(params);
+			setParticipants(data.participants);
+			setIsLoading(false);
+		} catch (error) {
+			_notification("warning", "Error", error.message);
+		}
+	};
+
+	const handleYearChange = val => {
+		console.log(val);
 	};
 
 	const handleParticipantRevoke = async id => {
@@ -202,6 +225,8 @@ const ParticipantsList = props => {
 				<ParticipantsOptions
 					onEventChange={handleEventChange}
 					onQuery={handleQuery}
+					onBranchChange={handleBranchChange}
+					onYearChange={handleYearChange}
 				/>
 				<Card style={{ padding: 0, width: "100%", overflowX: "auto" }}>
 					<Table
