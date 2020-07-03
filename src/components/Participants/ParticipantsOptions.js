@@ -13,20 +13,15 @@ const Container = styled.div`
 const ParticipantsOptions = props => {
 	const [events, setEvents] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const [branch, setBranch] = useState();
+	const [year, setYear] = useState();
 
 	useEffect(() => {
 		(async () => {
 			setIsLoading(true);
 			try {
 				const { data } = await getEventsService();
-				// const { upcomingEvents, previousEvents, runningEvents } = data;
-				// setEvents([
-				// 	...upcomingEvents,
-				// 	...previousEvents,
-				// 	...runningEvents
-				// ]);
 				setEvents(data);
-
 				setIsLoading(false);
 			} catch (err) {
 				_notification("warning", "Error", err.message);
@@ -35,6 +30,10 @@ const ParticipantsOptions = props => {
 	}, []);
 
 	const handleChange = val => {
+		if (val === "All") {
+			setBranch();
+			setYear();
+		}
 		props.onEventChange(val);
 	};
 
@@ -43,10 +42,12 @@ const ParticipantsOptions = props => {
 	};
 
 	const handleBranchChange = val => {
+		setBranch(val);
 		props.onBranchChange(val);
 	};
 
 	const handleYearChange = val => {
+		setYear(val);
 		props.onYearChange(val);
 	};
 
@@ -135,6 +136,8 @@ const ParticipantsOptions = props => {
 							placeholder="Branch"
 							style={{ width: 100 }}
 							onChange={handleBranchChange}
+							value={branch}
+							allowClear
 						>
 							<Option value="CSE">CSE</Option>
 							<Option value="IT">IT</Option>
@@ -144,6 +147,8 @@ const ParticipantsOptions = props => {
 							placeholder="Year"
 							style={{ width: 80 }}
 							onChange={handleYearChange}
+							value={year}
+							allowClear
 						>
 							<Option value="1">1st</Option>
 							<Option value="2">2nd</Option>
