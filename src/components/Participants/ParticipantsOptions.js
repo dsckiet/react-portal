@@ -128,6 +128,7 @@ const ParticipantsOptions = props => {
 						loading={isLoading}
 						placeholder="Search"
 						onSearch={value => handleQuery(value)}
+						allowClear
 					/>
 				</Col>
 				<Col span={12}>

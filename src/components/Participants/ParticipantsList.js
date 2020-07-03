@@ -17,11 +17,12 @@ const ParticipantsList = props => {
 	const [allParticipants, setAllParticipants] = useState([]);
 	const [viewDrawer, setViewDrawer] = useState(false);
 	const [participantId, setParticipantId] = useState(null);
-	const [eventId, setEventId] = useState(null);
+	const [eId, setEID] = useState(null);
 	const [refresh, toggleRefresh] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [branch, setBranch] = useState(null);
 	const [year, setYear] = useState(null);
+	const [query, setQuery] = useState(null);
 	// const [allEvents, setAllEvents] = useState([]);
 
 	useEffect(() => {
@@ -45,9 +46,9 @@ const ParticipantsList = props => {
 				setParticipants(allParticipants);
 				setBranch(null);
 				setYear(null);
-				setEventId(null);
+				setEID(null);
 			} else {
-				setEventId(id);
+				setEID(id);
 				let params = { eid: id };
 				const { data } = await getParticipantsService(params);
 				setParticipants(data.participants);
@@ -59,11 +60,12 @@ const ParticipantsList = props => {
 	};
 
 	const handleQuery = async val => {
+		setQuery(val);
 		setIsLoading(true);
 		try {
-			let params = { eventId, query: val };
+			let params = { eId, query: val, branch, year };
 			const { data } = await getParticipantsService(params);
-			// setParticipants(data.participants);
+			setParticipants(data.participants);
 			setIsLoading(false);
 		} catch (err) {
 			_notification("warning", "Error", err.message);
@@ -77,6 +79,9 @@ const ParticipantsList = props => {
 			let params = { branch: val };
 			if (year) {
 				params = { ...params, year };
+			}
+			if (query) {
+				params = { ...params, query };
 			}
 			const { data } = await getParticipantsService(params);
 			setParticipants(data.participants);
