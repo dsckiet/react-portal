@@ -237,7 +237,7 @@ const ParticipantsList = props => {
 
 	return (
 		<>
-			<PageTitle title="Participants" />
+			<PageTitle title="Participants" bgColor="#4285F4" />
 
 			<div className="table-wrapper-card">
 				<ParticipantsOptions

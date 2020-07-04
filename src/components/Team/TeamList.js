@@ -213,7 +213,7 @@ const TeamList = props => {
 
 	return (
 		<>
-			<PageTitle title="Team" />
+			<PageTitle title="Team" bgColor="#0F9D58" />
 
 			<div className="table-wrapper-card">
 				<UserOptions onAddMember={handleAddMember} />

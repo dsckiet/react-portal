@@ -272,7 +272,7 @@ const EventsList = props => {
 
 	return (
 		<>
-			<PageTitle title="Events" />
+			<PageTitle title="Events" bgColor="#DB4437" />
 
 			<div className="table-wrapper-card">
 				<EventOptions
