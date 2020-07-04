@@ -32,7 +32,7 @@ export const GET_EVENT = "/events"; // GET
 export const ADD_EVENT = "/events/"; // POST
 export const CHANGE_EVENT_CODE = "/events/change-code"; // POST
 export const TOGGLE_REGISTRATION = "/events/toggle-reg"; // POST
-export const UPDATE_EVENT = "/events/"; // PUT
+export const UPDATE_EVENT = "/events"; // PUT
 export const DELETE_EVENT = "/events"; // DELETE
 
 /** ATTENDANCE MODULE **/

@@ -39,7 +39,7 @@ export default props => {
 	return (
 		<>
 			<div className="dashboard-section">
-				<PageTitle title="Dashboard" />
+				<PageTitle title="Dashboard" bgColor="#0F9D58" />
 				<div className="sub-components">
 					<Row gutter={[16, 16]}>
 						<Col span={18}>

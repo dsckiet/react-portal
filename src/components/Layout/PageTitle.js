@@ -7,7 +7,7 @@ const PageTitle = props => {
 		<PageHeader
 			style={{
 				padding: "8px 16px",
-				background: "#0F9D58",
+				background: props.bgColor,
 				color: "#fff!important",
 				marginBottom: 16,
 				borderRadius: 4,

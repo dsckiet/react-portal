@@ -19,7 +19,12 @@ export const DashCards = () => {
 				}
 				return (
 					<Col lg={8} md={8} sm={12} key={route.key}>
-						<Link to={route.path}>
+						<Link
+							to={route.path}
+							onClick={() => {
+								localStorage.setItem("routeKey", route.key);
+							}}
+						>
 							<Card
 								hoverable
 								className="content-clickable"
