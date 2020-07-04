@@ -50,8 +50,8 @@ export async function loginService(data) {
 			};
 		} else return response.data;
 	} catch (err) {
-		if (err.response) return err.response.data;
-		else return err.message;
+		if (err.response) throw err.response.data;
+		else throw err.message;
 	}
 }
 
@@ -62,8 +62,8 @@ export const forgotPassService = async data => {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		if (err.response) return err.response.data;
-		else return err.message;
+		if (err.response) throw err.response.data;
+		else throw err.message;
 	}
 };
 
@@ -74,8 +74,8 @@ export const resetPassService = async data => {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		if (err.response) return err.response.data;
-		else return err.message;
+		if (err.response) throw err.response.data;
+		else throw err.message;
 	}
 };
 
@@ -87,8 +87,8 @@ export async function getEventsService() {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		if (err.response) return err.response.data;
-		else return err.message;
+		if (err.response) throw err.response.data;
+		else throw err.message;
 	}
 }
 
@@ -101,8 +101,8 @@ export async function getEventService(id) {
 			return { response: { data: { message: "Something went wrong" } } };
 		else return response.data;
 	} catch (err) {
-		if (err.response) return err.response.data;
-		else return err.message;
+		if (err.response) throw err.response.data;
+		else throw err.message;
 	}
 }
 
@@ -119,8 +119,8 @@ export async function addEventService(data) {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		if (err.response) return err.response.data;
-		else return err.message;
+		if (err.response) throw err.response.data;
+		else throw err.message;
 	}
 }
 
@@ -141,8 +141,8 @@ export async function updateEventService(data, params) {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		if (err.response) return err.response.data;
-		else return err.message;
+		if (err.response) throw err.response.data;
+		else throw err.message;
 	}
 }
 
@@ -154,8 +154,8 @@ export async function refreshEventCodeService(data) {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		if (err.response) return err.response.data;
-		else return err.message;
+		if (err.response) throw err.response.data;
+		else throw err.message;
 	}
 }
 
@@ -167,8 +167,8 @@ export async function toggleRegistrationsService(data) {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		if (err.response) return err.response.data;
-		else return err.message;
+		if (err.response) throw err.response.data;
+		else throw err.message;
 	}
 }
 
@@ -180,8 +180,8 @@ export async function deleteEventsService(eventId) {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		if (err.response) return err.response.data;
-		else return err.message;
+		if (err.response) throw err.response.data;
+		else throw err.message;
 	}
 }
 
@@ -193,8 +193,8 @@ export async function getUsersService() {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		if (err.response) return err.response.data;
-		else return err.message;
+		if (err.response) throw err.response.data;
+		else throw err.message;
 	}
 }
 
@@ -206,8 +206,8 @@ export const getUserService = async id => {
 			return response.data;
 		} else return response.data;
 	} catch (error) {
-		if (error.response) return error.response.data;
-		else return error.message;
+		if (error.response) throw error.response.data;
+		else throw error.message;
 	}
 };
 
@@ -219,8 +219,8 @@ export async function addUserService(data) {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		if (err.response) return err.response.data;
-		else return err.message;
+		if (err.response) throw err.response.data;
+		else throw err.message;
 	}
 }
 
@@ -232,8 +232,8 @@ export const updateUserService = async data => {
 			return response.data;
 		} else return response.data;
 	} catch (error) {
-		if (error.response) return error.response.data;
-		else return error.message;
+		if (error.response) throw error.response.data;
+		else throw error.message;
 	}
 };
 
@@ -245,8 +245,8 @@ export const toggleWebsiteSeen = async id => {
 			return response.data;
 		} else return response.data;
 	} catch (error) {
-		if (error.response) return error.response.data;
-		else return error.message;
+		if (error.response) throw error.response.data;
+		else throw error.message;
 	}
 };
 
@@ -258,8 +258,8 @@ export const toggleUserRevoke = async id => {
 			return response.data;
 		} else return response.data;
 	} catch (error) {
-		if (error.response) return error.response.data;
-		else return error.message;
+		if (error.response) throw error.response.data;
+		else throw error.message;
 	}
 };
 
@@ -271,8 +271,8 @@ export const deleteUser = async id => {
 			return response.data;
 		} else return response.data;
 	} catch (error) {
-		if (error.response) return error.response.data;
-		else return error.message;
+		if (error.response) throw error.response.data;
+		else throw error.message;
 	}
 };
 
@@ -298,8 +298,8 @@ export async function getParticipantsDetailService(params) {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		if (err.response) return err.response.data;
-		else return err.message;
+		if (err.response) throw err.response.data;
+		else throw err.message;
 	}
 }
 
@@ -311,8 +311,8 @@ export const deleteParticipantServices = async id => {
 			return response.data;
 		} else return response.data;
 	} catch (err) {
-		if (err.response) return err.response.data;
-		else return err.message;
+		if (err.response) throw err.response.data;
+		else throw err.message;
 	}
 };
 
@@ -324,8 +324,8 @@ export const revokeParticipantServices = async id => {
 			return response.data;
 		} else return response.data;
 	} catch (error) {
-		if (error.response) return error.response.data;
-		else return error.message;
+		if (error.response) throw error.response.data;
+		else throw error.message;
 	}
 };
 
