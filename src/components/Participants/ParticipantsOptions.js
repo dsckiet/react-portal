@@ -60,7 +60,6 @@ const ParticipantsOptions = props => {
 						dropdownStyle={{ maxHeight: 400, overflow: "auto" }}
 						placeholder="Please select"
 						onChange={handleChange}
-						defaultValue="All"
 					>
 						<TreeNode value="All" title="All" />
 						<TreeNode

@@ -50,6 +50,8 @@ const ParticipantsList = props => {
 			} else {
 				setEID(id);
 				let params = { eid: id };
+				if (branch) params = { ...params, branch };
+				if (year) params = { ...params, year };
 				const { data } = await getParticipantsService(params);
 				setParticipants(data.participants);
 			}
@@ -63,7 +65,7 @@ const ParticipantsList = props => {
 		setQuery(val);
 		setIsLoading(true);
 		try {
-			let params = { eId, query: val, branch, year };
+			let params = { eid: eId, query: val, branch, year };
 			const { data } = await getParticipantsService(params);
 			setParticipants(data.participants);
 			setIsLoading(false);
@@ -77,12 +79,9 @@ const ParticipantsList = props => {
 		setBranch(val);
 		try {
 			let params = { branch: val };
-			if (year) {
-				params = { ...params, year };
-			}
-			if (query) {
-				params = { ...params, query };
-			}
+			if (year) params = { ...params, year };
+			if (query) params = { ...params, query };
+			if (eId) params = { ...params, eid: eId };
 			const { data } = await getParticipantsService(params);
 			setParticipants(data.participants);
 			setIsLoading(false);
@@ -96,9 +95,9 @@ const ParticipantsList = props => {
 		setYear(val);
 		try {
 			let params = { year: val };
-			if (branch) {
-				params = { ...params, branch };
-			}
+			if (branch) params = { ...params, branch };
+			if (query) params = { ...params, query };
+			if (eId) params = { ...params, eid: eId };
 			const { data } = await getParticipantsService(params);
 			setParticipants(data.participants);
 			setIsLoading(false);
