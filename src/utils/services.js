@@ -22,7 +22,8 @@ import {
 	RESETPASS,
 	DELETE_PARTICIPANT,
 	REVOKE_PARTICIPANT,
-	PREVIEW_CERTIFICATE
+	PREVIEW_CERTIFICATE,
+	ADD_CERTIFICATE
 } from "./routes";
 
 const BASE_URL = "https://api.dsckiet.com/dev";
@@ -364,6 +365,17 @@ export const previewCertificateService = data => {
 		});
 };
 
+export const addCertificateService = async (data, id) => {
+	try {
+		const response = await axios.post(`${ADD_CERTIFICATE}/${id}`, data);
+		return response.data;
+	} catch (error) {
+		if (error.response) throw error.response.data;
+		else throw error.message;
+	}
+};
+
+/******************Helper SERVICES********************/
 export const getRole = () => {
 	let AUTH_TOKEN = JSON.parse(localStorage.getItem("token"));
 	let decode = jwt(AUTH_TOKEN.token);
