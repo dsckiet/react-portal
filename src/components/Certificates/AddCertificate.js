@@ -14,6 +14,7 @@ import {
 } from "antd";
 import styled from "styled-components";
 import { _notification } from "./../../utils/_helpers";
+import { previewCertificateService } from "../../utils/services";
 
 const Heading = styled.div`
 	font-size: 20px;
@@ -26,12 +27,15 @@ const CustomizeCard = styled(Card)`
 	padding-right: 8px;
 `;
 
+const CustomButton = styled(Button)`
+	background-color: #f4b400 !important;
+`;
+
 const AddCertificate = props => {
 	const [isLoading, setIsLoading] = useState(false);
 	const { getFieldDecorator } = props.form;
 	const uploadprops = {
 		name: "file",
-
 		action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
 		headers: {
 			authorization: "authorization-text"
@@ -53,8 +57,12 @@ const AddCertificate = props => {
 			if (info.file.status === "uploading") {
 			}
 			if (info.file.status === "done") {
+				console.log(info.file, info.fileList);
+
 				message.success(`${info.file.name} file uploaded successfully`);
 			} else if (info.file.status === "error") {
+				console.log(info.file, info.fileList);
+
 				message.error(`${info.file.name} file upload failed.`);
 			}
 		}
@@ -68,11 +76,12 @@ const AddCertificate = props => {
 		},
 		onChange(info) {
 			if (info.file.status !== "uploading") {
-				console.log(info.file, info.fileList);
 			}
 			if (info.file.status === "done") {
 				message.success(`${info.file.name} file uploaded successfully`);
 			} else if (info.file.status === "error") {
+				console.log(info.file, info.fileList);
+
 				message.error(`${info.file.name} file upload failed.`);
 			}
 		}
@@ -81,11 +90,27 @@ const AddCertificate = props => {
 	const handlePreview = e => {
 		e.preventDefault();
 		setIsLoading(true);
-		props.form.validateFields(async (err, values) => {
+		props.form.validateFields((err, values) => {
 			if (!err) {
 				try {
-					// const formData = new FormData();
-					console.log(values);
+					const formData = new FormData();
+					formData.append("name", values.name);
+					formData.append("x", values.x);
+					formData.append("y", values.y);
+					formData.append("size", values.size);
+					formData.append("red", values.red);
+					formData.append("green", values.green);
+					formData.append("blue", values.blue);
+					formData.append(
+						"pdffile",
+						values.pdffile.file.originFileObj
+					);
+					formData.append(
+						"fontfile",
+						values.fontfile.file.originFileObj
+					);
+
+					previewCertificateService(formData);
 					setIsLoading(false);
 				} catch (error) {
 					_notification("error", "Error", error.message);
@@ -108,28 +133,39 @@ const AddCertificate = props => {
 							Preview Certificate
 							<Divider style={{ marginTop: "10px" }} />
 						</Heading>
-						<Form layout="vertical">
+						<Form onSubmit={handlePreview} layout="vertical">
 							<Row>
 								<Col span={12}>
 									<Form.Item label="Upload">
-										{getFieldDecorator(
-											"pdffile",
-											{}
-										)(
-											<>
-												<Upload {...uploadprops}>
-													<p>Click to upload</p>
-												</Upload>
-											</>
+										{getFieldDecorator("pdffile", {
+											rules: [
+												{
+													required: true,
+													message:
+														"Please select pdf file"
+												}
+											]
+										})(
+											<Upload
+												listType="pdf"
+												{...uploadprops}
+											>
+												<p>Click to upload</p>
+											</Upload>
 										)}
 									</Form.Item>
 								</Col>
 								<Col span={12}>
 									<Form.Item label="Name">
-										{getFieldDecorator(
-											"name",
-											{}
-										)(
+										{getFieldDecorator("name", {
+											rules: [
+												{
+													required: true,
+													message:
+														"Please input name!"
+												}
+											]
+										})(
 											<Input
 												type="text"
 												placeholder="Name"
@@ -139,10 +175,15 @@ const AddCertificate = props => {
 									<Row gutter={24}>
 										<Col span={12}>
 											<Form.Item label="X-axis">
-												{getFieldDecorator(
-													"x",
-													{}
-												)(
+												{getFieldDecorator("x", {
+													rules: [
+														{
+															required: true,
+															message:
+																"Please input x-axis!"
+														}
+													]
+												})(
 													<Input
 														type="number"
 														placeholder="X"
@@ -152,10 +193,15 @@ const AddCertificate = props => {
 										</Col>
 										<Col span={12}>
 											<Form.Item label="Y-axis">
-												{getFieldDecorator(
-													"y",
-													{}
-												)(
+												{getFieldDecorator("y", {
+													rules: [
+														{
+															required: true,
+															message:
+																"Please input y-axis!"
+														}
+													]
+												})(
 													<Input
 														type="number"
 														placeholder="Y"
@@ -165,10 +211,15 @@ const AddCertificate = props => {
 										</Col>
 									</Row>
 									<Form.Item label="Font size">
-										{getFieldDecorator(
-											"size",
-											{}
-										)(
+										{getFieldDecorator("size", {
+											rules: [
+												{
+													required: true,
+													message:
+														"Please input font size!"
+												}
+											]
+										})(
 											<Input
 												type="number"
 												placeholder="Size"
@@ -178,10 +229,15 @@ const AddCertificate = props => {
 									<Row gutter={24}>
 										<Col span={8}>
 											<Form.Item label="Red">
-												{getFieldDecorator(
-													"red",
-													{}
-												)(
+												{getFieldDecorator("red", {
+													rules: [
+														{
+															required: true,
+															message:
+																"Please input red value of RGB"
+														}
+													]
+												})(
 													<Input
 														type="number"
 														placeholder="Red"
@@ -193,10 +249,15 @@ const AddCertificate = props => {
 										</Col>
 										<Col span={8}>
 											<Form.Item label="Green">
-												{getFieldDecorator(
-													"green",
-													{}
-												)(
+												{getFieldDecorator("green", {
+													rules: [
+														{
+															required: true,
+															message:
+																"Please input green value of RGB"
+														}
+													]
+												})(
 													<Input
 														type="number"
 														placeholder="Green"
@@ -208,10 +269,15 @@ const AddCertificate = props => {
 										</Col>
 										<Col span={8}>
 											<Form.Item label="Blue">
-												{getFieldDecorator(
-													"blue",
-													{}
-												)(
+												{getFieldDecorator("blue", {
+													rules: [
+														{
+															required: true,
+															message:
+																"Please input blue value of RGB"
+														}
+													]
+												})(
 													<Input
 														type="number"
 														placeholder="Blue"
@@ -223,18 +289,24 @@ const AddCertificate = props => {
 										</Col>
 									</Row>
 									<Form.Item label="Upload Font">
-										{getFieldDecorator(
-											"fontfile",
-											{}
-										)(
-											<>
-												<Upload {...fontprops}>
-													<Button type="primary">
-														<Icon type="upload" />
-														Click to upload
-													</Button>
-												</Upload>
-											</>
+										{getFieldDecorator("fontfile", {
+											rules: [
+												{
+													required: true,
+													message:
+														"Please select font file"
+												}
+											]
+										})(
+											<Upload
+												listType="ttf"
+												{...fontprops}
+											>
+												<Button type="primary">
+													<Icon type="upload" />
+													Upload
+												</Button>
+											</Upload>
 										)}
 									</Form.Item>
 									<div
@@ -243,15 +315,15 @@ const AddCertificate = props => {
 											width: "100%"
 										}}
 									>
-										<Button
+										<CustomButton
 											loading={isLoading}
 											style={{
 												width: "100%"
 											}}
-											onClick={handlePreview}
+											htmlType="submit"
 										>
 											Preview
-										</Button>
+										</CustomButton>
 									</div>
 								</Col>
 							</Row>

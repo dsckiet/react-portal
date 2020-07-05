@@ -21,7 +21,8 @@ import {
 	FORGOTPASS,
 	RESETPASS,
 	DELETE_PARTICIPANT,
-	REVOKE_PARTICIPANT
+	REVOKE_PARTICIPANT,
+	PREVIEW_CERTIFICATE
 } from "./routes";
 
 const BASE_URL = "https://api.dsckiet.com/dev";
@@ -327,6 +328,40 @@ export const revokeParticipantServices = async id => {
 		if (error.response) throw error.response.data;
 		else throw error.message;
 	}
+};
+
+/******************CERTIFICATE SERVICES********************/
+export const previewCertificateService = data => {
+	setUserToken();
+	axios
+		.post(PREVIEW_CERTIFICATE, data, {
+			responseType: "blob" //Force to receive data in a Blob Format
+		})
+		.then(response => {
+			console.log(response);
+			//Create a Blob from the PDF Stream
+			const file = new Blob([response.data], { type: "application/pdf" });
+			//Build a URL from the file
+			const fileURL = URL.createObjectURL(file);
+			//Open the URL on new Window
+			window.open(fileURL);
+		})
+		.catch(err => {
+			//since response type is forced to be Blob, we need to parse if server sends a JSON resp.
+			if (
+				err.request.responseType === "blob" &&
+				err.response.data instanceof Blob &&
+				err.response.data.type &&
+				err.response.data.type.toLowerCase().indexOf("json") !== -1
+			) {
+				let reader = new FileReader();
+				reader.readAsText(err.response.data);
+				reader.onload = () => {
+					err.response.data = JSON.parse(reader.result);
+					console.log(err.response.data);
+				};
+			}
+		});
 };
 
 export const getRole = () => {
