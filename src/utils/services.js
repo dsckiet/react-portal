@@ -349,6 +349,7 @@ export const previewCertificateService = data => {
 		})
 		.catch(err => {
 			//since response type is forced to be Blob, we need to parse if server sends a JSON resp.
+			console.log(err);
 			if (
 				err.request.responseType === "blob" &&
 				err.response.data instanceof Blob &&

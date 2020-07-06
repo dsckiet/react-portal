@@ -180,8 +180,14 @@ const AddCertificate = props => {
 
 					const res = await addCertificateService(formData, eventID);
 					if (res.message === "success") {
-						_notification("success", "Success", "Profile Updated");
-						props.onUpdateUser();
+						_notification(
+							"success",
+							"Success",
+							"Certificate Saved"
+						);
+						setTimeout(() => {
+							window.location.reload();
+						}, 200);
 					} else {
 						_notification("error", "Error", res.message);
 					}
