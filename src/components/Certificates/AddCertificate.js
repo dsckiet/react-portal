@@ -120,10 +120,9 @@ const AddCertificate = props => {
 	const handlePreview = e => {
 		e.preventDefault();
 		setIsLoading(true);
-		props.form.validateFields((err, values) => {
+		props.form.validateFields(async (err, values) => {
 			if (!err) {
 				try {
-					console.log(values);
 					const formData = new FormData();
 					formData.append("name", values.name);
 					formData.append("x", values.x);
@@ -141,7 +140,7 @@ const AddCertificate = props => {
 						values.fontfile.file.originFileObj
 					);
 
-					previewCertificateService(formData);
+					await previewCertificateService(formData);
 					setIsShown(true);
 					setIsLoading(false);
 				} catch (error) {
@@ -176,7 +175,6 @@ const AddCertificate = props => {
 						"fontfile",
 						values.fontfile.file.originFileObj
 					);
-					console.log(values);
 
 					const res = await addCertificateService(formData, eventID);
 					if (res.message === "success") {
@@ -242,13 +240,13 @@ const AddCertificate = props => {
 								<Col span={12}>
 									<Form.Item label="Name">
 										{getFieldDecorator("name", {
-											rules: [
-												{
-													required: true,
-													message:
-														"Please input name!"
-												}
-											]
+											// rules: [
+											// 	{
+											// 		required: true,
+											// 		message:
+											// 			"Please input name!"
+											// 	}
+											// ]
 										})(
 											<Input
 												type="text"

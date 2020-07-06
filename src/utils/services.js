@@ -322,9 +322,7 @@ export const revokeParticipantServices = async id => {
 	setUserToken();
 	try {
 		const response = await axios.put(`${REVOKE_PARTICIPANT}/${id}`);
-		if (response.status === 200 && response.data.error === false) {
-			return response.data;
-		} else return response.data;
+		return response.data;
 	} catch (error) {
 		if (error.response) throw error.response.data;
 		else throw error.message;
@@ -332,38 +330,21 @@ export const revokeParticipantServices = async id => {
 };
 
 /******************CERTIFICATE SERVICES********************/
-export const previewCertificateService = data => {
+export const previewCertificateService = async data => {
 	setUserToken();
-	axios
-		.post(PREVIEW_CERTIFICATE, data, {
+	try {
+		let response = await axios.post(PREVIEW_CERTIFICATE, data, {
 			responseType: "blob" //Force to receive data in a Blob Format
-		})
-		.then(response => {
-			console.log(response);
-			//Create a Blob from the PDF Stream
-			const file = new Blob([response.data], { type: "application/pdf" });
-			//Build a URL from the file
-			const fileURL = URL.createObjectURL(file);
-			//Open the URL on new Window
-			window.open(fileURL);
-		})
-		.catch(err => {
-			//since response type is forced to be Blob, we need to parse if server sends a JSON resp.
-			console.log(err);
-			if (
-				err.request.responseType === "blob" &&
-				err.response.data instanceof Blob &&
-				err.response.data.type &&
-				err.response.data.type.toLowerCase().indexOf("json") !== -1
-			) {
-				let reader = new FileReader();
-				reader.readAsText(err.response.data);
-				reader.onload = () => {
-					err.response.data = JSON.parse(reader.result);
-					console.log(err.response.data);
-				};
-			}
 		});
+		console.log(response);
+		const file = new Blob([response.data], { type: "application/pdf" });
+		//Build a URL from the file
+		const fileURL = URL.createObjectURL(file);
+		//Open the URL on new Window
+		window.open(fileURL);
+	} catch (error) {
+		throw error;
+	}
 };
 
 export const addCertificateService = async (data, id) => {
@@ -371,8 +352,7 @@ export const addCertificateService = async (data, id) => {
 		const response = await axios.post(`${ADD_CERTIFICATE}/${id}`, data);
 		return response.data;
 	} catch (error) {
-		if (error.response) throw error.response.data;
-		else throw error.message;
+		throw error;
 	}
 };
 
