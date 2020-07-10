@@ -21,7 +21,9 @@ import {
 	FORGOTPASS,
 	RESETPASS,
 	DELETE_PARTICIPANT,
-	REVOKE_PARTICIPANT
+	REVOKE_PARTICIPANT,
+	PREVIEW_CERTIFICATE,
+	ADD_CERTIFICATE
 } from "./routes";
 
 const BASE_URL = "https://api.dsckiet.com/dev";
@@ -320,15 +322,41 @@ export const revokeParticipantServices = async id => {
 	setUserToken();
 	try {
 		const response = await axios.put(`${REVOKE_PARTICIPANT}/${id}`);
-		if (response.status === 200 && response.data.error === false) {
-			return response.data;
-		} else return response.data;
+		return response.data;
 	} catch (error) {
 		if (error.response) throw error.response.data;
 		else throw error.message;
 	}
 };
 
+/******************CERTIFICATE SERVICES********************/
+export const previewCertificateService = async data => {
+	setUserToken();
+	try {
+		let response = await axios.post(PREVIEW_CERTIFICATE, data, {
+			responseType: "blob" //Force to receive data in a Blob Format
+		});
+		console.log(response);
+		const file = new Blob([response.data], { type: "application/pdf" });
+		//Build a URL from the file
+		const fileURL = URL.createObjectURL(file);
+		//Open the URL on new Window
+		window.open(fileURL);
+	} catch (error) {
+		throw error;
+	}
+};
+
+export const addCertificateService = async (data, id) => {
+	try {
+		const response = await axios.post(`${ADD_CERTIFICATE}/${id}`, data);
+		return response.data;
+	} catch (error) {
+		throw error;
+	}
+};
+
+/******************Helper SERVICES********************/
 export const getRole = () => {
 	let AUTH_TOKEN = JSON.parse(localStorage.getItem("token"));
 	let decode = jwt(AUTH_TOKEN.token);

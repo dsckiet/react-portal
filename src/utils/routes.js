@@ -17,8 +17,7 @@ export const VIEW_USERS = "/users?sortBy=createdAt&sortType=asc"; // GET
 export const REGISTER_PARTICIPANT = "/events/participants/"; // POST
 export const LOGIN_PARTICIPANT = "/events/participants/login"; // POST
 export const REGISTER_FOR_EVENT = "/events/register"; // POST
-export const UPDATE_PARTICIPANT =
-	"/events/participants/5e6a67b4890fda16986ae843"; // PUT
+export const UPDATE_PARTICIPANT = "/events/participants"; // PUT
 export const DELETE_PARTICIPANT = "/events/participants"; //DELETE
 export const REVOKE_PARTICIPANT = "/events/participants/revoke"; //PUT
 export const GET_PARTICIPANT_DETAILS = "/events/participants/profile"; // GET
@@ -43,3 +42,7 @@ export const EVENT_ATTENDANCE_STATS =
 	"/events/attendance/stats?event=5e6dfb7caad4441a9ceb5b2e"; // GET
 export const PARTICIPANT_EVENT_ATTENDANCE =
 	"/events/attendance/user?event=5e6df19c16ea1e3a9c5a508b&attendance=5e6df287aa68b63e48201e11"; // GET
+
+/**CERTIFICATE MODULE**/
+export const PREVIEW_CERTIFICATE = "/events/certificate/preview"; // POST
+export const ADD_CERTIFICATE = "/events/certificate"; // POST
