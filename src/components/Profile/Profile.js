@@ -100,6 +100,7 @@ const Profile = () => {
 				setShowSkeleton(false);
 			}
 		})();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [refresh]);
 
 	return (
