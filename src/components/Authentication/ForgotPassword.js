@@ -71,7 +71,7 @@ const ForgotPassword = props => {
 			<Card title="Forgot Password" className="login-form-wrapper">
 				<Form onSubmit={handleSubmit} className="login-form">
 					<p style={{ textAlign: "center", fontWeight: "300" }}>
-						We will sent a mail to your email with reset password
+						We will send a mail to your email with reset password
 						link
 					</p>
 					<Form.Item>

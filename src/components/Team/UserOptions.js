@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Button, Drawer, Menu, Dropdown, Row, Icon, Col } from "antd";
+import { Button, Drawer, Row, Col } from "antd";
 import AddMember from "./AddMember";
 import { getRole } from "./../../utils/services";
 import styled from "styled-components";
-import UpdateProfile from "./UpdateProfile";
+//import UpdateProfile from "./UpdateProfile";
 
 const DropdownContainer = styled.div`
 	margin-right: 5px;
@@ -18,29 +18,11 @@ const UserName = styled.p`
 
 const UserOptions = props => {
 	const [isDrawerVisible, setIsDrawerVisible] = useState(false);
-	const [profileDrawer, setProfileDrawer] = useState(false);
 	const [userData] = useState(getRole());
 	const handleUserAdd = () => {
 		setIsDrawerVisible(false);
 		props.onAddMember();
 	};
-
-	const handleUpdateUser = () => {
-		setProfileDrawer(false);
-	};
-
-	const menu = (
-		<Menu>
-			<Menu.Item key="1" onClick={() => setProfileDrawer(true)}>
-				<Icon type="user" />
-				Update Profile
-			</Menu.Item>
-			<Menu.Item key="2">
-				<Icon type="edit" />
-				Reset Password
-			</Menu.Item>
-		</Menu>
-	);
 
 	return (
 		<>
@@ -54,18 +36,12 @@ const UserOptions = props => {
 							</Button>
 						) : null}
 					</Col>
-					{userData.role !== "lead" ? (
-						<Col span={12}>
-							<DropdownContainer>
-								<Dropdown
-									overlay={menu}
-									placement="bottomCenter"
-								>
-									<UserName>{userData.name}</UserName>
-								</Dropdown>
-							</DropdownContainer>
-						</Col>
-					) : null}
+
+					<Col span={12}>
+						<DropdownContainer>
+							<UserName>{userData.name}</UserName>
+						</DropdownContainer>
+					</Col>
 				</Row>
 
 				<Drawer
@@ -78,20 +54,6 @@ const UserOptions = props => {
 					visible={isDrawerVisible}
 				>
 					<AddMember onAddMember={handleUserAdd} />
-				</Drawer>
-				<Drawer
-					title="Update Profile"
-					placement="right"
-					closable={true}
-					width="30%"
-					destroyOnClose={true}
-					onClose={() => setProfileDrawer(false)}
-					visible={profileDrawer}
-				>
-					<UpdateProfile
-						uid={userData.id}
-						onUpdateUser={handleUpdateUser}
-					/>
 				</Drawer>
 			</div>
 		</>

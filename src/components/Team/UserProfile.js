@@ -45,12 +45,16 @@ const Image = styled.img`
 `;
 
 const NameContainer = styled.div`
-	padding-top: 30px;
+	padding-top: 10px;
 `;
 
-const Name = styled.p`
+const Name = styled.div`
 	font-size: 23px;
 	font-weight: 700;
+`;
+
+const Branch = styled.div`
+	padding-top: 10px;
 `;
 
 const Logo = styled.div`
@@ -86,6 +90,7 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 			try {
 				if (uid) {
 					const res = await getUserService(uid);
+					console.log(res);
 					if (res.message === "success") {
 						setUser(res.data);
 						setShowSkeleton(false);
@@ -130,6 +135,20 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 											<Tag color="lime">{user.role}</Tag>
 											<br />
 										</Name>
+										<Branch>
+											<Row gutter={12}>
+												<Col span={8}>
+													{user.branch
+														? user.branch
+														: "N/A"}
+												</Col>
+												<Col>
+													{user.year
+														? user.year
+														: "N/A"}
+												</Col>
+											</Row>
+										</Branch>
 									</NameContainer>
 								</Col>
 							</Row>
@@ -181,7 +200,9 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 								style={{
 									textAlign: "center",
 									marginRight: "auto !important",
-									marginLeft: "auto !important"
+									marginLeft: "auto !important",
+									justifyContent: "center",
+									display: "flex"
 								}}
 							>
 								<Col span={2}></Col>

@@ -11,7 +11,7 @@ export const DELETE_USER = "/users";
 // @queryParams userId
 export const GET_PROFILE = "/users/profile"; // GET
 export const UPDATE_PROFILE = "/users/profile"; // POST
-export const VIEW_USERS = "/users?sortBy=createdAt&sortType=asc"; // GET
+export const VIEW_USERS = "/users"; // GET
 
 /** EVENTS MODULE : PARTICIPANTS **/
 export const REGISTER_PARTICIPANT = "/events/participants/"; // POST

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Layout, Menu, Icon } from "antd";
+import { Layout, Menu, Icon, Modal, Row, Col, Button } from "antd";
 import routes from "../../utils/_routes";
+import { getRole } from "../../utils/services";
 import {
 	Redirect,
 	Route,
@@ -9,20 +10,51 @@ import {
 	Link
 } from "react-router-dom";
 import logo from "../../utils/assets/images/logo-white.svg";
+import { IoIosArrowRoundBack } from "react-icons/io";
+import styled from "styled-components";
 
 const { Content, Sider } = Layout;
 
 const Dashboard = props => {
 	const [isCollapsed] = useState(false);
+	const [visible, setVisible] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const Creds = getRole();
+
+	const handleSignOut = state => {
+		if (state) {
+			setIsLoading(true);
+			setTimeout(() => {
+				localStorage.clear();
+				props.history.push("/login");
+			}, 1000);
+		} else {
+			setVisible(state);
+		}
+	};
+
+	const Wrapper = styled.div`
+		padding: 10px 20px;
+	`;
+	const Head = styled.div`
+		padding-bottom: 20px;
+		font-size: 16px;
+	`;
+
+	const NoButton = styled(Button)`
+		background-color: #ffffff !important;
+		color: #1890ff !important;
+		border: 2px solid #1890ff !important;
+	`;
 
 	// useEffect(() => {
-	//   if (
-	//     !localStorage.getItem("token") ||
-	//     localStorage.getItem("token") === "undefined"
-	//   ) {
-	//     props.history.push("/login");
-	//   }
-	// });
+	// 	if (
+	// 		!localStorage.getItem("token") ||
+	// 		localStorage.getItem("token") === "undefined"
+	// 	) {
+	// 		props.history.push("/login");
+	// 	}
+	// }, [history]);
 
 	return (
 		<>
@@ -55,27 +87,33 @@ const Dashboard = props => {
 							mode="inline"
 							defaultSelectedKeys={"dashboard"}
 						>
-							{routes.map((route, idx) => (
-								<Menu.Item
-									key={route.key}
-									onClick={() => {
-										localStorage.setItem(
-											"routeKey",
-											route.key
-										);
-									}}
-								>
-									<Icon type={route.icon} />
-									<span>{route.name}</span>
-									<Link to={route.path} />
-								</Menu.Item>
-							))}
+							{routes.map((route, idx) => {
+								if (
+									Creds.role === "member" &&
+									route.key === "participants"
+								) {
+									return null;
+								} else {
+									return (
+										<Menu.Item
+											key={route.key}
+											onClick={() => {
+												localStorage.setItem(
+													"routeKey",
+													route.key
+												);
+											}}
+										>
+											<Icon type={route.icon} />
+											<span>{route.name}</span>
+											<Link to={route.path} />
+										</Menu.Item>
+									);
+								}
+							})}
 							<Menu.Item
 								key={"signout"}
-								onClick={() => {
-									localStorage.clear();
-									props.history.push("/login");
-								}}
+								onClick={() => setVisible(true)}
 							>
 								<Icon type="lock" />
 								<span>Sign Out</span>
@@ -112,6 +150,55 @@ const Dashboard = props => {
 					</Layout>
 				</Layout>
 			</Router>
+
+			<Modal
+				visible={visible}
+				footer={null}
+				closable={false}
+				onCancel={() => handleSignOut(false)}
+			>
+				<IoIosArrowRoundBack
+					onClick={() => handleSignOut(false)}
+					style={{ fontSize: "28px", cursor: "pointer" }}
+				/>
+
+				<Wrapper>
+					<Head>
+						<Row>
+							<Col xs={5}></Col>
+							<Col>Do you really want to sign out ?</Col>
+							<Col xs={5}></Col>
+						</Row>
+					</Head>
+					<Row>
+						<Col xs={5}></Col>
+						<Col xs={6} style={{ paddingLeft: "8px" }}>
+							<NoButton
+								type="primary"
+								onClick={() => handleSignOut(false)}
+							>
+								No
+							</NoButton>
+						</Col>
+						<Col
+							xs={7}
+							style={{
+								display: "flex",
+								justifyContent: "flex-end"
+							}}
+						>
+							<Button
+								type="primary"
+								loading={isLoading}
+								onClick={() => handleSignOut(true)}
+							>
+								Yes
+							</Button>
+						</Col>
+						<Col xs={5}></Col>
+					</Row>
+				</Wrapper>
+			</Modal>
 		</>
 	);
 };
