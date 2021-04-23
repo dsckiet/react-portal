@@ -23,7 +23,12 @@ import {
 	DELETE_PARTICIPANT,
 	REVOKE_PARTICIPANT,
 	PREVIEW_CERTIFICATE,
-	ADD_CERTIFICATE
+	ADD_CERTIFICATE,
+	GET_TODO,
+	ADD_TODO,
+	UPDATE_TODO,
+	DELETE_TODO,
+	DELETE_ALL_TODO
 } from "./routes";
 
 const BASE_URL = "https://api.dsckiet.com/dev";
@@ -276,6 +281,84 @@ export const deleteUser = async id => {
 	} catch (error) {
 		if (error.response) throw error.response.data;
 		else throw error.message;
+	}
+};
+
+export const getTodo = async () => {
+	setUserToken();
+	try {
+		const response = await axios.get(GET_TODO);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const addTodo = async data => {
+	setUserToken();
+	try {
+		const response = await axios.post(ADD_TODO, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const updateTodo = async (id, data) => {
+	setUserToken();
+	try {
+		const response = await axios.put(`${UPDATE_TODO}/${id}`, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const editTodo = async (id, data) => {
+	setUserToken();
+	try {
+		const response = await axios.put(`${UPDATE_TODO}/${id}`, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const deleteTodo = async id => {
+	setUserToken();
+	try {
+		const response = await axios.delete(`${DELETE_TODO}/${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const deleteAllTodo = async () => {
+	setUserToken();
+	try {
+		const response = await axios.delete(DELETE_ALL_TODO);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
 	}
 };
 
