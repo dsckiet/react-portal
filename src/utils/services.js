@@ -189,6 +189,7 @@ export async function deleteEventsService(eventId) {
 
 /******************USER/TEAM SERVICES********************/
 export async function getUsersService(params) {
+	setUserToken();
 	try {
 		const response = await axios.get(VIEW_USERS, { params });
 		if (response.status === 200 && response.data.error === false) {
@@ -227,7 +228,6 @@ export async function addUserService(data) {
 }
 
 export const updateUserService = async data => {
-	console.log(data);
 	setUserToken();
 	try {
 		const response = await axios.post(UPDATE_PROFILE, data);
@@ -349,6 +349,7 @@ export const previewCertificateService = async data => {
 };
 
 export const addCertificateService = async (data, id) => {
+	setUserToken();
 	try {
 		const response = await axios.post(`${ADD_CERTIFICATE}/${id}`, data);
 		return response.data;

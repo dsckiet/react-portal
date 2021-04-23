@@ -18,6 +18,7 @@ import styled from "styled-components";
 import { getUserService, updateUserService } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
 
 const UploadContainer = styled.div`
 	align-content: center !important;
@@ -48,12 +49,14 @@ const UpdateProfile = props => {
 	const [showSkeleton, setShowSkeleton] = useState(false);
 	const [fileList, setFileList] = useState(null);
 	const { getFieldDecorator } = props.form;
+	const history = useHistory();
 
 	const handleSignOut = state => {
 		setLoad(true);
 		localStorage.clear();
 		setTimeout(() => {
-			window.location = "/login";
+			// window.location = "/login";
+			history.push("/login");
 		}, 2000);
 	};
 

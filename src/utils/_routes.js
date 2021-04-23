@@ -57,7 +57,7 @@ let routes = [
 	// 	color: "#F4B400"
 	// },
 	{
-		path: "/Profile",
+		path: "/profile",
 		exact: true,
 		component: Profile,
 		name: "Profile",
