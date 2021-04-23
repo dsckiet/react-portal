@@ -27,15 +27,17 @@ const EditTodoModal = ({
 	const [data, setData] = useState(null);
 	const handleEdit = async e => {
 		e.preventDefault();
-		try {
-			const res = await editTodo(todo._id, { title: data });
-			if (!res.error && res.message === "success") {
-				setRefresh(!refresh);
-				handleVisible(!visible);
-				setData(null);
+		if (data !== "") {
+			try {
+				const res = await editTodo(todo._id, { title: data });
+				if (!res.error && res.message === "success") {
+					setRefresh(!refresh);
+					handleVisible(!visible);
+					setData(null);
+				}
+			} catch (err) {
+				console.log(err);
 			}
-		} catch (err) {
-			console.log(err);
 		}
 	};
 
