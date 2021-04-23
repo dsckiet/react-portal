@@ -36,8 +36,12 @@ const TeamList = props => {
 		(async () => {
 			setIsLoading(true);
 			try {
-				const { data } = await getUsersService();
+				let params = {
+					sortBy: "name"
+				};
+				const { data } = await getUsersService(params);
 				setUsers(data);
+				console.log(data);
 				setIsLoading(false);
 			} catch (err) {
 				_notification("warning", "Error", err.message);
@@ -124,6 +128,16 @@ const TeamList = props => {
 			key: "email"
 		},
 		{
+			title: "Branch",
+			dataIndex: "branch",
+			key: "branch"
+		},
+		{
+			title: "Year",
+			dataIndex: "year",
+			key: "year"
+		},
+		{
 			title: "Role",
 			dataIndex: "role",
 			key: "role",
@@ -192,6 +206,8 @@ const TeamList = props => {
 					_id,
 					name,
 					email,
+					branch,
+					year,
 					role,
 					designation,
 					showOnWebsite,
@@ -202,6 +218,8 @@ const TeamList = props => {
 					_id,
 					profile: [name, _id],
 					email,
+					branch: branch ? branch : "N/A",
+					year: year ? year : "N/A",
 					role,
 					designation,
 					isRevoked,

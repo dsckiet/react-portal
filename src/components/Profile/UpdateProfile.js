@@ -10,25 +10,56 @@ import {
 	message,
 	Upload,
 	Icon,
-	Divider
+	Divider,
+	Modal,
+	Select
 } from "antd";
 import styled from "styled-components";
-import "./style.css";
 import { getUserService, updateUserService } from "../../utils/services";
-import { _notification } from "./../../utils/_helpers";
+import { _notification } from "../../utils/_helpers";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
 
 const UploadContainer = styled.div`
 	align-content: center !important;
 `;
 
+const Wrapper = styled.div`
+	padding: 10px 20px;
+`;
+const Head = styled.div`
+	padding-bottom: 20px;
+	font-size: 16px;
+`;
+
+const NoButton = styled(Button)`
+	background-color: #ffffff !important;
+	color: #1890ff !important;
+	border: 2px solid #1890ff !important;
+`;
+
+const { Option } = Select;
+const { TextArea } = Input;
+
 const UpdateProfile = props => {
 	const [user, setUser] = useState(null);
+	const [show, setShow] = useState(false);
+	const [load, setLoad] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [image, setImage] = useState(null);
 	const [showSkeleton, setShowSkeleton] = useState(false);
 	const [fileList, setFileList] = useState(null);
 	const { getFieldDecorator } = props.form;
+	const history = useHistory();
+
+	const handleSignOut = state => {
+		setLoad(true);
+		localStorage.clear();
+		setTimeout(() => {
+			history.push("/login");
+		}, 1500);
+	};
+
 	const uploadprops = {
 		name: "avatar",
 		listType: "picture-card",
@@ -68,7 +99,7 @@ const UpdateProfile = props => {
 		(async () => {
 			setShowSkeleton(true);
 			try {
-				const id = props.uid;
+				const id = props.userData.id;
 				const res = await getUserService(id);
 				if (res.message === "success") {
 					setUser(res.data);
@@ -79,7 +110,7 @@ const UpdateProfile = props => {
 				_notification("error", "Error", err.message);
 			}
 		})();
-	}, [props.uid]);
+	}, [props.userData.id]);
 
 	useEffect(() => {
 		if (user) {
@@ -87,9 +118,12 @@ const UpdateProfile = props => {
 				image,
 				name,
 				email,
+				branch,
+				year,
 				contact,
 				designation,
 				dob,
+				bio,
 				github,
 				linkedin,
 				twitter,
@@ -103,9 +137,12 @@ const UpdateProfile = props => {
 
 			props.form.setFieldsValue({
 				dob: moment(dob, "YYYY-MM-DD"),
+				bio,
 				image,
 				name,
 				email,
+				branch,
+				year,
 				designation,
 				contact,
 				github,
@@ -134,8 +171,13 @@ const UpdateProfile = props => {
 					const formData = new FormData();
 					formData.append("name", values.name);
 					formData.append("email", values.email);
-					formData.append("designation", values.designation);
 					formData.append("dob", values.dob.format("YYYY-MM-DD"));
+					if (
+						props.userData.role !== "member" &&
+						values.designation
+					) {
+						formData.append("designation", values.designation);
+					}
 					if (values.image.file) {
 						formData.append(
 							"image",
@@ -144,17 +186,21 @@ const UpdateProfile = props => {
 					} else {
 						formData.append("image", values.image);
 					}
-					if (
-						values.password !== undefined &&
-						values.password !== ""
-					) {
-						formData.append("password", values.password);
-					}
+
 					if (values.contact !== undefined && values.contact !== "") {
 						formData.append("contact", values.contact);
 					}
 					if (values.github !== undefined && values.github !== "") {
 						formData.append("github", values.github);
+					}
+					if (values.branch !== undefined && values.branch !== "") {
+						formData.append("branch", values.branch);
+					}
+					if (values.year !== undefined && values.year !== "") {
+						formData.append("year", values.year);
+					}
+					if (values.bio !== undefined && values.bio !== "") {
+						formData.append("bio", values.bio);
 					}
 					if (
 						values.linkedin !== undefined &&
@@ -175,12 +221,22 @@ const UpdateProfile = props => {
 					const res = await updateUserService(formData);
 					if (res.message === "success") {
 						_notification("success", "Success", "Profile Updated");
-						props.onUpdateUser();
+
+						if (
+							user.name === values.name &&
+							user.email === values.email
+						) {
+							props.onUpdateUser();
+							props.Refresh();
+						} else {
+							setShow(true);
+						}
 					} else {
 						_notification("error", "Error", res.message);
 					}
 					setIsLoading(false);
 				} catch (err) {
+					console.log(err);
 					_notification("error", "Error", err.message);
 					setIsLoading(false);
 				}
@@ -258,17 +314,43 @@ const UpdateProfile = props => {
 					</Col>
 				</Row>
 
-				<Form.Item label="Password">
-					{getFieldDecorator(
-						"password",
-						{}
-					)(
-						<Input.Password
-							type="password"
-							placeholder="Password"
-						/>
-					)}
-				</Form.Item>
+				<Row gutter={16}>
+					<Col span={12}>
+						<Form.Item label="Branch" required>
+							{getFieldDecorator(
+								"branch",
+								{}
+							)(
+								<Select placeholder="Select Branch">
+									<Option value="CS">CS</Option>
+									<Option value="CO">CO</Option>
+									<Option value="IT">IT</Option>
+									<Option value="CSI">CSI</Option>
+									<Option value="EC">EC</Option>
+									<Option value="ME">ME</Option>
+									<Option value="EN">EN</Option>
+									<Option value="CE">CE</Option>
+									<Option value="MCA">MCA</Option>
+								</Select>
+							)}
+						</Form.Item>
+					</Col>
+					<Col span={12}>
+						<Form.Item label="Year" required>
+							{getFieldDecorator(
+								"year",
+								{}
+							)(
+								<Select placeholder="Select Year">
+									<Option value="1">1</Option>
+									<Option value="2">2</Option>
+									<Option value="3">3</Option>
+									<Option value="4">4</Option>
+								</Select>
+							)}
+						</Form.Item>
+					</Col>
+				</Row>
 
 				<Form.Item label="Contact">
 					{getFieldDecorator(
@@ -277,16 +359,18 @@ const UpdateProfile = props => {
 					)(<Input type="number" placeholder="Contact" />)}
 				</Form.Item>
 
-				<Form.Item label="Designation">
-					{getFieldDecorator("designation", {
-						rules: [
-							{
-								required: true,
-								message: "Please input Designation"
-							}
-						]
-					})(<Input type="text" placeholder="Designation" />)}
-				</Form.Item>
+				{props.userData.role !== "member" ? (
+					<Form.Item label="Designation">
+						{getFieldDecorator("designation", {
+							rules: [
+								{
+									required: true,
+									message: "Please input Designation"
+								}
+							]
+						})(<Input type="text" placeholder="Designation" />)}
+					</Form.Item>
+				) : null}
 
 				<Form.Item label="Date of Birth" name="date-picker">
 					{getFieldDecorator("dob", {
@@ -301,6 +385,13 @@ const UpdateProfile = props => {
 							format="YYYY-MM-DD"
 						/>
 					)}
+				</Form.Item>
+
+				<Form.Item label="Bio">
+					{getFieldDecorator(
+						"bio",
+						{}
+					)(<TextArea rows={4} type="text" placeholder="Bio" />)}
 				</Form.Item>
 
 				<Divider style={{ color: "rgba(0,0,0,.25)" }}>
@@ -386,6 +477,42 @@ const UpdateProfile = props => {
 					</Button>
 				</Form.Item>
 			</Form>
+			<Modal
+				visible={show}
+				footer={null}
+				closable={false}
+				onCancel={() => handleSignOut(true)}
+			>
+				<Wrapper
+					style={{
+						display: "flex",
+						alignItems: "center",
+						textAlign: "center",
+						flexDirection: "column"
+					}}
+				>
+					<Head>
+						<Row>
+							<Col>
+								You will be signed out for safety reasons !{" "}
+								<br />
+								Try logging in later
+							</Col>
+						</Row>
+					</Head>
+					<Row>
+						<Col xs={6}>
+							<NoButton
+								loading={load}
+								type="primary"
+								onClick={() => handleSignOut(true)}
+							>
+								Ok
+							</NoButton>
+						</Col>
+					</Row>
+				</Wrapper>
+			</Modal>
 		</Skeleton>
 	);
 };

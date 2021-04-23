@@ -3,6 +3,12 @@ export const ADD_USER = "/users"; // POST
 export const LOGIN = "/users/login"; // POST
 export const FORGOTPASS = "/users/forgot"; // POST
 export const RESETPASS = "/users/reset"; // POST
+export const GET_TODO = "/todo"; // GET
+export const ADD_TODO = "/todo"; // POST
+export const UPDATE_TODO = "/todo"; //PUT
+export const DELETE_TODO = "/todo"; //DEL
+export const DELETE_ALL_TODO = "/todo/all"; //DEL
+export const EDIT_TODO = "/todo"; //PUT
 // @queryParams userId
 export const UPDATE_USER = "/users/5deab2193026f30ec826a0cc"; // PUT
 export const TOGGLE_WEBSITE_SEEN = "/users/approve";
@@ -11,7 +17,7 @@ export const DELETE_USER = "/users";
 // @queryParams userId
 export const GET_PROFILE = "/users/profile"; // GET
 export const UPDATE_PROFILE = "/users/profile"; // POST
-export const VIEW_USERS = "/users?sortBy=createdAt&sortType=asc"; // GET
+export const VIEW_USERS = "/users"; // GET
 
 /** EVENTS MODULE : PARTICIPANTS **/
 export const REGISTER_PARTICIPANT = "/events/participants/"; // POST
