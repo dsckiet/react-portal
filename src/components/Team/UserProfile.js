@@ -8,7 +8,12 @@ import {
 	FaBirthdayCake
 } from "react-icons/fa";
 import { FiLink } from "react-icons/fi";
-import { AiFillLinkedin, AiFillPhone } from "react-icons/ai";
+import {
+	AiFillLinkedin,
+	AiFillPhone,
+	AiOutlineBranches,
+	AiOutlineCalendar
+} from "react-icons/ai";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { getUserService } from "../../utils/services";
 import { _notification } from "./../../utils/_helpers";
@@ -137,10 +142,26 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 										</Name>
 										<Branch>
 											<Row gutter={12}>
-												<Col span={8}>
+												<Col
+													span={2}
+													style={{
+														paddingTop: "2px"
+													}}
+												>
+													<AiOutlineBranches />
+												</Col>
+												<Col span={6}>
 													{user.branch
 														? user.branch
 														: "N/A"}
+												</Col>
+												<Col
+													span={3}
+													style={{
+														paddingTop: "3px"
+													}}
+												>
+													<AiOutlineCalendar />
 												</Col>
 												<Col>
 													{user.year

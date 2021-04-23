@@ -39,6 +39,7 @@ const NoButton = styled(Button)`
 `;
 
 const { Option } = Select;
+const { TextArea } = Input;
 
 const UpdateProfile = props => {
 	const [user, setUser] = useState(null);
@@ -55,9 +56,8 @@ const UpdateProfile = props => {
 		setLoad(true);
 		localStorage.clear();
 		setTimeout(() => {
-			// window.location = "/login";
 			history.push("/login");
-		}, 2000);
+		}, 1500);
 	};
 
 	const uploadprops = {
@@ -123,6 +123,7 @@ const UpdateProfile = props => {
 				contact,
 				designation,
 				dob,
+				bio,
 				github,
 				linkedin,
 				twitter,
@@ -136,6 +137,7 @@ const UpdateProfile = props => {
 
 			props.form.setFieldsValue({
 				dob: moment(dob, "YYYY-MM-DD"),
+				bio,
 				image,
 				name,
 				email,
@@ -196,6 +198,9 @@ const UpdateProfile = props => {
 					}
 					if (values.year !== undefined && values.year !== "") {
 						formData.append("year", values.year);
+					}
+					if (values.bio !== undefined && values.bio !== "") {
+						formData.append("bio", values.bio);
 					}
 					if (
 						values.linkedin !== undefined &&
@@ -380,6 +385,13 @@ const UpdateProfile = props => {
 							format="YYYY-MM-DD"
 						/>
 					)}
+				</Form.Item>
+
+				<Form.Item label="Bio">
+					{getFieldDecorator(
+						"bio",
+						{}
+					)(<TextArea rows={4} type="text" placeholder="Bio" />)}
 				</Form.Item>
 
 				<Divider style={{ color: "rgba(0,0,0,.25)" }}>

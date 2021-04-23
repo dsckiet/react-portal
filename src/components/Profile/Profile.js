@@ -10,7 +10,12 @@ import {
 	FaGithubSquare,
 	FaBirthdayCake
 } from "react-icons/fa";
-import { AiFillLinkedin, AiFillPhone } from "react-icons/ai";
+import {
+	AiFillLinkedin,
+	AiFillPhone,
+	AiOutlineBranches,
+	AiOutlineCalendar
+} from "react-icons/ai";
 import { FiLink } from "react-icons/fi";
 import { MdEmail } from "react-icons/md";
 import UpdateOptions from "./UpdateOptions";
@@ -146,10 +151,40 @@ const Profile = () => {
 										</Name>
 										<Branch>
 											<Row gutter={12}>
-												<Col span={4}>
+												<Col
+													xl={2}
+													lg={3}
+													md={4}
+													sm={5}
+													xs={6}
+													style={{
+														paddingTop: "2px"
+													}}
+												>
+													<AiOutlineBranches />
+												</Col>
+												<Col
+													xl={4}
+													lg={5}
+													md={6}
+													sm={7}
+													xs={8}
+												>
 													{user && user.branch
 														? user.branch
 														: "N/A"}
+												</Col>
+												<Col
+													xl={2}
+													lg={3}
+													md={4}
+													sm={5}
+													xs={6}
+													style={{
+														paddingTop: "2px"
+													}}
+												>
+													<AiOutlineCalendar />
 												</Col>
 												<Col>
 													{user && user.year
