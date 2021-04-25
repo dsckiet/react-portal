@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Form, Input, Button } from "antd";
-import { updateUserService } from "../../utils/services";
+import { changePassword } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
 
 const UpdateProfile = props => {
 	const [isLoading, setIsLoading] = useState(false);
-	//const [isDisable, setIsDisable] = useState(true);
 	const { getFieldDecorator } = props.form;
 
 	const handleSubmit = e => {
@@ -15,25 +14,32 @@ const UpdateProfile = props => {
 		props.form.validateFields(async (err, values) => {
 			if (!err) {
 				try {
-					const formData = new FormData();
 					if (
 						values.oldPassword &&
 						values.newPassword &&
-						values.confirmPassword &&
-						values.newPassword === values.confirmPassword
+						values.confirmPassword
 					) {
-						console.log(values.newPassword);
-						formData.append("password", values.confirmPassword);
-						const res = await updateUserService(formData);
-						if (res.message === "success") {
-							_notification(
-								"success",
-								"Success",
-								"Password Changed"
-							);
-							props.onUpdatePassword();
+						if (values.newPassword === values.confirmPassword) {
+							const res = await changePassword({
+								oldPassword: values.oldPassword,
+								newPassword: values.confirmPassword
+							});
+							if (res.message === "success") {
+								_notification(
+									"success",
+									"Success",
+									"Password Changed"
+								);
+								props.onUpdatePassword();
+							} else {
+								_notification("error", "Error", res.message);
+							}
 						} else {
-							_notification("error", "Error", res.message);
+							_notification(
+								"error",
+								"Error",
+								"New and Confirmed password does not match !"
+							);
 						}
 					} else {
 						_notification(
@@ -64,7 +70,12 @@ const UpdateProfile = props => {
 							message: "Please enter current password!"
 						}
 					]
-				})(<Input.Password type="password" placeholder="Password" />)}
+				})(
+					<Input.Password
+						type="password"
+						placeholder="Current password"
+					/>
+				)}
 			</Form.Item>
 
 			<Form.Item label="New Password" required>

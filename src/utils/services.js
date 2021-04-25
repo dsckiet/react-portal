@@ -28,7 +28,9 @@ import {
 	ADD_TODO,
 	UPDATE_TODO,
 	DELETE_TODO,
-	DELETE_ALL_TODO
+	DELETE_ALL_TODO,
+	EDIT,
+	CHANGE_PASSWORD
 } from "./routes";
 
 const BASE_URL = "https://api.dsckiet.com/dev";
@@ -353,6 +355,32 @@ export const deleteAllTodo = async () => {
 	setUserToken();
 	try {
 		const response = await axios.delete(DELETE_ALL_TODO);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const editService = async (id, data) => {
+	setUserToken();
+	try {
+		const response = await axios.put(`${EDIT}/${id}`, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const changePassword = async data => {
+	setUserToken();
+	try {
+		const response = await axios.post(CHANGE_PASSWORD, data);
 		if (response.status === 200 && response.data.error === false) {
 			return response.data;
 		} else return response.data;

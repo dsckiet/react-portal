@@ -5,15 +5,11 @@ import { MdEmail } from "react-icons/md";
 import {
 	FaTwitterSquare,
 	FaGithubSquare,
-	FaBirthdayCake
+	FaBirthdayCake,
+	FaUserGraduate
 } from "react-icons/fa";
 import { FiLink } from "react-icons/fi";
-import {
-	AiFillLinkedin,
-	AiFillPhone,
-	AiOutlineBranches,
-	AiOutlineCalendar
-} from "react-icons/ai";
+import { AiFillLinkedin, AiFillPhone, AiFillCalendar } from "react-icons/ai";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { getUserService } from "../../utils/services";
 import { _notification } from "./../../utils/_helpers";
@@ -60,6 +56,13 @@ const Name = styled.div`
 
 const Branch = styled.div`
 	padding-top: 10px;
+	font-size: 16px;
+`;
+
+const Designation = styled(Col)`
+	margin-top: 7px;
+	font-size: 16px;
+	font-weight: 400;
 `;
 
 const Logo = styled.div`
@@ -137,8 +140,33 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 									<NameContainer>
 										<Name>
 											{user.name} <br />
-											<Tag color="lime">{user.role}</Tag>
-											<br />
+											<Row style={{ paddingTop: "10px" }}>
+												<Col span={12}>
+													<Tag
+														color={
+															user.role === "lead"
+																? "red"
+																: user.role ===
+																  "core"
+																? "geekblue"
+																: "orange"
+														}
+														style={{
+															marginBottom: "5px",
+															textTransform:
+																"capitalize",
+															fontSize: "14px",
+															width: "75%",
+															textAlign: "center"
+														}}
+													>
+														{user.role}
+													</Tag>
+												</Col>
+												<Designation span="12">
+													{user.designation}
+												</Designation>
+											</Row>
 										</Name>
 										<Branch>
 											<Row gutter={12}>
@@ -148,7 +176,7 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 														paddingTop: "2px"
 													}}
 												>
-													<AiOutlineBranches />
+													<FaUserGraduate />
 												</Col>
 												<Col span={6}>
 													{user.branch
@@ -158,10 +186,10 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 												<Col
 													span={3}
 													style={{
-														paddingTop: "3px"
+														marginTop: "2px"
 													}}
 												>
-													<AiOutlineCalendar />
+													<AiFillCalendar />
 												</Col>
 												<Col>
 													{user.year

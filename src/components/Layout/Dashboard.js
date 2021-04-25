@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Card, Icon, Checkbox, Input, Button, Tooltip } from "antd";
+import {
+	Row,
+	Col,
+	Card,
+	Icon,
+	Checkbox,
+	Input,
+	Button,
+	Tooltip,
+	Popconfirm
+} from "antd";
 import PageTitle from "./PageTitle";
 import "./style.css";
 import { DashCards } from "./DashCards";
@@ -122,25 +132,37 @@ const Dashboard = props => {
 								>
 									<h2 style={{ fontWeight: 700 }}>Todo</h2>
 									<span>
-										<Tooltip title="Delete All">
-											<Button
-												onClick={handleDeleteAllTodo}
-												danger
-												disabled={
-													todos && todos.length === 0
-														? true
-														: false
-												}
-											>
-												<Icon
-													type="delete"
-													style={{
-														color: "#ffffff",
-														cursor: "pointer"
-													}}
-												/>
-											</Button>
-										</Tooltip>
+										<Popconfirm
+											title="Do you want to delete all Todo ?"
+											onConfirm={handleDeleteAllTodo}
+											okText="Yes"
+											cancelText="No"
+											disabled={
+												todos && todos.length === 0
+													? true
+													: false
+											}
+										>
+											<Tooltip title="Delete All">
+												<Button
+													danger
+													disabled={
+														todos &&
+														todos.length === 0
+															? true
+															: false
+													}
+												>
+													<Icon
+														type="delete"
+														style={{
+															color: "#ffffff",
+															cursor: "pointer"
+														}}
+													/>
+												</Button>
+											</Tooltip>
+										</Popconfirm>
 									</span>
 								</div>
 								<hr />
@@ -258,22 +280,28 @@ const Dashboard = props => {
 															/>
 														</Col>
 														<Col span={2}>
-															<Icon
-																type="delete"
-																onClick={() =>
+															<Popconfirm
+																title="Do you want to delete this Todo ?"
+																onConfirm={() =>
 																	handleDeleteTodo(
 																		todo
 																	)
 																}
-																style={{
-																	color:
-																		"#DB4437",
-																	float:
-																		"right",
-																	cursor:
-																		"pointer"
-																}}
-															/>
+																okText="Yes"
+																cancelText="No"
+															>
+																<Icon
+																	type="delete"
+																	style={{
+																		color:
+																			"#DB4437",
+																		float:
+																			"right",
+																		cursor:
+																			"pointer"
+																	}}
+																/>
+															</Popconfirm>
 														</Col>
 													</Row>
 												</>
@@ -292,6 +320,7 @@ const Dashboard = props => {
 								<Row justify="space-between">
 									<Col>
 										<Input
+											maxLength="72"
 											placeholder="Type your To Do"
 											allowClear
 											value={todo}

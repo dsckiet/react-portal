@@ -8,13 +8,14 @@ import styled from "styled-components";
 import {
 	FaTwitterSquare,
 	FaGithubSquare,
-	FaBirthdayCake
+	FaBirthdayCake,
+	FaUserGraduate
 } from "react-icons/fa";
 import {
 	AiFillLinkedin,
 	AiFillPhone,
-	AiOutlineBranches,
-	AiOutlineCalendar
+	// /AiOutlineBranches,
+	AiFillCalendar
 } from "react-icons/ai";
 import { FiLink } from "react-icons/fi";
 import { MdEmail } from "react-icons/md";
@@ -137,10 +138,21 @@ const Profile = () => {
 												: "Not Available"}
 											<br />
 											<Tag
-												color="lime"
+												color={
+													user && user.role === "lead"
+														? "red"
+														: user &&
+														  user.role === "core"
+														? "geekblue"
+														: "orange"
+												}
 												style={{
 													marginTop: "5px",
-													marginBottom: "5px"
+													marginBottom: "5px",
+													textTransform: "capitalize",
+													fontSize: "14px",
+													width: "20%",
+													textAlign: "center"
 												}}
 											>
 												{user && user.role
@@ -161,7 +173,7 @@ const Profile = () => {
 														paddingTop: "2px"
 													}}
 												>
-													<AiOutlineBranches />
+													<FaUserGraduate />
 												</Col>
 												<Col
 													xl={4}
@@ -184,7 +196,7 @@ const Profile = () => {
 														paddingTop: "2px"
 													}}
 												>
-													<AiOutlineCalendar />
+													<AiFillCalendar />
 												</Col>
 												<Col>
 													{user && user.year

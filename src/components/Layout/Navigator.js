@@ -4,6 +4,7 @@ import routes from "../../utils/_routes";
 import { getRole } from "../../utils/services";
 import { Switch, Link, Redirect } from "react-router-dom";
 import logo from "../../utils/assets/images/logo-white.svg";
+import logoCollapse from "../../utils/assets/images/logo_collapse.svg";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import styled from "styled-components";
 import PrivateRoute from "./PrivateRoute";
@@ -16,7 +17,7 @@ import Profile from "../Profile/Profile";
 const { Content, Sider } = Layout;
 
 const Navigator = props => {
-	const [isCollapsed] = useState(false);
+	const [isCollapsed, setIsCollapsed] = useState(false);
 	const [visible, setVisible] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const Creds = getRole();
@@ -64,6 +65,13 @@ const Navigator = props => {
 		<>
 			<Layout>
 				<Sider
+					// width={200}
+					// style={{
+					// 	overflow: "auto",
+					// 	height: "100vh",
+					// 	position: "fixed",
+					// 	left: 0
+					// }}
 					theme="dark"
 					trigger={null}
 					collapsible
@@ -71,15 +79,16 @@ const Navigator = props => {
 				>
 					<div className="logo">
 						{/* <Icon
-								className="trigger"
-								type={isCollapsed ? "menu-unfold" : "menu-fold"}
-								onClick={() => setIsCollapsed(!isCollapsed)}
-							/> */}
+							className="trigger"
+							type={isCollapsed ? "menu-unfold" : "menu-fold"}
+							onClick={() => setIsCollapsed(!isCollapsed)}
+						/> */}
 						<img
-							src={logo}
-							hidden={isCollapsed}
-							width="160"
-							style={{ padding: "12px 24px" }}
+							onClick={() => setIsCollapsed(!isCollapsed)}
+							src={isCollapsed ? logoCollapse : logo}
+							//hidden={isCollapsed}
+							width={`${isCollapsed ? "84" : "160"}`}
+							style={{ padding: "12px 24px", cursor: "pointer" }}
 							alt=""
 						/>
 					</div>
@@ -121,10 +130,23 @@ const Navigator = props => {
 							<Icon type="lock" />
 							<span>Sign Out</span>
 						</Menu.Item>
+						<Menu.Item
+							key={"collapse"}
+							onClick={() => setIsCollapsed(!isCollapsed)}
+						>
+							{/* <BiArrowToLeft /> */}
+							<Icon type={isCollapsed ? "right" : "left"} />
+							<span>Collapse</span>
+						</Menu.Item>
 					</Menu>
 				</Sider>
 
-				<Layout>
+				<Layout
+				// style={{
+				// 	minHeight: "100vh",
+				// 	marginLeft: `${isCollapsed ? "80px" : "200px"}`
+				// }}
+				>
 					<Content
 						style={{
 							margin: 12,

@@ -31,8 +31,8 @@ const EditTodoModal = ({
 			try {
 				const res = await editTodo(todo._id, { title: data });
 				if (!res.error && res.message === "success") {
-					setRefresh(!refresh);
 					handleVisible(!visible);
+					setRefresh(!refresh);
 					setData(null);
 				}
 			} catch (err) {
@@ -43,7 +43,7 @@ const EditTodoModal = ({
 
 	useEffect(() => {
 		setData(todo ? todo.title : null);
-	}, [todo]);
+	}, [todo, visible]);
 
 	return (
 		<>

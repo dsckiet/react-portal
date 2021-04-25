@@ -1,7 +1,7 @@
-import EventsList from "../components/Events/EventsList";
+//import EventsList from "../components/Events/EventsList";
 import Dashboard from "../components/Layout/Dashboard";
 import TeamList from "../components/Team/TeamList";
-import ParticipantsList from "../components/Participants/ParticipantsList";
+//import ParticipantsList from "../components/Participants/ParticipantsList";
 //import AddCertificate from "./../components/Certificates/AddCertificate";
 import Profile from "../components/Profile/Profile";
 
@@ -16,26 +16,26 @@ let routes = [
 		description: "List of all the events",
 		color: "#F4B400"
 	},
-	{
-		path: "/events",
-		exact: true,
-		component: EventsList,
-		name: "Events",
-		key: "events",
-		icon: "calendar",
-		description: "List of all the events",
-		color: "#DB4437"
-	},
-	{
-		path: "/participants",
-		exact: true,
-		component: ParticipantsList,
-		name: "Participants",
-		key: "participants",
-		icon: "team",
-		description: "List of all the participants",
-		color: "#4285F4"
-	},
+	// {
+	// 	path: "/events",
+	// 	exact: true,
+	// 	component: EventsList,
+	// 	name: "Events",
+	// 	key: "events",
+	// 	icon: "calendar",
+	// 	description: "List of all the events",
+	// 	color: "#DB4437"
+	// },
+	// {
+	// 	path: "/participants",
+	// 	exact: true,
+	// 	component: ParticipantsList,
+	// 	name: "Participants",
+	// 	key: "participants",
+	// 	icon: "team",
+	// 	description: "List of all the participants",
+	// 	color: "#4285F4"
+	// },
 	{
 		path: "/team",
 		exact: true,

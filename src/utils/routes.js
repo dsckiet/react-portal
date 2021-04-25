@@ -3,12 +3,14 @@ export const ADD_USER = "/users"; // POST
 export const LOGIN = "/users/login"; // POST
 export const FORGOTPASS = "/users/forgot"; // POST
 export const RESETPASS = "/users/reset"; // POST
+export const EDIT = "/users"; //PUT
 export const GET_TODO = "/todo"; // GET
 export const ADD_TODO = "/todo"; // POST
 export const UPDATE_TODO = "/todo"; //PUT
 export const DELETE_TODO = "/todo"; //DEL
 export const DELETE_ALL_TODO = "/todo/all"; //DEL
 export const EDIT_TODO = "/todo"; //PUT
+export const CHANGE_PASSWORD = "/users/change";
 // @queryParams userId
 export const UPDATE_USER = "/users/5deab2193026f30ec826a0cc"; // PUT
 export const TOGGLE_WEBSITE_SEEN = "/users/approve";
