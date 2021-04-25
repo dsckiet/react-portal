@@ -13,6 +13,7 @@ import { AiFillLinkedin, AiFillPhone, AiFillCalendar } from "react-icons/ai";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { getUserService } from "../../utils/services";
 import { _notification } from "./../../utils/_helpers";
+import moment from "moment";
 
 // const Months = [
 // 	"Jan",
@@ -337,7 +338,9 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 
 								<Tag color="green">
 									{user.lastActiveAt
-										? user.lastActiveAt
+										? moment(user.lastActiveAt).format(
+												"DD MMM YYYY HH:MM A"
+										  )
 										: "never"}
 								</Tag>
 							</Row>

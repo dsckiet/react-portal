@@ -42,6 +42,10 @@ const NoButton = styled(Button)`
 const { Option } = Select;
 const { TextArea } = Input;
 
+const githubUrlPrefix = "https://github.com/";
+const twitterUrlPrefix = "https://twitter.com/";
+const linkedinUrlPrefix = "https://linkedin.com/in/";
+
 const UpdateProfile = props => {
 	const [user, setUser] = useState(null);
 	const [show, setShow] = useState(false);
@@ -176,12 +180,14 @@ const UpdateProfile = props => {
 				name,
 				email,
 				branch,
-				year,
+				year: year ? moment(year, "YYYY") : "",
 				designation,
 				contact,
-				github,
-				twitter,
-				linkedin,
+				github: github ? github.replace(githubUrlPrefix, "") : "",
+				twitter: twitter ? twitter.replace(twitterUrlPrefix, "") : "",
+				linkedin: linkedin
+					? linkedin.replace(linkedinUrlPrefix, "")
+					: "",
 				portfolio
 			});
 			setShowSkeleton(false);
@@ -217,22 +223,28 @@ const UpdateProfile = props => {
 				formData.append("contact", values.contact);
 			}
 			if (values.github !== undefined && values.github !== "") {
-				formData.append("github", values.github);
+				formData.append("github", `${githubUrlPrefix}${values.github}`);
 			}
 			if (values.branch !== undefined && values.branch !== "") {
 				formData.append("branch", values.branch);
 			}
 			if (values.year !== undefined && values.year !== "") {
-				formData.append("year", values.year);
+				formData.append("year", new Date(values.year).getFullYear());
 			}
 			if (values.bio !== undefined && values.bio !== "") {
 				formData.append("bio", values.bio);
 			}
 			if (values.linkedin !== undefined && values.linkedin !== "") {
-				formData.append("linkedin", values.linkedin);
+				formData.append(
+					"linkedin",
+					`${linkedinUrlPrefix}${values.linkedin}`
+				);
 			}
 			if (values.twitter !== undefined && values.twitter !== "") {
-				formData.append("twitter", values.twitter);
+				formData.append(
+					"twitter",
+					`${twitterUrlPrefix}${values.twitter}`
+				);
 			}
 			if (values.portfolio !== undefined && values.portfolio !== "") {
 				formData.append("portfolio", values.portfolio);
@@ -258,6 +270,21 @@ const UpdateProfile = props => {
 			setIsLoading(false);
 		}
 	};
+
+	const disabledDatesForYear = current => {
+		return (
+			current < moment(new Date().getFullYear() - 4, "YYYY") ||
+			current > moment(new Date().getFullYear() + 4, "YYYY")
+		);
+	};
+
+	const disabledDatesForDob = current => {
+		return (
+			current < moment(new Date().getFullYear() - 26, "YYYY") ||
+			current > moment(new Date().getFullYear() - 16, "YYYY")
+		);
+	};
+
 	return (
 		<Skeleton loading={showSkeleton} active>
 			<Form onFinish={handleSubmit} layout="vertical" form={form}>
@@ -347,19 +374,38 @@ const UpdateProfile = props => {
 						</Form.Item>
 					</Col>
 					<Col span={12}>
-						<Form.Item label="Year" required name="year">
-							<Select placeholder="Select Year">
-								<Option value="1">1</Option>
-								<Option value="2">2</Option>
-								<Option value="3">3</Option>
-								<Option value="4">4</Option>
-							</Select>
+						<Form.Item
+							label="Year of Graduation"
+							required
+							name="year"
+						>
+							<DatePicker
+								picker="year"
+								disabledDate={disabledDatesForYear}
+							/>
 						</Form.Item>
 					</Col>
 				</Row>
 
-				<Form.Item label="Contact" name="contact">
-					<Input type="number" placeholder="Contact" />
+				<Form.Item
+					label="Contact"
+					name="contact"
+					rules={[
+						{
+							required: true,
+							message: "Please input contact"
+						},
+						{
+							pattern: /(^[6-9]{1}[0-9]{9}$)/,
+							message: "Please input valid contact"
+						}
+					]}
+				>
+					<Input
+						type="number"
+						placeholder="Contact"
+						stringMode={true}
+					/>
 				</Form.Item>
 
 				<Form.Item
@@ -379,8 +425,21 @@ const UpdateProfile = props => {
 					/>
 				</Form.Item>
 
-				<Form.Item label="Date of Birth" name="dob">
-					<DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
+				<Form.Item
+					label="Date of Birth"
+					name="dob"
+					rules={[
+						{
+							required: true,
+							message: "Please input date of birth"
+						}
+					]}
+				>
+					<DatePicker
+						style={{ width: "100%" }}
+						format="YYYY-MM-DD"
+						disabledDate={disabledDatesForDob}
+					/>
 				</Form.Item>
 
 				<Form.Item label="Bio" name="bio">
@@ -388,10 +447,19 @@ const UpdateProfile = props => {
 				</Form.Item>
 
 				<Divider style={{ color: "rgba(0,0,0,.25)" }}>
-					Social Media Links
+					Profile Links
 				</Divider>
 
-				<Form.Item label="Github" name="github">
+				<Form.Item
+					label="Github"
+					name="github"
+					rules={[
+						{
+							pattern: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+							message: "Please input valid handle"
+						}
+					]}
+				>
 					<Input
 						prefix={
 							<Icon
@@ -399,11 +467,20 @@ const UpdateProfile = props => {
 								style={{ color: "rgba(0,0,0,.25)" }}
 							/>
 						}
-						type="text"
+						addonBefore={githubUrlPrefix}
 					/>
 				</Form.Item>
 
-				<Form.Item label="Twitter" name="twitter">
+				<Form.Item
+					label="Twitter"
+					name="twitter"
+					rules={[
+						{
+							pattern: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+							message: "Please input valid handle"
+						}
+					]}
+				>
 					<Input
 						prefix={
 							<Icon
@@ -411,11 +488,20 @@ const UpdateProfile = props => {
 								style={{ color: "rgba(0,0,0,.25)" }}
 							/>
 						}
-						type="text"
+						addonBefore={twitterUrlPrefix}
 					/>
 				</Form.Item>
 
-				<Form.Item label="LinkedIn" name="linkedin">
+				<Form.Item
+					label="LinkedIn"
+					name="linkedin"
+					rules={[
+						{
+							pattern: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+							message: "Please input valid handle"
+						}
+					]}
+				>
 					<Input
 						prefix={
 							<Icon
@@ -423,11 +509,21 @@ const UpdateProfile = props => {
 								style={{ color: "rgba(0,0,0,.25)" }}
 							/>
 						}
-						type="text"
+						addonBefore={linkedinUrlPrefix}
 					/>
 				</Form.Item>
 
-				<Form.Item label="Portfolio" name="portfolio">
+				<Form.Item
+					label="Portfolio"
+					name="portfolio"
+					rules={[
+						{
+							// eslint-disable-next-line no-useless-escape
+							pattern: /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)$/,
+							message: "Please input valid portfolio url"
+						}
+					]}
+				>
 					<Input
 						prefix={
 							<Icon
@@ -435,7 +531,6 @@ const UpdateProfile = props => {
 								style={{ color: "rgba(0,0,0,.25)" }}
 							/>
 						}
-						type="text"
 					/>
 				</Form.Item>
 
