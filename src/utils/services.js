@@ -34,10 +34,9 @@ import {
 } from "./routes";
 
 const BASE_URL =
-	window.location.host.includes("deploy-preview") ||
-	window.location.host.includes("localhost")
-		? "https://api.dsckiet.com/dev"
-		: "https://api.dsckiet.com/prod";
+	window.location.host === "portal.dsckiet.com"
+		? "https://api.dsckiet.com/prod"
+		: "https://api.dsckiet.com/dev";
 axios.defaults.baseURL = BASE_URL;
 
 function setUserToken(token) {
