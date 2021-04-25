@@ -1,44 +1,106 @@
 {
-  "name": "client",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "antd": "3.26.13",
-    "axios": "^0.19.2",
-    "history": "^5.0.0",
-    "jwt-decode": "^2.2.0",
-    "less": "^3.11.1",
-    "moment": "^2.24.0",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0",
-    "react-icons": "^3.10.0",
-    "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.0",
-    "styled-components": "^5.1.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "deploy": "react-scripts build && cp _redirects ./build && netlify deploy --prod",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+	"name": "dsc-portal",
+	"version": "0.1.0",
+	"description": "An efficient and scalable software solution to manage everything @dsckiet.",
+	"private": true,
+	"dependencies": {
+		"@testing-library/jest-dom": "^4.2.4",
+		"@testing-library/react": "^9.3.2",
+		"@testing-library/user-event": "^7.1.2",
+		"antd": "3.26.13",
+		"axios": "^0.19.2",
+		"history": "^5.0.0",
+		"jwt-decode": "^2.2.0",
+		"less": "^3.11.1",
+		"moment": "^2.24.0",
+		"react": "^16.13.0",
+		"react-dom": "^16.13.0",
+		"react-icons": "^3.10.0",
+		"react-router-dom": "^5.1.2",
+		"react-scripts": "3.4.0",
+		"styled-components": "^5.1.1"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"deploy": "react-scripts build && cp _redirects ./build && netlify deploy --prod",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject",
+		"lint": "prettier \"**/*.{js, jsx, json, md, html, css, yml}\" --write"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/dsckiet/react-portal.git"
+	},
+	"author": {
+		"name": "Developer Student Clubs KIET",
+		"email": "dsckiet@gmail.com",
+		"url": "https://dsckiet.com"
+	},
+	"contributors": [
+		{
+			"name": "Aakash Goel",
+			"email": "goelaakash79@gmail.com",
+			"url": "https://goelaakash79.github.io"
+		},
+		{
+			"name": "Rohan Mehta",
+			"email": "rhnmht30@gmail.com",
+			"url": "https://rhnmht30.dev"
+		},
+		{
+			"name": "Mayank Shakya",
+			"email": "mayankshakya992@gmail.com",
+			"url": "https://github.com/mayanksh99"
+		},
+		{
+			"name": "Aniket Padmaansh",
+			"email": "pudmaansh@gmail.com",
+			"url": "https://github.com/padmansh"
+		}
+	],
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/dsckiet/react-portal/issues"
+	},
+	"homepage": "https://portal.dsckiet.com",
+	"keywords": [
+		"portal",
+		"nodejs",
+		"redis",
+		"kue",
+		"management-system",
+		"mongodb",
+		"sentry"
+	],
+	"eslintConfig": {
+		"extends": "react-app"
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"husky": "4.3.0",
+		"lint-staged": "10.4.2",
+		"prettier": "^2.1.2"
+	},
+	"lint-staged": {
+		"*.{js, jsx, json, md, html, css, yml}": [
+			"prettier --write"
+		]
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	}
 }

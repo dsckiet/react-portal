@@ -33,7 +33,7 @@ import {
 	CHANGE_PASSWORD
 } from "./routes";
 
-const BASE_URL = "https://api.dsckiet.com/dev";
+const BASE_URL = "http://localhost:5000/api/v1";
 
 axios.defaults.baseURL = BASE_URL;
 
