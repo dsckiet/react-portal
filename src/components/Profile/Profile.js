@@ -11,12 +11,7 @@ import {
 	FaBirthdayCake,
 	FaUserGraduate
 } from "react-icons/fa";
-import {
-	AiFillLinkedin,
-	AiFillPhone,
-	// /AiOutlineBranches,
-	AiFillCalendar
-} from "react-icons/ai";
+import { AiFillLinkedin, AiFillPhone, AiFillCalendar } from "react-icons/ai";
 import { FiLink } from "react-icons/fi";
 import { MdEmail } from "react-icons/md";
 import UpdateOptions from "./UpdateOptions";
@@ -47,6 +42,7 @@ const Profile = () => {
 	`;
 
 	const Image = styled.img`
+		width: 70%;
 		border-radius: 50%;
 		padding: 4px;
 		border: 2px solid #d5d5d5;
@@ -114,10 +110,10 @@ const Profile = () => {
 			<PageTitle title="Profile" bgColor="#DB4437" />
 			<Skeleton loading={showSkeleton} active>
 				<Row>
-					<Col span={12}>
+					<Col span={24}>
 						<>
 							<Row gutter={16}>
-								<Col span={3}>
+								<Col span={5}>
 									<ImageContainer>
 										<Image
 											src={
@@ -129,7 +125,7 @@ const Profile = () => {
 										/>
 									</ImageContainer>
 								</Col>
-								<Col span={1}></Col>
+								<Col span={0}></Col>
 								<Col span={14}>
 									<NameContainer>
 										<Name>

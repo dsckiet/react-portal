@@ -39,12 +39,6 @@
 	border-radius: 4px !important;
 }
 
-.ant-btn {
-	background-color: #4285f4 !important;
-	color: #ffffff !important;
-	border: 0 !important;
-}
-
 .ant-btn:hover {
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }

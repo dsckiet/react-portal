@@ -7,13 +7,14 @@ import {
 	Row,
 	Col,
 	Skeleton,
-	message,
+	//message,
 	Upload,
-	Icon,
 	Divider,
 	Modal,
 	Select
 } from "antd";
+import ImgCrop from "antd-img-crop";
+import Icon from "@ant-design/icons";
 import styled from "styled-components";
 import { getUserService, updateUserService } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
@@ -48,9 +49,68 @@ const UpdateProfile = props => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [image, setImage] = useState(null);
 	const [showSkeleton, setShowSkeleton] = useState(false);
-	const [fileList, setFileList] = useState(null);
-	const { getFieldDecorator } = props.form;
+	const [fileList, setFileList] = useState([]);
+	const [showNotif, setShowNotif] = useState(false);
+
 	const history = useHistory();
+	const [form] = Form.useForm();
+
+	useEffect(() => {
+		if (showNotif) {
+			_notification(
+				"success",
+				"Success",
+				"File saved, Save changes before exit !"
+			);
+		}
+	}, [showNotif]);
+
+	const onChange = ({ fileList: newFileList }) => {
+		console.log(newFileList);
+		if (newFileList.length !== 0) {
+			const isJpgOrPng =
+				(newFileList &&
+					newFileList.length !== 0 &&
+					newFileList[0].type === "image/jpeg") ||
+				(newFileList &&
+					newFileList.length !== 0 &&
+					newFileList[0].type === "image/png");
+			const isLt2M =
+				newFileList &&
+				newFileList.length !== 0 &&
+				newFileList[0].size / 1024 / 1024 < 2;
+			if (isJpgOrPng && isLt2M) {
+				setFileList(newFileList);
+				if (!showNotif) {
+					setShowNotif(true);
+				}
+			}
+			if (!isLt2M) {
+				_notification("error", "Error", "Size should be less than 2MB");
+			}
+			if (!isJpgOrPng) {
+				_notification("error", "Error", "Invalid file format");
+			}
+		} else {
+			setFileList([]);
+			setShowNotif(false);
+		}
+	};
+
+	const onPreview = async file => {
+		let src = file.url;
+		if (!src) {
+			src = await new Promise(resolve => {
+				const reader = new FileReader();
+				reader.readAsDataURL(file.originFileObj);
+				reader.onload = () => resolve(reader.result);
+			});
+		}
+		const image = new Image();
+		image.src = src;
+		const imgWindow = window.open(src);
+		imgWindow.document.write(image.outerHTML);
+	};
 
 	const handleSignOut = state => {
 		setLoad(true);
@@ -66,32 +126,6 @@ const UpdateProfile = props => {
 		action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
 		headers: {
 			authorization: "authorization-text"
-		},
-		beforeUpload(file) {
-			const isJpgOrPng =
-				file.type === "image/jpeg" || file.type === "image/png";
-			if (!isJpgOrPng) {
-				message.error("You can only upload JPG/PNG file!");
-			}
-			console.log(file);
-			const isLt2M = file.size / 1024 / 1024 < 5;
-			if (!isLt2M) {
-				message.error("Image must smaller than 5MB!");
-			}
-			return isJpgOrPng && isLt2M;
-		},
-		onChange(info) {
-			if (info.file.status === "uploading") {
-			}
-			if (info.file.status === "done") {
-				message.success(`${info.file.name} file uploaded successfully`);
-				getBase64(info.file.originFileObj, imageUrl => {
-					setImage(imageUrl);
-				});
-			} else if (info.file.status === "error") {
-				message.error(`${info.file.name} file upload failed.`);
-			}
-			setFileList(info.fileList);
 		}
 	};
 
@@ -135,7 +169,7 @@ const UpdateProfile = props => {
 			}
 			setImage(image);
 
-			props.form.setFieldsValue({
+			form.setFieldsValue({
 				dob: dob ? moment(dob, "YYYY-MM-DD") : "",
 				bio,
 				image,
@@ -155,134 +189,107 @@ const UpdateProfile = props => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user]);
 
-	const getBase64 = (img, callback) => {
-		const reader = new FileReader();
-		reader.addEventListener("load", () => callback(reader.result));
-		reader.readAsDataURL(img);
-	};
+	// const getBase64 = (img, callback) => {
+	// 	const reader = new FileReader();
+	// 	reader.addEventListener("load", () => callback(reader.result));
+	// 	reader.readAsDataURL(img);
+	// };
 
-	const handleSubmit = e => {
-		e.preventDefault();
-		setIsLoading(true);
+	const handleSubmit = async values => {
+		console.log(values, "submit info");
+		try {
+			const formData = new FormData();
+			formData.append("name", values.name);
+			formData.append("email", values.email);
+			if (values.dob && values.dob !== "") {
+				formData.append("dob", values.dob.format("YYYY-MM-DD"));
+			}
 
-		props.form.validateFields(async (err, values) => {
-			if (!err) {
-				try {
-					const formData = new FormData();
-					formData.append("name", values.name);
-					formData.append("email", values.email);
-					if (values.dob && values.dob !== "") {
-						formData.append("dob", values.dob.format("YYYY-MM-DD"));
-					}
+			if (props.userData.role !== "member" && values.designation) {
+				formData.append("designation", values.designation);
+			}
+			if (fileList.length !== 0) {
+				formData.append("image", fileList[0].originFileObj);
+			} else {
+				formData.append("image", values.image);
+			}
+			if (values.contact !== undefined && values.contact !== "") {
+				formData.append("contact", values.contact);
+			}
+			if (values.github !== undefined && values.github !== "") {
+				formData.append("github", values.github);
+			}
+			if (values.branch !== undefined && values.branch !== "") {
+				formData.append("branch", values.branch);
+			}
+			if (values.year !== undefined && values.year !== "") {
+				formData.append("year", values.year);
+			}
+			if (values.bio !== undefined && values.bio !== "") {
+				formData.append("bio", values.bio);
+			}
+			if (values.linkedin !== undefined && values.linkedin !== "") {
+				formData.append("linkedin", values.linkedin);
+			}
+			if (values.twitter !== undefined && values.twitter !== "") {
+				formData.append("twitter", values.twitter);
+			}
+			if (values.portfolio !== undefined && values.portfolio !== "") {
+				formData.append("portfolio", values.portfolio);
+			}
 
-					if (
-						props.userData.role !== "member" &&
-						values.designation
-					) {
-						formData.append("designation", values.designation);
-					}
-					if (values.image.file) {
-						formData.append(
-							"image",
-							values.image.file.originFileObj
-						);
-					} else {
-						formData.append("image", values.image);
-					}
-
-					if (values.contact !== undefined && values.contact !== "") {
-						formData.append("contact", values.contact);
-					}
-					if (values.github !== undefined && values.github !== "") {
-						formData.append("github", values.github);
-					}
-					if (values.branch !== undefined && values.branch !== "") {
-						formData.append("branch", values.branch);
-					}
-					if (values.year !== undefined && values.year !== "") {
-						formData.append("year", values.year);
-					}
-					if (values.bio !== undefined && values.bio !== "") {
-						formData.append("bio", values.bio);
-					}
-					if (
-						values.linkedin !== undefined &&
-						values.linkedin !== ""
-					) {
-						formData.append("linkedin", values.linkedin);
-					}
-					if (values.twitter !== undefined && values.twitter !== "") {
-						formData.append("twitter", values.twitter);
-					}
-					if (
-						values.portfolio !== undefined &&
-						values.portfolio !== ""
-					) {
-						formData.append("portfolio", values.portfolio);
-					}
-
-					const res = await updateUserService(formData);
-					if (res.message === "success") {
-						_notification("success", "Success", "Profile Updated");
-
-						if (
-							user.name === values.name &&
-							user.email === values.email
-						) {
-							props.onUpdateUser();
-							props.Refresh();
-						} else {
-							setShow(true);
-						}
-					} else {
-						_notification("error", "Error", res.message);
-					}
-					setIsLoading(false);
-				} catch (err) {
-					console.log(err);
-					_notification("error", "Error", err.message);
-					setIsLoading(false);
+			const res = await updateUserService(formData);
+			if (res.message === "success") {
+				_notification("success", "Success", "Profile Updated");
+				setShowNotif(false);
+				if (user.name === values.name && user.email === values.email) {
+					props.onUpdateUser();
+					props.Refresh();
+				} else {
+					setShow(true);
 				}
 			} else {
-				setIsLoading(false);
+				_notification("error", "Error", res.message);
 			}
-		});
+			setIsLoading(false);
+		} catch (err) {
+			console.log(err);
+			_notification("error", "Error", err.message);
+			setIsLoading(false);
+		}
 	};
 	return (
 		<Skeleton loading={showSkeleton} active>
-			<Form onSubmit={handleSubmit} layout="vertical">
+			<Form onFinish={handleSubmit} layout="vertical" form={form}>
 				<UploadContainer>
-					<Form.Item>
-						{getFieldDecorator(
-							"image",
-							{}
-						)(
-							<>
+					<Form.Item name="image">
+						<>
+							<ImgCrop rotate>
 								<Upload
-									fileList={fileList}
-									showUploadList={false}
 									{...uploadprops}
+									fileList={fileList}
+									onChange={onChange}
+									onPreview={onPreview}
 								>
-									{image ? (
-										<img
-											src={image}
-											alt="avatar"
-											style={{ width: "100%" }}
-										/>
-									) : (
-										<div>
-											<Icon type="plus" />
-											<div className="ant-upload-text">
-												Upload
+									{fileList.length === 0 ? (
+										image ? (
+											<div style={{ padding: "8px 8px" }}>
+												<img
+													src={image}
+													alt="avatar"
+													style={{ width: "100%" }}
+												/>
 											</div>
-										</div>
-									)}
+										) : (
+											<div className="ant-upload-text">
+												+ Upload
+											</div>
+										)
+									) : null}
 								</Upload>
-								<small>
-									Photo should be in square dimension
-								</small>
-							</>
-						)}
+							</ImgCrop>
+							<small>Photo should be in square dimension</small>
+						</>
 					</Form.Item>
 				</UploadContainer>
 
@@ -292,196 +299,144 @@ const UpdateProfile = props => {
 
 				<Row gutter={16}>
 					<Col span={12}>
-						<Form.Item label="Name" required>
-							{getFieldDecorator("name", {
-								rules: [
-									{
-										required: true,
-										message: "Please enter your name!"
-									}
-								]
-							})(
-								<Input
-									type="text"
-									placeholder="Name"
-									disabled
-								/>
-							)}
+						<Form.Item
+							label="Name"
+							required
+							name="name"
+							rules={[
+								{
+									required: true,
+									message: "Please enter your name!"
+								}
+							]}
+						>
+							<Input type="text" placeholder="Name" disabled />
 						</Form.Item>
 					</Col>
 					<Col span={12}>
-						<Form.Item label="Email" required>
-							{getFieldDecorator("email", {
-								rules: [
-									{
-										required: true,
-										message: "Please input email!"
-									}
-								]
-							})(
-								<Input
-									type="text"
-									placeholder="Email"
-									disabled
-								/>
-							)}
+						<Form.Item
+							label="Email"
+							required
+							name="email"
+							rules={[
+								{
+									required: true,
+									message: "Please input email!"
+								}
+							]}
+						>
+							<Input type="text" placeholder="Email" disabled />
 						</Form.Item>
 					</Col>
 				</Row>
 
 				<Row gutter={16}>
 					<Col span={12}>
-						<Form.Item label="Branch" required>
-							{getFieldDecorator(
-								"branch",
-								{}
-							)(
-								<Select placeholder="Select Branch">
-									<Option value="CS">CS</Option>
-									<Option value="CO">CO</Option>
-									<Option value="IT">IT</Option>
-									<Option value="CSI">CSI</Option>
-									<Option value="EC">EC</Option>
-									<Option value="ME">ME</Option>
-									<Option value="EN">EN</Option>
-									<Option value="CE">CE</Option>
-									<Option value="MCA">MCA</Option>
-								</Select>
-							)}
+						<Form.Item label="Branch" required name="branch">
+							<Select placeholder="Select Branch">
+								<Option value="CS">CS</Option>
+								<Option value="CO">CO</Option>
+								<Option value="IT">IT</Option>
+								<Option value="CSI">CSI</Option>
+								<Option value="EC">EC</Option>
+								<Option value="ME">ME</Option>
+								<Option value="EN">EN</Option>
+								<Option value="CE">CE</Option>
+								<Option value="MCA">MCA</Option>
+							</Select>
 						</Form.Item>
 					</Col>
 					<Col span={12}>
-						<Form.Item label="Year" required>
-							{getFieldDecorator(
-								"year",
-								{}
-							)(
-								<Select placeholder="Select Year">
-									<Option value="1">1</Option>
-									<Option value="2">2</Option>
-									<Option value="3">3</Option>
-									<Option value="4">4</Option>
-								</Select>
-							)}
+						<Form.Item label="Year" required name="year">
+							<Select placeholder="Select Year">
+								<Option value="1">1</Option>
+								<Option value="2">2</Option>
+								<Option value="3">3</Option>
+								<Option value="4">4</Option>
+							</Select>
 						</Form.Item>
 					</Col>
 				</Row>
 
-				<Form.Item label="Contact">
-					{getFieldDecorator(
-						"contact",
-						{}
-					)(<Input type="number" placeholder="Contact" />)}
+				<Form.Item label="Contact" name="contact">
+					<Input type="number" placeholder="Contact" />
 				</Form.Item>
 
-				<Form.Item label="Designation">
-					{getFieldDecorator("designation", {
-						rules: [
-							{
-								required: true,
-								message: "Please input Designation"
-							}
-						]
-					})(
-						<Input
-							type="text"
-							placeholder="Designation"
-							disabled={
-								props.userData.role !== "lead" ? true : false
-							}
-						/>
-					)}
+				<Form.Item
+					label="Designation"
+					name="designation"
+					rules={[
+						{
+							required: true,
+							message: "Please input Designation"
+						}
+					]}
+				>
+					<Input
+						type="text"
+						placeholder="Designation"
+						disabled={props.userData.role !== "lead" ? true : false}
+					/>
 				</Form.Item>
 
-				<Form.Item label="Date of Birth" name="date-picker">
-					{getFieldDecorator(
-						"dob",
-						{}
-					)(
-						<DatePicker
-							style={{ width: "100%" }}
-							format="YYYY-MM-DD"
-						/>
-					)}
+				<Form.Item label="Date of Birth" name="dob">
+					<DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
 				</Form.Item>
 
-				<Form.Item label="Bio">
-					{getFieldDecorator(
-						"bio",
-						{}
-					)(<TextArea rows={4} type="text" placeholder="Bio" />)}
+				<Form.Item label="Bio" name="bio">
+					<TextArea rows={4} type="text" placeholder="Bio" />
 				</Form.Item>
 
 				<Divider style={{ color: "rgba(0,0,0,.25)" }}>
-					Social Handles
+					Social Media Links
 				</Divider>
 
-				<Form.Item label="Github">
-					{getFieldDecorator(
-						"github",
-						{}
-					)(
-						<Input
-							prefix={
-								<Icon
-									type="github"
-									style={{ color: "rgba(0,0,0,.25)" }}
-								/>
-							}
-							type="text"
-						/>
-					)}
+				<Form.Item label="Github" name="github">
+					<Input
+						prefix={
+							<Icon
+								type="github"
+								style={{ color: "rgba(0,0,0,.25)" }}
+							/>
+						}
+						type="text"
+					/>
 				</Form.Item>
 
-				<Form.Item label="Twitter">
-					{getFieldDecorator(
-						"twitter",
-						{}
-					)(
-						<Input
-							prefix={
-								<Icon
-									type="twitter"
-									style={{ color: "rgba(0,0,0,.25)" }}
-								/>
-							}
-							type="text"
-						/>
-					)}
+				<Form.Item label="Twitter" name="twitter">
+					<Input
+						prefix={
+							<Icon
+								type="twitter"
+								style={{ color: "rgba(0,0,0,.25)" }}
+							/>
+						}
+						type="text"
+					/>
 				</Form.Item>
 
-				<Form.Item label="LinkedIn">
-					{getFieldDecorator(
-						"linkedin",
-						{}
-					)(
-						<Input
-							prefix={
-								<Icon
-									type="linkedin"
-									style={{ color: "rgba(0,0,0,.25)" }}
-								/>
-							}
-							type="text"
-						/>
-					)}
+				<Form.Item label="LinkedIn" name="linkedin">
+					<Input
+						prefix={
+							<Icon
+								type="linkedin"
+								style={{ color: "rgba(0,0,0,.25)" }}
+							/>
+						}
+						type="text"
+					/>
 				</Form.Item>
 
-				<Form.Item label="Portfolio">
-					{getFieldDecorator(
-						"portfolio",
-						{}
-					)(
-						<Input
-							prefix={
-								<Icon
-									type="link"
-									style={{ color: "rgba(0,0,0,.25)" }}
-								/>
-							}
-							type="text"
-						/>
-					)}
+				<Form.Item label="Portfolio" name="portfolio">
+					<Input
+						prefix={
+							<Icon
+								type="link"
+								style={{ color: "rgba(0,0,0,.25)" }}
+							/>
+						}
+						type="text"
+					/>
 				</Form.Item>
 
 				<Form.Item>
@@ -491,7 +446,7 @@ const UpdateProfile = props => {
 						className="login-form-button"
 						loading={isLoading}
 					>
-						Update Details
+						Save Details
 					</Button>
 				</Form.Item>
 			</Form>
@@ -535,6 +490,4 @@ const UpdateProfile = props => {
 	);
 };
 
-const UpdateProfileForm = Form.create({ name: "profile_form" })(UpdateProfile);
-
-export default UpdateProfileForm;
+export default UpdateProfile;

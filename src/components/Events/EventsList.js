@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import PageTitle from "../Layout/PageTitle";
 import EventOptions from "./EventOptions";
-import { Table, Divider, Tag, Card, Icon, Drawer, Popconfirm } from "antd";
+import { Table, Divider, Tag, Card, Drawer, Popconfirm } from "antd";
+import Icon from "@ant-design/icons";
 import "./style.css";
 import {
 	getEventsService,

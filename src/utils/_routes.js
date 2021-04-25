@@ -4,6 +4,11 @@ import TeamList from "../components/Team/TeamList";
 //import ParticipantsList from "../components/Participants/ParticipantsList";
 //import AddCertificate from "./../components/Certificates/AddCertificate";
 import Profile from "../components/Profile/Profile";
+import {
+	AiOutlineAppstore,
+	AiOutlineSmile,
+	AiOutlineTeam
+} from "react-icons/ai";
 
 let routes = [
 	{
@@ -12,7 +17,7 @@ let routes = [
 		name: "Dashboard",
 		component: Dashboard,
 		key: "dashboard",
-		icon: "appstore",
+		icon: AiOutlineAppstore,
 		description: "List of all the events",
 		color: "#F4B400"
 	},
@@ -42,7 +47,7 @@ let routes = [
 		component: TeamList,
 		name: "Team",
 		key: "team",
-		icon: "team",
+		icon: AiOutlineTeam,
 		description: "List of all the members",
 		color: "#0F9D58"
 	},
@@ -62,7 +67,7 @@ let routes = [
 		component: Profile,
 		name: "Profile",
 		key: "profile",
-		icon: "smile",
+		icon: AiOutlineSmile,
 		description: "Your Profile",
 		color: "#F4B400"
 	}

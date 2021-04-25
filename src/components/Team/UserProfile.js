@@ -100,6 +100,7 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 					const res = await getUserService(uid);
 					console.log(res);
 					if (res.message === "success") {
+						console.log(res.data);
 						setUser(res.data);
 						setShowSkeleton(false);
 					} else {
@@ -323,6 +324,22 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 								) : null}
 
 								<Col span={2}></Col>
+							</Row>
+							<Row
+								style={{
+									float: "right",
+									paddingBottom: "10px"
+								}}
+							>
+								<span style={{ paddingRight: "10px" }}>
+									Last active
+								</span>
+
+								<Tag color="green">
+									{user.lastActiveAt
+										? user.lastActiveAt
+										: "never"}
+								</Tag>
 							</Row>
 						</Wrapper>
 					) : null}

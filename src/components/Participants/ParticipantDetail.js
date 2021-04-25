@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Skeleton, Timeline, Card, Avatar, Icon, Tag } from "antd";
+import { Skeleton, Timeline, Card, Avatar, Tag } from "antd";
+import Icon from "@ant-design/icons";
 import { getParticipantsDetailService } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
 
