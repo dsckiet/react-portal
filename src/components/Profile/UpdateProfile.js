@@ -76,7 +76,7 @@ const UpdateProfile = props => {
 			console.log(file);
 			const isLt2M = file.size / 1024 / 1024 < 5;
 			if (!isLt2M) {
-				message.error("Image must smaller than 2MB!");
+				message.error("Image must smaller than 5MB!");
 			}
 			return isJpgOrPng && isLt2M;
 		},
@@ -136,7 +136,7 @@ const UpdateProfile = props => {
 			setImage(image);
 
 			props.form.setFieldsValue({
-				dob: moment(dob, "YYYY-MM-DD"),
+				dob: dob ? moment(dob, "YYYY-MM-DD") : "",
 				bio,
 				image,
 				name,
@@ -171,7 +171,10 @@ const UpdateProfile = props => {
 					const formData = new FormData();
 					formData.append("name", values.name);
 					formData.append("email", values.email);
-					formData.append("dob", values.dob.format("YYYY-MM-DD"));
+					if (values.dob && values.dob !== "") {
+						formData.append("dob", values.dob.format("YYYY-MM-DD"));
+					}
+
 					if (
 						props.userData.role !== "member" &&
 						values.designation
@@ -297,7 +300,13 @@ const UpdateProfile = props => {
 										message: "Please enter your name!"
 									}
 								]
-							})(<Input type="text" placeholder="Name" />)}
+							})(
+								<Input
+									type="text"
+									placeholder="Name"
+									disabled
+								/>
+							)}
 						</Form.Item>
 					</Col>
 					<Col span={12}>
@@ -309,7 +318,13 @@ const UpdateProfile = props => {
 										message: "Please input email!"
 									}
 								]
-							})(<Input type="text" placeholder="Email" />)}
+							})(
+								<Input
+									type="text"
+									placeholder="Email"
+									disabled
+								/>
+							)}
 						</Form.Item>
 					</Col>
 				</Row>
@@ -359,27 +374,30 @@ const UpdateProfile = props => {
 					)(<Input type="number" placeholder="Contact" />)}
 				</Form.Item>
 
-				{props.userData.role !== "member" ? (
-					<Form.Item label="Designation">
-						{getFieldDecorator("designation", {
-							rules: [
-								{
-									required: true,
-									message: "Please input Designation"
-								}
-							]
-						})(<Input type="text" placeholder="Designation" />)}
-					</Form.Item>
-				) : null}
-
-				<Form.Item label="Date of Birth" name="date-picker">
-					{getFieldDecorator("dob", {
+				<Form.Item label="Designation">
+					{getFieldDecorator("designation", {
 						rules: [
 							{
-								type: "object"
+								required: true,
+								message: "Please input Designation"
 							}
 						]
 					})(
+						<Input
+							type="text"
+							placeholder="Designation"
+							disabled={
+								props.userData.role !== "lead" ? true : false
+							}
+						/>
+					)}
+				</Form.Item>
+
+				<Form.Item label="Date of Birth" name="date-picker">
+					{getFieldDecorator(
+						"dob",
+						{}
+					)(
 						<DatePicker
 							style={{ width: "100%" }}
 							format="YYYY-MM-DD"

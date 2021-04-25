@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button, Input, Select } from "antd";
-
+import { getRole } from "../../utils/services";
 import "./style.css";
 import { addUserService } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
@@ -15,6 +15,7 @@ const AddMember = props => {
 	const [email, setEmail] = useState(null);
 	const [role, setRole] = useState(null);
 	const [designation, setDesignation] = useState(null);
+	const userData = getRole();
 
 	const { getFieldDecorator } = props.form;
 
@@ -105,7 +106,12 @@ const AddMember = props => {
 						onChange={value => setRole(value)}
 						placeholder="Select user role"
 					>
-						<Option value="core">Core</Option>
+						<Option
+							value="core"
+							disabled={userData.role !== "core" ? false : true}
+						>
+							Core
+						</Option>
 						<Option value="member">Member</Option>
 						<Option value="lead" disabled>
 							Lead
