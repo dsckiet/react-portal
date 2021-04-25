@@ -34,9 +34,10 @@ import {
 } from "./routes";
 
 const BASE_URL =
-	process.env.REACT_APP_ENV === "production"
-		? "https://api.dsckiet.com/prod"
-		: "https://api.dsckiet.com/dev";
+	window.location.host.includes("deploy-preview") ||
+	window.location.host.includes("localhost")
+		? "https://api.dsckiet.com/dev"
+		: "https://api.dsckiet.com/prod";
 axios.defaults.baseURL = BASE_URL;
 
 function setUserToken(token) {
