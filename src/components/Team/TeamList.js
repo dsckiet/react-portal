@@ -500,6 +500,7 @@ const TeamList = props => {
 				</>
 			)
 		},
+
 		{
 			title: "Action",
 			key: "action",
