@@ -11,9 +11,9 @@ import {
 	Skeleton,
 	Upload,
 	message,
-	Icon,
 	InputNumber
 } from "antd";
+import Icon from "@ant-design/icons";
 import moment from "moment";
 
 import "./style.css";
@@ -28,7 +28,7 @@ const UpdateEvent = props => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [showSkeleton, setShowSkeleton] = useState(false);
 	const [fileList, setFileList] = useState(null);
-	const { getFieldDecorator } = props.form;
+	const [form] = Form.useForm();
 	const uploadprops = {
 		name: "file",
 		action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
@@ -80,7 +80,7 @@ const UpdateEvent = props => {
 			startDate = startDate.split("T")[0];
 			endDate = endDate.split("T")[0];
 
-			props.form.setFieldsValue({
+			form.setFieldsValue({
 				startTime: moment(time.split(" to ")[0], format),
 				endTime: moment(time.split(" to ")[1], format),
 				dates: [
@@ -107,10 +107,10 @@ const UpdateEvent = props => {
 	const handleSubmit = e => {
 		e.preventDefault();
 		setIsLoading(true);
-		if (props.form.getFieldValue("isRegistrationRequired") === false) {
-			props.form.setFieldsValue({ isRegistrationOpened: false });
+		if (form.getFieldValue("isRegistrationRequired") === false) {
+			form.setFieldsValue({ isRegistrationOpened: false });
 		}
-		props.form.validateFields(async (err, values) => {
+		form.validateFields(async (err, values) => {
 			console.log(values);
 			if (!err) {
 				try {
@@ -172,31 +172,32 @@ const UpdateEvent = props => {
 
 	return (
 		<Skeleton loading={showSkeleton} active>
-			<Form onSubmit={handleSubmit} layout="vertical">
-				<Form.Item label="Event Title" required>
-					{getFieldDecorator("title", {
-						rules: [
-							{
-								required: true,
-								message: "Please input event title!"
-							}
-						]
-					})(<Input type="text" placeholder="Event title" />)}
+			<Form onSubmit={handleSubmit} layout="vertical" form={form}>
+				<Form.Item
+					label="Event Title"
+					required
+					name="title"
+					rules={[
+						{
+							required: true,
+							message: "Please input event title!"
+						}
+					]}
+				>
+					<Input type="text" placeholder="Event title" />
 				</Form.Item>
-				<Form.Item label="Description" required>
-					{getFieldDecorator("description", {
-						rules: [
-							{
-								require: true,
-								message: "Please enter description!"
-							}
-						]
-					})(
-						<TextArea
-							rows={4}
-							placeholder="Enter event description"
-						/>
-					)}
+				<Form.Item
+					label="Description"
+					required
+					name="description"
+					rules={[
+						{
+							require: true,
+							message: "Please enter description!"
+						}
+					]}
+				>
+					<TextArea rows={4} placeholder="Enter event description" />
 				</Form.Item>
 
 				{event ? (
@@ -208,146 +209,145 @@ const UpdateEvent = props => {
 					/>
 				) : null}
 
-				<Form.Item label="Update Picture" required>
-					{getFieldDecorator("image", {
-						rules: [
-							{
-								required: true,
-								message: "Please select!"
-							}
-						]
-					})(
-						<Upload
-							{...uploadprops}
-							fileList={fileList}
-							listType="picture"
-						>
-							<Button>
-								<Icon type="upload" /> Click to Upload
-							</Button>
-						</Upload>
-					)}
+				<Form.Item
+					label="Update Picture"
+					required
+					name="image"
+					rules={[
+						{
+							required: true,
+							message: "Please select!"
+						}
+					]}
+				>
+					<Upload
+						{...uploadprops}
+						fileList={fileList}
+						listType="picture"
+					>
+						<Button>
+							<Icon type="upload" /> Click to Upload
+						</Button>
+					</Upload>
 				</Form.Item>
 
-				<Form.Item label="Event Venue" required>
-					{getFieldDecorator("venue", {
-						rules: [
-							{
-								required: true,
-								message: "Please input event venue!"
-							}
-						]
-					})(<Input type="text" placeholder="Event venue" />)}
+				<Form.Item
+					label="Event Venue"
+					required
+					name="venue"
+					rules={[
+						{
+							required: true,
+							message: "Please input event venue!"
+						}
+					]}
+				>
+					<Input type="text" placeholder="Event venue" />
 				</Form.Item>
 
-				<Form.Item label="Event Dates" required>
-					{getFieldDecorator("dates", {
-						rules: [
-							{
-								required: true,
-								message: "Please select event dates!"
-							}
-						]
-					})(
-						<RangePicker
-							style={{ width: "100%" }}
-							disabledDate={disabledDate}
-							format="YYYY-MM-DD"
-						/>
-					)}
+				<Form.Item
+					label="Event Dates"
+					required
+					name="dates"
+					rules={[
+						{
+							required: true,
+							message: "Please select event dates!"
+						}
+					]}
+				>
+					<RangePicker
+						style={{ width: "100%" }}
+						disabledDate={disabledDate}
+						format="YYYY-MM-DD"
+					/>
 				</Form.Item>
 
 				<Row gutter={16}>
 					<Col span={12}>
-						<Form.Item label="Start Time" required>
-							{getFieldDecorator("startTime", {
-								rules: [
-									{
-										required: true,
-										message: "Please select event timings!"
-									}
-								]
-							})(
-								<TimePicker
-									use12Hours
-									format="h:mm a"
-									style={{ width: "100%" }}
-								/>
-							)}
+						<Form.Item
+							label="Start Time"
+							required
+							name="startTime"
+							rules={[
+								{
+									required: true,
+									message: "Please select event timings!"
+								}
+							]}
+						>
+							<TimePicker
+								use12Hours
+								format="h:mm a"
+								style={{ width: "100%" }}
+							/>
 						</Form.Item>
 					</Col>
 					<Col span={12}>
-						<Form.Item label="End Time" required>
-							{getFieldDecorator("endTime", {
-								rules: [
-									{
-										required: true,
-										message: "Please select event timings!"
-									}
-								]
-							})(
-								<TimePicker
-									use12Hours
-									format="h:mm a"
-									style={{ width: "100%" }}
-								/>
-							)}
+						<Form.Item
+							label="End Time"
+							required
+							name="endTime"
+							rules={[
+								{
+									required: true,
+									message: "Please select event timings!"
+								}
+							]}
+						>
+							<TimePicker
+								use12Hours
+								format="h:mm a"
+								style={{ width: "100%" }}
+							/>
 						</Form.Item>
 					</Col>
 				</Row>
 
 				<Row gutter={16}>
 					<Col span={12}>
-						<Form.Item>
-							{getFieldDecorator(
-								"isRegistrationRequired",
-								{}
-							)(
-								<Checkbox
-									checked={props.form.getFieldValue(
-										"isRegistrationRequired"
-									)}
-								>
-									Is Registration Required?
-								</Checkbox>
-							)}
+						<Form.Item name="isRegistrationRequired">
+							<Checkbox
+								checked={props.form.getFieldValue(
+									"isRegistrationRequired"
+								)}
+							>
+								Is Registration Required?
+							</Checkbox>
 						</Form.Item>
 					</Col>
 
 					<Col span={12}>
 						<Form.Item
+							name="isRegistrationOpened"
 							hidden={
-								props.form.getFieldValue(
-									"isRegistrationRequired"
-								) === false
+								form.getFieldValue("isRegistrationRequired") ===
+								false
 									? true
 									: false
 							}
 						>
-							{getFieldDecorator(
-								"isRegistrationOpened",
-								{}
-							)(
-								<Checkbox
-									checked={props.form.getFieldValue(
-										"isRegistrationOpened"
-									)}
-								>
-									Is Registration Open?
-								</Checkbox>
-							)}
+							<Checkbox
+								checked={form.getFieldValue(
+									"isRegistrationOpened"
+								)}
+							>
+								Is Registration Open?
+							</Checkbox>
 						</Form.Item>
 					</Col>
 				</Row>
-				<Form.Item label="Max Registerations">
-					{getFieldDecorator("maxRegister", {
-						rules: [
-							{
-								required: true,
-								message: "Please enter maximum registrations."
-							}
-						]
-					})(<InputNumber min={1} />)}
+				<Form.Item
+					label="Max Registerations"
+					name="maxRegister"
+					rules={[
+						{
+							required: true,
+							message: "Please enter maximum registrations."
+						}
+					]}
+				>
+					<InputNumber min={1} />
 				</Form.Item>
 
 				<Form.Item>
@@ -365,6 +365,6 @@ const UpdateEvent = props => {
 	);
 };
 
-const UpdateEventForm = Form.create({ name: "event_form" })(UpdateEvent);
+//const UpdateEventForm = Form.create({ name: "event_form" })(UpdateEvent);
 
-export default UpdateEventForm;
+export default UpdateEvent;

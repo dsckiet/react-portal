@@ -15,3 +15,8 @@ code {
 ::-webkit-scrollbar {
 	display: none;
 }
+
+li.ant-menu-item {
+	display: flex;
+	align-items: center;
+}

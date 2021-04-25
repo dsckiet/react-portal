@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PageTitle from "../Layout/PageTitle";
 import {
 	Table,
 	Divider,
 	Tag,
 	Card,
-	Icon,
 	Popconfirm,
 	Select,
-	Input
+	Input,
+	Button,
+	Space
 } from "antd";
 import "./style.css";
 import {
@@ -19,7 +20,15 @@ import {
 	deleteUser,
 	editService
 } from "../../utils/services";
-import { AiOutlineClose } from "react-icons/ai";
+import {
+	AiOutlineClose,
+	AiOutlineSearch,
+	AiOutlineEdit,
+	AiOutlineRedo,
+	AiOutlineCheck,
+	AiOutlineDelete
+} from "react-icons/ai";
+import Highlighter from "react-highlight-words";
 import { _notification } from "../../utils/_helpers";
 import UserOptions from "./UserOptions";
 import { Link } from "react-router-dom";
@@ -47,6 +56,9 @@ const TeamList = props => {
 	const [newDesignation, setNewDesignation] = useState(null);
 	const [branchOptions, setBranchOptions] = useState([]);
 	const [yearOptions, setYearOptions] = useState([]);
+	const [searchText, setSearchText] = useState("");
+	const [searchedColumn, setSearchedColumn] = useState("");
+	const ref = useRef();
 
 	const { Option } = Select;
 
@@ -75,8 +87,9 @@ const TeamList = props => {
 					}
 					if (
 						item.year &&
-						!arrayYears.filter(year => year.text === item.year)
-							.length
+						!arrayYears.filter(
+							year => year.text === String(item.year)
+						).length
 					) {
 						arrayYears.push({
 							text: String(item.year),
@@ -102,6 +115,103 @@ const TeamList = props => {
 	// const checkLoggedInUser = user => {
 	// 	if (user._id !== userData.id) return user;
 	// };
+
+	const getColumnSearchProps = dataIndex => ({
+		filterDropdown: ({
+			setSelectedKeys,
+			selectedKeys,
+			confirm,
+			clearFilters
+		}) => (
+			<div style={{ padding: 8 }}>
+				<Input
+					ref={ref}
+					placeholder={`Search ${dataIndex}`}
+					value={selectedKeys[0]}
+					onChange={e =>
+						setSelectedKeys(e.target.value ? [e.target.value] : [])
+					}
+					onPressEnter={() =>
+						handleSearch(selectedKeys, confirm, dataIndex)
+					}
+					style={{ width: 188, marginBottom: 8, display: "block" }}
+				/>
+				<Space>
+					<Button
+						type="primary"
+						size="small"
+						onClick={() =>
+							handleSearch(selectedKeys, confirm, dataIndex)
+						}
+						icon={
+							<AiOutlineSearch style={{ marginRight: "8px" }} />
+						}
+						style={{
+							width: 90,
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center"
+						}}
+					>
+						Search
+					</Button>
+					<Button
+						onClick={() => handleReset(clearFilters)}
+						size="small"
+						style={{ width: 90 }}
+					>
+						Reset
+					</Button>
+				</Space>
+			</div>
+		),
+		filterIcon: filtered => (
+			<div
+				style={{
+					height: "100%",
+					justifyContent: "center",
+					display: "flex",
+					alignItems: "center"
+				}}
+			>
+				<AiOutlineSearch
+					style={{
+						color: filtered ? "#1890ff" : undefined,
+						fontSize: "16px"
+					}}
+				/>
+			</div>
+		),
+		onFilter: (value, record) =>
+			record[dataIndex]
+				? record[dataIndex]
+						.toString()
+						.toLowerCase()
+						.includes(value.toLowerCase())
+				: "",
+		render: text =>
+			searchedColumn === dataIndex ? (
+				<Highlighter
+					highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+					searchWords={[searchText]}
+					autoEscape
+					textToHighlight={text ? text.toString() : ""}
+				/>
+			) : (
+				text
+			)
+	});
+
+	const handleSearch = (selectedKeys, confirm, dataIndex) => {
+		confirm();
+		setSearchText(selectedKeys[0]);
+		setSearchedColumn(dataIndex);
+	};
+
+	const handleReset = clearFilters => {
+		clearFilters();
+		setSearchText(" ");
+	};
 
 	const handleAddMember = () => {
 		toggleRefresh(!refresh);
@@ -200,6 +310,7 @@ const TeamList = props => {
 			title: "Name",
 			dataIndex: "profile",
 			key: "profile",
+			...getColumnSearchProps("name"),
 			render: profile => (
 				<Link to="#" onClick={() => handleHover(true, profile[1])}>
 					{profile[0]}
@@ -209,7 +320,8 @@ const TeamList = props => {
 		{
 			title: "Email",
 			dataIndex: "email",
-			key: "email"
+			key: "email",
+			...getColumnSearchProps(`email`)
 		},
 		{
 			title: "Branch",
@@ -237,80 +349,93 @@ const TeamList = props => {
 			],
 			onFilter: (value, record) => record.role.indexOf(value) === 0,
 			render: role => (
-				<>
-					{role[1] === editRole ? (
-						<Select
-							size="small"
-							defaultValue={role[0]}
-							label="Role"
-							name="role"
-							style={{ marginRight: "10px", width: "75%" }}
-							onChange={val => handleEdit(val)}
-						>
-							<Option value="lead" disabled>
-								Lead
-							</Option>
-							<Option value="core">Core</Option>
-							<Option value="member">Member</Option>
-						</Select>
-					) : (
-						<Tag
-							color={
-								role[0] === "lead"
-									? "red"
-									: role[0] === "core"
-									? "geekblue"
-									: "orange"
-							}
-							className={
-								userData.role === "lead" ? "w-lead" : "w-else"
-							}
-						>
-							{role[0]}
-						</Tag>
-					)}
+				<div
+					style={{
+						display: "flex",
+						flexDirection: "row",
+						alignItems: "center"
+					}}
+				>
+					<>
+						{role[1] === editRole ? (
+							<Select
+								size="small"
+								defaultValue={role[0]}
+								label="Role"
+								name="role"
+								style={{ marginRight: "10px", width: "75%" }}
+								onChange={val => handleEdit(val)}
+							>
+								<Option value="lead" disabled>
+									Lead
+								</Option>
+								<Option value="core">Core</Option>
+								<Option value="member">Member</Option>
+							</Select>
+						) : (
+							<Tag
+								color={
+									role[0] === "lead"
+										? "red"
+										: role[0] === "core"
+										? "geekblue"
+										: "orange"
+								}
+								className={
+									userData.role === "lead"
+										? "w-lead"
+										: "w-else"
+								}
+							>
+								{role[0]}
+							</Tag>
+						)}
 
-					{userData.role === "lead" && role[0] !== "lead" ? (
-						<>
-							{editRole && editRole === role[1] ? (
-								<AiOutlineClose
-									style={{ cursor: "pointer" }}
-									onClick={() => {
-										setEditRole(null);
-									}}
-								/>
-							) : (
-								<Popconfirm
-									title="Do you want to edit Roles?"
-									okText="Yes"
-									cancelText="No"
-									onConfirm={() => {
-										if (editDesignation) {
-											setEditDesignation(null);
-										}
-										setEditRole(role[1]);
-									}}
-								>
-									<Icon
-										type="edit"
+						{userData.role === "lead" && role[0] !== "lead" ? (
+							<>
+								{editRole && editRole === role[1] ? (
+									<AiOutlineClose
 										style={{
-											color: `${
-												role[0] === "lead"
-													? "#F5222D"
-													: role[0] === "core"
-													? "#5A85EF"
-													: "#FA8C16"
-											}`,
-											cursor: "pointer"
+											cursor: "pointer",
+											fontSize: "16px"
+										}}
+										onClick={() => {
+											setEditRole(null);
 										}}
 									/>
-								</Popconfirm>
-							)}
-
-							<Divider type="vertical" />
-						</>
-					) : null}
-				</>
+								) : (
+									<Popconfirm
+										title="Do you want to edit Roles?"
+										okText="Yes"
+										cancelText="No"
+										onConfirm={() => {
+											if (editDesignation) {
+												setEditDesignation(null);
+											}
+											setEditRole(role[1]);
+										}}
+									>
+										<AiOutlineEdit
+											type="edit"
+											style={{
+												fontSize: "16px",
+												color: `${
+													role[0] === "lead"
+														? "#F5222D"
+														: role[0] === "core"
+														? "#5A85EF"
+														: "#FA8C16"
+												}`,
+												cursor: "pointer"
+											}}
+										/>
+									</Popconfirm>
+								)}
+								<Divider type="vertical" />
+							</>
+						) : null}
+					</>
+				</div>
 			)
 		},
 		{
@@ -319,27 +444,37 @@ const TeamList = props => {
 			key: "show",
 			className: "websiteShow",
 			render: show => (
-				<>
-					<Tag
-						color={show[0] ? "green" : "red"}
-						style={{
-							textAlign: "center",
-							width: "70%",
-							textTransform: "capitalize"
-						}}
-					>
-						{show[0] ? "Shown" : "Not shown"}
-					</Tag>
-					<Popconfirm
-						title="Do you want to toggle website seen?"
-						onConfirm={() => handleChangeWebsiteSeen(show[1])}
-						okText="Yes"
-						cancelText="No"
-					>
-						<Icon type="redo" />
-					</Popconfirm>
-					<Divider type="vertical" />
-				</>
+				<div
+					style={{
+						display: "flex",
+						flexDirection: "row",
+						alignItems: "center"
+					}}
+				>
+					<>
+						<Tag
+							color={show[0] ? "green" : "red"}
+							style={{
+								textAlign: "center",
+								width: "70%",
+								textTransform: "capitalize"
+							}}
+						>
+							{show[0] ? "Shown" : "Not shown"}
+						</Tag>
+						<Popconfirm
+							title="Do you want to toggle website seen?"
+							onConfirm={() => handleChangeWebsiteSeen(show[1])}
+							okText="Yes"
+							cancelText="No"
+						>
+							<AiOutlineRedo
+								style={{ cursor: "pointer", fontSize: "16px" }}
+							/>
+						</Popconfirm>
+						<Divider type="vertical" />
+					</>
+				</div>
 			)
 		},
 		{
@@ -366,79 +501,110 @@ const TeamList = props => {
 			)
 		},
 		{
-			title: "",
-			key: "designationEdit",
-			dataIndex: "designation",
-			render: designation =>
-				userData.role === "lead" ? (
-					<>
-						{editDesignation &&
-						editDesignation === designation[1] ? (
-							<AiOutlineClose
-								style={{ cursor: "pointer" }}
-								onClick={() => {
-									setEditDesignation(null);
-								}}
-							/>
-						) : (
-							<Popconfirm
-								title="Do you want to change Designation ?"
-								okText="Yes"
-								cancelText="No"
-								onConfirm={() => {
-									if (editRole) {
-										setEditRole(null);
-									}
-									setEditDesignation(designation[1]);
-								}}
-							>
-								<Icon
-									type="edit"
-									style={{
-										cursor: "pointer",
-										color: "#FA8C16"
-									}}
-								/>
-							</Popconfirm>
-						)}
-						<Divider type="vertical" />
-					</>
-				) : null
-		},
-
-		{
 			title: "Action",
 			key: "action",
 			dataIndex: "action",
 			className: "userAction",
 			render: action =>
 				action[2] !== "lead" ? (
-					<span>
-						<Popconfirm
-							title="Do you want to toggle user revoke?"
-							onConfirm={() => handleUserRevoke(action[1])}
-							okText="Yes"
-							cancelText="No"
-						>
-							{action[0] ? (
-								<Icon
-									type="close"
-									style={{ color: "#F4B400" }}
-								/>
-							) : (
-								<Icon type="check" style={{ color: "green" }} />
-							)}
-						</Popconfirm>
-						<Divider type="vertical" />
-						<Popconfirm
-							title="Are you sure delete this user?"
-							onConfirm={() => handleUserDelete(action[1])}
-							okText="Yes"
-							cancelText="No"
-						>
-							<Icon style={{ color: "#DB4437" }} type="delete" />
-						</Popconfirm>
-					</span>
+					<div
+						style={{
+							display: "flex",
+							flexDirection: "row",
+							alignItems: "center"
+						}}
+					>
+						<>
+							{userData.role === "lead" ? (
+								<>
+									{editDesignation &&
+									editDesignation === action[1] ? (
+										<AiOutlineClose
+											style={{
+												cursor: "pointer",
+												fontSize: "16px"
+											}}
+											onClick={() => {
+												setEditDesignation(null);
+											}}
+										/>
+									) : (
+										<Popconfirm
+											title="Do you want to change Designation ?"
+											okText="Yes"
+											cancelText="No"
+											onConfirm={() => {
+												if (editRole) {
+													setEditRole(null);
+												}
+												setEditDesignation(action[1]);
+											}}
+										>
+											<AiOutlineEdit
+												type="edit"
+												style={{
+													fontSize: "16px",
+													cursor: "pointer",
+													color: "#FA8C16"
+												}}
+											/>
+										</Popconfirm>
+									)}
+									<Divider type="vertical" />
+								</>
+							) : null}
+							{
+								<>
+									<Popconfirm
+										title="Do you want to toggle user revoke?"
+										onConfirm={() =>
+											handleUserRevoke(action[1])
+										}
+										okText="Yes"
+										cancelText="No"
+									>
+										{action[0] ? (
+											<AiOutlineClose
+												type="close"
+												style={{
+													fontSize: "16px",
+													color: "#F4B400",
+													cursor: "pointer"
+												}}
+											/>
+										) : (
+											<AiOutlineCheck
+												type="check"
+												style={{
+													fontSize: "16px",
+													color: "green",
+													cursor: "pointer"
+												}}
+											/>
+										)}
+									</Popconfirm>
+									<Divider type="vertical" />
+									<Popconfirm
+										title="Are you sure delete this user?"
+										onConfirm={() =>
+											handleUserDelete(action[1])
+										}
+										okText="Yes"
+										cancelText="No"
+									>
+										<AiOutlineDelete
+											style={{
+												fontSize: "16px",
+												color: "#DB4437",
+												cursor: "pointer"
+											}}
+											type="delete"
+										/>
+									</Popconfirm>
+								</>
+							}
+						</>
+					</div>
 				) : null
 		}
 	];
@@ -459,6 +625,7 @@ const TeamList = props => {
 				return {
 					key: ++id,
 					_id,
+					name,
 					profile: [name, _id],
 					email,
 					branch: branch ? branch : "N/A",
@@ -467,7 +634,7 @@ const TeamList = props => {
 					designation: [designation, _id],
 					isRevoked,
 					show: [showOnWebsite, _id],
-					action: [isRevoked, _id, role]
+					action: [isRevoked, _id, role, designation]
 				};
 		  })
 		: null;
