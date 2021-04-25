@@ -371,6 +371,11 @@ const TeamList = props => {
 								</Option>
 								<Option value="core">Core</Option>
 								<Option value="member">Member</Option>
+								{role[2] &&
+								Number(role[2]) === new Date().getFullYear() &&
+								new Date().getMonth() >= 4 ? (
+									<Option value="graduate">Graduate</Option>
+								) : null}
 							</Select>
 						) : (
 							<Tag
@@ -443,6 +448,11 @@ const TeamList = props => {
 			dataIndex: "show",
 			key: "show",
 			className: "websiteShow",
+			filters: [
+				{ text: "Shown", value: true },
+				{ text: "Not Shown", value: false }
+			],
+			onFilter: (value, record) => record.show.indexOf(value) === 0,
 			render: show => (
 				<div
 					style={{
@@ -481,6 +491,7 @@ const TeamList = props => {
 			title: "Designation",
 			dataIndex: "designation",
 			key: "designation",
+			...getColumnSearchProps("designation"),
 			render: designation => (
 				<>
 					{editDesignation === designation[1] ? (
@@ -506,107 +517,106 @@ const TeamList = props => {
 			key: "action",
 			dataIndex: "action",
 			className: "userAction",
-			render: action =>
-				action[2] !== "lead" ? (
-					<div
-						style={{
-							display: "flex",
-							flexDirection: "row",
-							alignItems: "center"
-						}}
-					>
-						<>
-							{userData.role === "lead" ? (
-								<>
-									{editDesignation &&
-									editDesignation === action[1] ? (
-										<AiOutlineClose
+			render: action => (
+				<div
+					style={{
+						display: "flex",
+						flexDirection: "row",
+						alignItems: "center"
+					}}
+				>
+					<>
+						{userData.role === "lead" ? (
+							<>
+								{editDesignation &&
+								editDesignation === action[1] ? (
+									<AiOutlineClose
+										style={{
+											cursor: "pointer",
+											fontSize: "16px"
+										}}
+										onClick={() => {
+											setEditDesignation(null);
+										}}
+									/>
+								) : (
+									<Popconfirm
+										title="Do you want to change Designation ?"
+										okText="Yes"
+										cancelText="No"
+										onConfirm={() => {
+											if (editRole) {
+												setEditRole(null);
+											}
+											setEditDesignation(action[1]);
+										}}
+									>
+										<AiOutlineEdit
+											type="edit"
 											style={{
+												fontSize: "16px",
 												cursor: "pointer",
-												fontSize: "16px"
+												color: "#FA8C16"
 											}}
-											onClick={() => {
-												setEditDesignation(null);
+										/>
+									</Popconfirm>
+								)}
+								<Divider type="vertical" />
+							</>
+						) : null}
+						{action[2] !== "lead" ? (
+							<>
+								<Popconfirm
+									title="Do you want to toggle user revoke?"
+									onConfirm={() =>
+										handleUserRevoke(action[1])
+									}
+									okText="Yes"
+									cancelText="No"
+								>
+									{action[0] ? (
+										<AiOutlineClose
+											type="close"
+											style={{
+												fontSize: "16px",
+												color: "#F4B400",
+												cursor: "pointer"
 											}}
 										/>
 									) : (
-										<Popconfirm
-											title="Do you want to change Designation ?"
-											okText="Yes"
-											cancelText="No"
-											onConfirm={() => {
-												if (editRole) {
-													setEditRole(null);
-												}
-												setEditDesignation(action[1]);
-											}}
-										>
-											<AiOutlineEdit
-												type="edit"
-												style={{
-													fontSize: "16px",
-													cursor: "pointer",
-													color: "#FA8C16"
-												}}
-											/>
-										</Popconfirm>
-									)}
-									<Divider type="vertical" />
-								</>
-							) : null}
-							{
-								<>
-									<Popconfirm
-										title="Do you want to toggle user revoke?"
-										onConfirm={() =>
-											handleUserRevoke(action[1])
-										}
-										okText="Yes"
-										cancelText="No"
-									>
-										{action[0] ? (
-											<AiOutlineClose
-												type="close"
-												style={{
-													fontSize: "16px",
-													color: "#F4B400",
-													cursor: "pointer"
-												}}
-											/>
-										) : (
-											<AiOutlineCheck
-												type="check"
-												style={{
-													fontSize: "16px",
-													color: "green",
-													cursor: "pointer"
-												}}
-											/>
-										)}
-									</Popconfirm>
-									<Divider type="vertical" />
-									<Popconfirm
-										title="Are you sure delete this user?"
-										onConfirm={() =>
-											handleUserDelete(action[1])
-										}
-										okText="Yes"
-										cancelText="No"
-									>
-										<AiOutlineDelete
+										<AiOutlineCheck
+											type="check"
 											style={{
 												fontSize: "16px",
-												color: "#DB4437",
+												color: "green",
 												cursor: "pointer"
 											}}
-											type="delete"
 										/>
-									</Popconfirm>
-								</>
-							}
-						</>
-					</div>
-				) : null
+									)}
+								</Popconfirm>
+								<Divider type="vertical" />
+								<Popconfirm
+									title="Are you sure delete this user?"
+									onConfirm={() =>
+										handleUserDelete(action[1])
+									}
+									okText="Yes"
+									cancelText="No"
+								>
+									<AiOutlineDelete
+										style={{
+											fontSize: "16px",
+											color: "#DB4437",
+											cursor: "pointer"
+										}}
+										type="delete"
+									/>
+								</Popconfirm>
+							</>
+						) : null}
+					</>
+				</div>
+			)
 		}
 	];
 
@@ -631,7 +641,7 @@ const TeamList = props => {
 					email,
 					branch: branch ? branch : "N/A",
 					year: year ? year : "N/A",
-					role: [role, _id],
+					role: [role, _id, year],
 					designation: [designation, _id],
 					isRevoked,
 					show: [showOnWebsite, _id],
