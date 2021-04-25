@@ -33,8 +33,10 @@ import {
 	CHANGE_PASSWORD
 } from "./routes";
 
-const BASE_URL = "https://api.dsckiet.com/dev";
-
+const BASE_URL =
+	window.location.host === "portal.dsckiet.com"
+		? "https://api.dsckiet.com/prod"
+		: "https://api.dsckiet.com/dev";
 axios.defaults.baseURL = BASE_URL;
 
 function setUserToken(token) {
