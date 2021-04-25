@@ -2,19 +2,7 @@ import React, { useState } from "react";
 import { Button, Drawer, Row, Col } from "antd";
 import AddMember from "./AddMember";
 import { getRole } from "./../../utils/services";
-import styled from "styled-components";
 //import UpdateProfile from "./UpdateProfile";
-
-const DropdownContainer = styled.div`
-	margin-right: 5px;
-	margin-top: 5px;
-	float: right;
-`;
-
-const UserName = styled.p`
-	font-size: 18px;
-	font-weight: 700;
-`;
 
 const UserOptions = props => {
 	const [isDrawerVisible, setIsDrawerVisible] = useState(false);
@@ -35,12 +23,6 @@ const UserOptions = props => {
 								Add Member
 							</Button>
 						) : null}
-					</Col>
-
-					<Col span={12}>
-						<DropdownContainer>
-							<UserName>{userData.name}</UserName>
-						</DropdownContainer>
 					</Col>
 				</Row>
 

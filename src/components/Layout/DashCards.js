@@ -1,5 +1,6 @@
 import React from "react";
-import { Row, Col, Card, Icon } from "antd";
+import { Row, Col, Card } from "antd";
+import Icon from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import _routes from "../../utils/_routes";
 

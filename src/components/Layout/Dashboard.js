@@ -3,7 +3,6 @@ import {
 	Row,
 	Col,
 	Card,
-	Icon,
 	Checkbox,
 	Input,
 	Button,
@@ -11,6 +10,7 @@ import {
 	Popconfirm
 } from "antd";
 import PageTitle from "./PageTitle";
+import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import "./style.css";
 import { DashCards } from "./DashCards";
 import {
@@ -153,11 +153,11 @@ const Dashboard = props => {
 															: false
 													}
 												>
-													<Icon
-														type="delete"
+													<AiOutlineDelete
 														style={{
+															paddingTop: "3px",
 															color: "#ffffff",
-															cursor: "pointer"
+															fontSize: "20px"
 														}}
 													/>
 												</Button>
@@ -228,7 +228,7 @@ const Dashboard = props => {
 																		"anywhere",
 																	alignItems:
 																		"center",
-																	paddingTop:
+																	paddingBottom:
 																		"3px"
 																}}
 																checked={
@@ -259,7 +259,7 @@ const Dashboard = props => {
 															</Checkbox>
 														</Col>
 														<Col span={2}>
-															<Icon
+															<AiOutlineEdit
 																type="edit"
 																onClick={() => {
 																	setVisible(
@@ -270,6 +270,8 @@ const Dashboard = props => {
 																	);
 																}}
 																style={{
+																	fontSize:
+																		"16px",
 																	color:
 																		"#F4B400",
 																	float:
@@ -290,9 +292,10 @@ const Dashboard = props => {
 																okText="Yes"
 																cancelText="No"
 															>
-																<Icon
-																	type="delete"
+																<AiOutlineDelete
 																	style={{
+																		fonTSize:
+																			"16px",
 																		color:
 																			"#DB4437",
 																		float:
@@ -317,22 +320,18 @@ const Dashboard = props => {
 										marginTop: 16
 									}}
 								></div>
-								<Row justify="space-between">
-									<Col>
-										<Input
-											maxLength="72"
-											placeholder="Type your To Do"
-											allowClear
-											value={todo}
-											onChange={e =>
-												setTodo(e.target.value)
-											}
-											onPressEnter={e =>
-												handleAddTodo(e.target.value)
-											}
-										/>
-									</Col>
-								</Row>
+
+								<Input
+									maxLength="72"
+									width={100}
+									placeholder="Type your To Do"
+									allowClear
+									value={todo}
+									onChange={e => setTodo(e.target.value)}
+									onPressEnter={e =>
+										handleAddTodo(e.target.value)
+									}
+								/>
 							</Card>
 						</Col>
 					</Row>

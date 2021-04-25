@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Layout, Menu, Icon, Modal, Row, Col, Button } from "antd";
+import React, { useState } from "react";
+import { Layout, Menu, Modal, Row, Col, Button } from "antd";
 import routes from "../../utils/_routes";
 import { getRole } from "../../utils/services";
 import { Switch, Link, Redirect } from "react-router-dom";
@@ -13,6 +13,7 @@ import EventList from "../Events/EventsList";
 import ParticipantsList from "../Participants/ParticipantsList";
 import TeamList from "../Team/TeamList";
 import Profile from "../Profile/Profile";
+import { AiOutlineLeft, AiOutlineLock, AiOutlineRight } from "react-icons/ai";
 
 const { Content, Sider } = Layout;
 
@@ -48,10 +49,6 @@ const Navigator = props => {
 		border: 2px solid #1890ff !important;
 	`;
 
-	useEffect(() => {
-		console.log("1st mount pe ni har mount pe khelenge");
-	});
-
 	// useEffect(() => {
 	// 	if (
 	// 		!localStorage.getItem("token") ||
@@ -65,28 +62,22 @@ const Navigator = props => {
 		<>
 			<Layout>
 				<Sider
-					// width={200}
-					// style={{
-					// 	overflow: "auto",
-					// 	height: "100vh",
-					// 	position: "fixed",
-					// 	left: 0
-					// }}
+					width={200}
+					style={{
+						overflow: "auto",
+						height: "100vh",
+						position: "fixed",
+						left: 0
+					}}
 					theme="dark"
 					trigger={null}
 					collapsible
 					collapsed={isCollapsed}
 				>
 					<div className="logo">
-						{/* <Icon
-							className="trigger"
-							type={isCollapsed ? "menu-unfold" : "menu-fold"}
-							onClick={() => setIsCollapsed(!isCollapsed)}
-						/> */}
 						<img
 							onClick={() => setIsCollapsed(!isCollapsed)}
 							src={isCollapsed ? logoCollapse : logo}
-							//hidden={isCollapsed}
 							width={`${isCollapsed ? "84" : "160"}`}
 							style={{ padding: "12px 24px", cursor: "pointer" }}
 							alt=""
@@ -108,6 +99,9 @@ const Navigator = props => {
 							} else {
 								return (
 									<Menu.Item
+										style={{
+											alignItems: "center"
+										}}
 										key={route.key}
 										onClick={() => {
 											localStorage.setItem(
@@ -116,8 +110,18 @@ const Navigator = props => {
 											);
 										}}
 									>
-										<Icon type={route.icon} />
-										<span>{route.name}</span>
+										<route.icon
+											style={{ fontSize: "18px" }}
+										/>
+										{isCollapsed ? null : (
+											<span
+												style={{
+													paddingLeft: "10px"
+												}}
+											>
+												{route.name}
+											</span>
+										)}
 										<Link to={route.path} />
 									</Menu.Item>
 								);
@@ -127,25 +131,37 @@ const Navigator = props => {
 							key={"signout"}
 							onClick={() => setVisible(true)}
 						>
-							<Icon type="lock" />
-							<span>Sign Out</span>
+							<AiOutlineLock />
+							{isCollapsed ? null : (
+								<span style={{ paddingLeft: "10px" }}>
+									Sign Out
+								</span>
+							)}
 						</Menu.Item>
 						<Menu.Item
 							key={"collapse"}
 							onClick={() => setIsCollapsed(!isCollapsed)}
 						>
-							{/* <BiArrowToLeft /> */}
-							<Icon type={isCollapsed ? "right" : "left"} />
-							<span>Collapse</span>
+							{isCollapsed ? (
+								<AiOutlineRight />
+							) : (
+								<AiOutlineLeft />
+							)}
+
+							{isCollapsed ? null : (
+								<span style={{ paddingLeft: "10px" }}>
+									Hide
+								</span>
+							)}
 						</Menu.Item>
 					</Menu>
 				</Sider>
 
 				<Layout
-				// style={{
-				// 	minHeight: "100vh",
-				// 	marginLeft: `${isCollapsed ? "80px" : "200px"}`
-				// }}
+					style={{
+						minHeight: "100vh",
+						marginLeft: `${isCollapsed ? "80px" : "200px"}`
+					}}
 				>
 					<Content
 						style={{
