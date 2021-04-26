@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Layout, Menu, Modal, Row, Col, Button } from "antd";
 import routes from "../../utils/_routes";
 import { getRole } from "../../utils/services";
@@ -16,12 +16,21 @@ import Profile from "../Profile/Profile";
 import { AiOutlineLeft, AiOutlineLock, AiOutlineRight } from "react-icons/ai";
 
 const { Content, Sider } = Layout;
-
+const smallDeviceWidth = 420;
 const Navigator = props => {
-	const [isCollapsed, setIsCollapsed] = useState(false);
+	const [isCollapsed, setIsCollapsed] = useState(true);
 	const [visible, setVisible] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const Creds = getRole();
+
+	useEffect(() => {
+		if (window.innerWidth > smallDeviceWidth) setIsCollapsed(false);
+	}, []);
+
+	const setIsCollapsedState = () => {
+		if (window.innerWidth < smallDeviceWidth) return;
+		setIsCollapsed(!isCollapsed);
+	};
 
 	const handleSignOut = state => {
 		if (state) {
@@ -65,7 +74,7 @@ const Navigator = props => {
 					width={200}
 					style={{
 						overflow: "auto",
-						height: "100vh",
+						height: "100%",
 						position: "fixed",
 						left: 0
 					}}
@@ -76,7 +85,7 @@ const Navigator = props => {
 				>
 					<div className="logo">
 						<img
-							onClick={() => setIsCollapsed(!isCollapsed)}
+							onClick={() => setIsCollapsedState()}
 							src={isCollapsed ? logoCollapse : logo}
 							width={`${isCollapsed ? "84" : "160"}`}
 							style={{ padding: "12px 24px", cursor: "pointer" }}
@@ -109,6 +118,7 @@ const Navigator = props => {
 												route.key
 											);
 										}}
+										title={route.name}
 									>
 										<route.icon
 											style={{ fontSize: "18px" }}
@@ -138,22 +148,24 @@ const Navigator = props => {
 								</span>
 							)}
 						</Menu.Item>
-						<Menu.Item
-							key={"collapse"}
-							onClick={() => setIsCollapsed(!isCollapsed)}
-						>
-							{isCollapsed ? (
-								<AiOutlineRight />
-							) : (
-								<AiOutlineLeft />
-							)}
+						{window.innerWidth > smallDeviceWidth ? (
+							<Menu.Item
+								key={"collapse"}
+								onClick={() => setIsCollapsed(!isCollapsed)}
+							>
+								{isCollapsed ? (
+									<AiOutlineRight />
+								) : (
+									<AiOutlineLeft />
+								)}
 
-							{isCollapsed ? null : (
-								<span style={{ paddingLeft: "10px" }}>
-									Hide
-								</span>
-							)}
-						</Menu.Item>
+								{isCollapsed ? null : (
+									<span style={{ paddingLeft: "10px" }}>
+										Hide
+									</span>
+								)}
+							</Menu.Item>
+						) : null}
 					</Menu>
 				</Sider>
 

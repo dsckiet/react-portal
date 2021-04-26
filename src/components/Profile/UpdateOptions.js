@@ -20,7 +20,7 @@ const UpdateOptions = ({
 					title="Update Profile"
 					placement="right"
 					closable={true}
-					width="35%"
+					width={window.innerWidth < 420 ? "70%" : "35%"}
 					destroyOnClose={true}
 					onClose={() => setProfileDrawer(false)}
 					visible={profileDrawer}
@@ -35,7 +35,7 @@ const UpdateOptions = ({
 					title="Change Password"
 					placement="right"
 					closable={true}
-					width="30%"
+					width={window.innerWidth < 420 ? "70%" : "35%"}
 					destroyOnClose={true}
 					onClose={() => setPasswordDrawer(false)}
 					visible={passwordDrawer}

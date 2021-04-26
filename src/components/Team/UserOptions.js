@@ -30,7 +30,7 @@ const UserOptions = props => {
 					title="Add New Member"
 					placement="right"
 					closable={true}
-					width="40%"
+					width={window.innerWidth < 420 ? "70%" : "35%"}
 					destroyOnClose={true}
 					onClose={() => setIsDrawerVisible(false)}
 					visible={isDrawerVisible}
