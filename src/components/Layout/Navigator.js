@@ -49,15 +49,6 @@ const Navigator = props => {
 		border: 2px solid #1890ff !important;
 	`;
 
-	// useEffect(() => {
-	// 	if (
-	// 		!localStorage.getItem("token") ||
-	// 		localStorage.getItem("token") === "undefined"
-	// 	) {
-	// 		props.history.push("/login");
-	// 	}
-	// }, [history]);
-
 	return (
 		<>
 			<Layout>
@@ -65,7 +56,7 @@ const Navigator = props => {
 					width={200}
 					style={{
 						overflow: "auto",
-						height: "100vh",
+						height: "100%",
 						position: "fixed",
 						left: 0
 					}}
@@ -109,6 +100,7 @@ const Navigator = props => {
 												route.key
 											);
 										}}
+										title={route.name}
 									>
 										<route.icon
 											style={{ fontSize: "18px" }}

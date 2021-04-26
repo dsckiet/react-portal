@@ -25,19 +25,35 @@ const EditTodoModal = ({
 	setRefresh
 }) => {
 	const [data, setData] = useState(null);
-	const handleEdit = async e => {
-		e.preventDefault();
-		if (data !== "") {
-			try {
-				const res = await editTodo(todo._id, { title: data });
-				if (!res.error && res.message === "success") {
-					handleVisible(!visible);
-					setRefresh(!refresh);
-					setData(null);
-				}
-			} catch (err) {
-				console.log(err);
+	const [isTodoInputValid, setIsTodoInputValid] = useState(true);
+
+	const handleOnClose = () => {
+		setIsTodoInputValid(true);
+		handleVisible(!visible);
+	};
+
+	const handleOnChangeTodo = data => {
+		if (data && !data) {
+			if (!isTodoInputValid) setIsTodoInputValid(true);
+			setData("");
+			return;
+		}
+		if (data.length < 7 && isTodoInputValid) setIsTodoInputValid(false);
+		if (data.length >= 7 && !isTodoInputValid) setIsTodoInputValid(true);
+		setData(data);
+	};
+
+	const handleEditTodo = async data => {
+		if (!data || data.length < 7) return;
+		try {
+			const res = await editTodo(todo._id, { title: data });
+			if (!res.error && res.message === "success") {
+				handleVisible(!visible);
+				setRefresh(!refresh);
+				setData(null);
 			}
+		} catch (err) {
+			console.log(err);
 		}
 	};
 
@@ -50,8 +66,9 @@ const EditTodoModal = ({
 			<Modal
 				visible={visible}
 				footer={null}
-				closable={false}
-				onCancel={() => handleVisible(!visible)}
+				closable={true}
+				onCancel={() => handleOnClose()}
+				destroyOnClose={true}
 			>
 				<IoIosArrowRoundBack
 					onClick={() => handleVisible(!visible)}
@@ -75,16 +92,19 @@ const EditTodoModal = ({
 							allowClear
 							value={data}
 							onChange={e => {
-								setData(e.target.value);
+								handleOnChangeTodo(e.target.value);
 							}}
-							onPressEnter={handleEdit}
+							onPressEnter={e => handleEditTodo(e.target.value)}
+							style={
+								!isTodoInputValid ? { borderColor: "red" } : {}
+							}
 						/>
 					</Row>
 					<Row style={{ paddingTop: "20px" }}>
 						<SaveButton
 							type="primary"
 							htmlType="submit"
-							onClick={handleEdit}
+							onClick={e => handleEditTodo(e.target.value)}
 						>
 							Save
 						</SaveButton>
