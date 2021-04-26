@@ -1,0 +1,106 @@
+.social-links-container {
+	text-align: center;
+	margin-right: auto !important;
+	margin-left: auto !important;
+	justify-content: center;
+	display: flex !important;
+}
+
+.profile-image-container {
+	display: flex !important;
+	justify-content: center;
+	align-items: center;
+	padding-top: 18px;
+}
+
+.tag {
+	margin-top: 10px;
+}
+
+.name {
+	margin-top: 20px;
+	font-size: 24px;
+	font-weight: 700;
+}
+
+.branch {
+	padding-top: 20px;
+	font-size: 16px;
+}
+
+.branch .text {
+	display: flex !important;
+	align-items: center;
+}
+
+.pl-5 {
+	padding-left: 5px;
+}
+
+.logos {
+	text-align: center;
+}
+
+.info {
+	font-size: 16px;
+	margin-top: 2px;
+}
+
+@media only screen and (max-width: 576px) {
+	.button-container {
+		padding-top: 10px;
+	}
+
+	.dob-container {
+		padding-top: 10px;
+	}
+
+	.center-align-row {
+		justify-content: center;
+	}
+
+	.icon {
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+	}
+}
+
+@media only screen and (max-width: 767px) and (min-width: 577px) {
+	.button-container {
+		padding: 0px 6px;
+	}
+	.center-align-row {
+		justify-content: center;
+	}
+}
+
+@media only screen and (max-width: 991px) and (min-width: 768px) {
+	.icon {
+		display: flex !important;
+		align-items: center;
+	}
+
+	.contact-container {
+		margin-left: 25px !important;
+	}
+
+	.button-container {
+		padding: 0px 12px;
+	}
+}
+
+@media only screen and (min-width: 992px) {
+	.icon {
+		display: flex !important;
+		align-items: center;
+	}
+
+	.contact-container {
+		margin-left: 10px !important;
+	}
+
+	.button-container {
+		padding: 0px 18px;
+	}
+}

@@ -271,19 +271,19 @@ const UpdateProfile = props => {
 		}
 	};
 
-	const disabledDatesForYear = current => {
-		return (
-			current < moment(new Date().getFullYear() - 4, "YYYY") ||
-			current > moment(new Date().getFullYear() + 4, "YYYY")
-		);
-	};
+	// const disabledDatesForYear = current => {
+	// 	return (
+	// 		current < moment(new Date().getFullYear() - 4, "YYYY") ||
+	// 		current > moment(new Date().getFullYear() + 4, "YYYY")
+	// 	);
+	// };
 
-	const disabledDatesForDob = current => {
-		return (
-			current < moment(new Date().getFullYear() - 26, "YYYY") ||
-			current > moment(new Date().getFullYear() - 16, "YYYY")
-		);
-	};
+	// const disabledDatesForDob = current => {
+	// 	return (
+	// 		current < moment(new Date().getFullYear() - 26, "YYYY") ||
+	// 		current > moment(new Date().getFullYear() - 16, "YYYY")
+	// 	);
+	// };
 
 	return (
 		<Skeleton loading={showSkeleton} active>
@@ -381,7 +381,7 @@ const UpdateProfile = props => {
 						>
 							<DatePicker
 								picker="year"
-								disabledDate={disabledDatesForYear}
+								//disabledDate={disabledDatesForYear}
 							/>
 						</Form.Item>
 					</Col>
@@ -438,7 +438,7 @@ const UpdateProfile = props => {
 					<DatePicker
 						style={{ width: "100%" }}
 						format="YYYY-MM-DD"
-						disabledDate={disabledDatesForDob}
+						//disabledDate={disabledDatesForDob}
 					/>
 				</Form.Item>
 

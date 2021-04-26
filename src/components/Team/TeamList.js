@@ -349,98 +349,88 @@ const TeamList = props => {
 			],
 			onFilter: (value, record) => record.role.indexOf(value) === 0,
 			render: role => (
-				<div
-					style={{
-						display: "flex",
-						flexDirection: "row",
-						alignItems: "center"
-					}}
-				>
-					<>
-						{role[1] === editRole ? (
-							<Select
-								size="small"
-								defaultValue={role[0]}
-								label="Role"
-								name="role"
-								style={{ marginRight: "10px", width: "75%" }}
-								onChange={val => handleEdit(val)}
-							>
-								<Option value="lead" disabled>
-									Lead
-								</Option>
-								<Option value="core">Core</Option>
-								<Option value="member">Member</Option>
-								{role[2] &&
-								Number(role[2]) === new Date().getFullYear() &&
-								new Date().getMonth() >= 4 ? (
-									<Option value="graduate">Graduate</Option>
-								) : null}
-							</Select>
-						) : (
-							<Tag
-								color={
-									role[0] === "lead"
-										? "red"
-										: role[0] === "core"
-										? "geekblue"
-										: "orange"
-								}
-								className={
-									userData.role === "lead"
-										? "w-lead"
-										: "w-else"
-								}
-							>
-								{role[0]}
-							</Tag>
-						)}
+				<>
+					{role[1] === editRole ? (
+						<Select
+							size="small"
+							defaultValue={role[0]}
+							label="Role"
+							name="role"
+							style={{ marginRight: "10px", width: "75%" }}
+							onChange={val => handleEdit(val)}
+						>
+							<Option value="lead" disabled>
+								Lead
+							</Option>
+							<Option value="core">Core</Option>
+							<Option value="member">Member</Option>
+							{role[2] &&
+							Number(role[2]) === new Date().getFullYear() &&
+							new Date().getMonth() >= 4 ? (
+								<Option value="graduate">Graduate</Option>
+							) : null}
+						</Select>
+					) : (
+						<Tag
+							color={
+								role[0] === "lead"
+									? "red"
+									: role[0] === "core"
+									? "geekblue"
+									: "orange"
+							}
+							className={
+								userData.role === "lead" ? "w-lead" : "w-else"
+							}
+						>
+							{role[0]}
+						</Tag>
+					)}
 
-						{userData.role === "lead" && role[0] !== "lead" ? (
-							<>
-								{editRole && editRole === role[1] ? (
-									<AiOutlineClose
+					{userData.role === "lead" && role[0] !== "lead" ? (
+						<>
+							{editRole && editRole === role[1] ? (
+								<AiOutlineClose
+									style={{
+										cursor: "pointer",
+										fontSize: "16px"
+									}}
+									onClick={() => {
+										setEditRole(null);
+									}}
+								/>
+							) : (
+								<Popconfirm
+									title="Do you want to edit Roles?"
+									okText="Yes"
+									cancelText="No"
+									onConfirm={() => {
+										if (editDesignation) {
+											setEditDesignation(null);
+										}
+										setEditRole(role[1]);
+									}}
+								>
+									<AiOutlineEdit
+										type="edit"
 										style={{
-											cursor: "pointer",
-											fontSize: "16px"
-										}}
-										onClick={() => {
-											setEditRole(null);
+											fontSize: "16px",
+											color: `${
+												role[0] === "lead"
+													? "#F5222D"
+													: role[0] === "core"
+													? "#5A85EF"
+													: "#FA8C16"
+											}`,
+											cursor: "pointer"
 										}}
 									/>
-								) : (
-									<Popconfirm
-										title="Do you want to edit Roles?"
-										okText="Yes"
-										cancelText="No"
-										onConfirm={() => {
-											if (editDesignation) {
-												setEditDesignation(null);
-											}
-											setEditRole(role[1]);
-										}}
-									>
-										<AiOutlineEdit
-											type="edit"
-											style={{
-												fontSize: "16px",
-												color: `${
-													role[0] === "lead"
-														? "#F5222D"
-														: role[0] === "core"
-														? "#5A85EF"
-														: "#FA8C16"
-												}`,
-												cursor: "pointer"
-											}}
-										/>
-									</Popconfirm>
-								)}
-								<Divider type="vertical" />
-							</>
-						) : null}
-					</>
-				</div>
+								</Popconfirm>
+							)}
+							<Divider type="vertical" />
+						</>
+					) : null}
+				</>
 			)
 		},
 		{
