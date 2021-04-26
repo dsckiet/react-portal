@@ -113,7 +113,7 @@ const Profile = () => {
 					<Col span={24}>
 						<>
 							<Row gutter={16}>
-								<Col span={5}>
+								<Col s={30} m={20}>
 									<ImageContainer>
 										<Image
 											src={
@@ -344,7 +344,7 @@ const Profile = () => {
 								Update Details
 							</Divider>
 							<Row>
-								<Col span={8}>
+								<Col xs={20} s={8} m={8} l={8} xl={8}>
 									<Button
 										type="primary"
 										className="login-form-button"
@@ -355,8 +355,8 @@ const Profile = () => {
 										Update Details
 									</Button>
 								</Col>
-								<Col span={8}></Col>
-								<Col span={8}>
+								<Col xs={16} s={8} m={8} l={8} xl={8}></Col>
+								<Col xs={20} s={8} m={8} l={8} xl={8}>
 									<Button
 										type="primary"
 										className="login-form-button"
@@ -377,6 +377,7 @@ const Profile = () => {
 					userData={Creds}
 					handleUpdateUser={handleUpdateUser}
 					Refresh={Refresh}
+					style={{ width: "100%" }}
 				/>
 				<UpdateOptions
 					passwordDrawer={passwordDrawer}

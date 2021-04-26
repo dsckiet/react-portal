@@ -341,7 +341,8 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 										? moment(user.lastActiveAt).format(
 												"DD MMM YYYY HH:MM A"
 										  )
-										: "never"}
+										: //user.lastActiveAt
+										  "never"}
 								</Tag>
 							</Row>
 						</Wrapper>
