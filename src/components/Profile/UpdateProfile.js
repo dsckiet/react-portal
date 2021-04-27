@@ -271,19 +271,19 @@ const UpdateProfile = props => {
 		}
 	};
 
-	// const disabledDatesForYear = current => {
-	// 	return (
-	// 		current < moment(new Date().getFullYear() - 4, "YYYY") ||
-	// 		current > moment(new Date().getFullYear() + 4, "YYYY")
-	// 	);
-	// };
+	const disabledDatesForYear = current => {
+		return (
+			current < moment(new Date().getFullYear() - 4, "YYYY") ||
+			current > moment(new Date().getFullYear() + 4, "YYYY")
+		);
+	};
 
-	// const disabledDatesForDob = current => {
-	// 	return (
-	// 		current < moment(new Date().getFullYear() - 26, "YYYY") ||
-	// 		current > moment(new Date().getFullYear() - 16, "YYYY")
-	// 	);
-	// };
+	const disabledDatesForDob = current => {
+		return (
+			current < moment(new Date().getFullYear() - 26, "YYYY") ||
+			current > moment(new Date().getFullYear() - 16, "YYYY")
+		);
+	};
 
 	return (
 		<Skeleton loading={showSkeleton} active>
@@ -325,7 +325,7 @@ const UpdateProfile = props => {
 				</Divider>
 
 				<Row gutter={16}>
-					<Col span={12}>
+					<Col xs={24} md={24} lg={12}>
 						<Form.Item
 							label="Name"
 							required
@@ -340,7 +340,7 @@ const UpdateProfile = props => {
 							<Input type="text" placeholder="Name" disabled />
 						</Form.Item>
 					</Col>
-					<Col span={12}>
+					<Col xs={24} md={24} lg={12}>
 						<Form.Item
 							label="Email"
 							required
@@ -358,7 +358,7 @@ const UpdateProfile = props => {
 				</Row>
 
 				<Row gutter={16}>
-					<Col span={12}>
+					<Col xs={10} sm={24} md={12} lg={12}>
 						<Form.Item label="Branch" required name="branch">
 							<Select placeholder="Select Branch">
 								<Option value="CS">CS</Option>
@@ -373,7 +373,7 @@ const UpdateProfile = props => {
 							</Select>
 						</Form.Item>
 					</Col>
-					<Col span={12}>
+					<Col xs={14} sm={24} md={12} lg={12}>
 						<Form.Item
 							label="Year of Graduation"
 							required
@@ -381,7 +381,7 @@ const UpdateProfile = props => {
 						>
 							<DatePicker
 								picker="year"
-								//disabledDate={disabledDatesForYear}
+								disabledDate={disabledDatesForYear}
 							/>
 						</Form.Item>
 					</Col>
@@ -438,7 +438,7 @@ const UpdateProfile = props => {
 					<DatePicker
 						style={{ width: "100%" }}
 						format="YYYY-MM-DD"
-						//disabledDate={disabledDatesForDob}
+						disabledDate={disabledDatesForDob}
 					/>
 				</Form.Item>
 
