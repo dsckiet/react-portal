@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Drawer } from "antd";
 import UpdateProfile from "./UpdateProfile";
 import UpdatePassword from "./UpdatePassword";
@@ -13,6 +13,14 @@ const UpdateOptions = ({
 	setPasswordDrawer,
 	Refresh
 }) => {
+	const [isMobile, setIsMobile] = useState(false);
+
+	useEffect(() => {
+		if (window.innerWidth <= 568) {
+			setIsMobile(true);
+		}
+	}, []);
+
 	return (
 		<>
 			<div>
@@ -20,7 +28,7 @@ const UpdateOptions = ({
 					title="Update Profile"
 					placement="right"
 					closable={true}
-					width="35%"
+					width={isMobile ? "80%" : "40%"}
 					destroyOnClose={true}
 					onClose={() => setProfileDrawer(false)}
 					visible={profileDrawer}
@@ -35,7 +43,7 @@ const UpdateOptions = ({
 					title="Change Password"
 					placement="right"
 					closable={true}
-					width="30%"
+					width={isMobile ? "80%" : "40%"}
 					destroyOnClose={true}
 					onClose={() => setPasswordDrawer(false)}
 					visible={passwordDrawer}

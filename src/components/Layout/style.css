@@ -6,3 +6,24 @@
 .ant-card-body {
 	padding: 16px !important;
 }
+.side-nav {
+	overflow: auto;
+	height: 100vh !important;
+	position: fixed !important;
+	left: 0;
+	z-index: 1;
+}
+
+@media screen and (max-width: 592px) {
+	.side-nav {
+		overflow: hidden;
+		height: 100% !important;
+		position: fixed !important;
+		left: 0;
+		z-index: 1;
+	}
+
+	.side-nav-layout {
+		margin-left: 80px !important;
+	}
+}

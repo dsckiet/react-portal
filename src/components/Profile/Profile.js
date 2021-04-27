@@ -15,6 +15,7 @@ import { AiFillLinkedin, AiFillPhone, AiFillCalendar } from "react-icons/ai";
 import { FiLink } from "react-icons/fi";
 import { MdEmail } from "react-icons/md";
 import UpdateOptions from "./UpdateOptions";
+import "./style.css";
 
 const Profile = () => {
 	const [showSkeleton, setShowSkeleton] = useState(false);
@@ -23,26 +24,8 @@ const Profile = () => {
 	const [profileDrawer, setProfileDrawer] = useState(false);
 	const [passwordDrawer, setPasswordDrawer] = useState(false);
 	const [refresh, setRefresh] = useState(false);
-
-	const NameContainer = styled.div`
-		padding-top: 20px;
-	`;
-
-	const Name = styled.div`
-		font-size: 23px;
-		font-weight: 700;
-	`;
-
-	const Branch = styled.div`
-		padding-top: 10px;
-	`;
-
-	const ImageContainer = styled.div`
-		align-items: center;
-	`;
-
 	const Image = styled.img`
-		width: 70%;
+		width: 120px;
 		border-radius: 50%;
 		padding: 4px;
 		border: 2px solid #d5d5d5;
@@ -53,21 +36,11 @@ const Profile = () => {
 		}
 	`;
 
-	const Logo = styled.div`
-		text-align: center;
-	`;
-
-	const Info = styled.p`
-		font-size: 16px;
-		margin-top: 2px;
-	`;
-
 	const LogoStyle = styled.span`
 		font-size: 28px;
 		color: #595959;
 		&:hover {
 			transition: 0.2s all ease-in;
-
 			color: #4285f4;
 		}
 	`;
@@ -109,268 +82,283 @@ const Profile = () => {
 		<>
 			<PageTitle title="Profile" bgColor="#DB4437" />
 			<Skeleton loading={showSkeleton} active>
-				<Row>
-					<Col span={24}>
-						<>
-							<Row gutter={16}>
-								<Col span={5}>
-									<ImageContainer>
-										<Image
-											src={
-												user && user.image
-													? user.image
-													: "https://avatars.dicebear.com/v2/identicon/16042.svg"
-											}
-											alt="Profilepic"
-										/>
-									</ImageContainer>
+				<>
+					<Row gutter={16}>
+						<Col xs={0} sm={0} md={4} lg={6}></Col>
+						<Col
+							xs={24}
+							sm={24}
+							md={8}
+							lg={6}
+							className="profile-image-container"
+						>
+							<Image
+								src={
+									user && user.image
+										? user.image
+										: "https://avatars.dicebear.com/v2/identicon/16042.svg"
+								}
+								alt="Profilepic"
+							/>
+						</Col>
+
+						<Col xs={24} sm={24} md={9} lg={6}>
+							<Row className="name center-align-row">
+								{user && user.name
+									? user.name
+									: "Not Available"}
+							</Row>
+							<Row className="center-align-row tag">
+								<Tag
+									color={
+										user && user.role === "lead"
+											? "red"
+											: user && user.role === "core"
+											? "geekblue"
+											: "orange"
+									}
+									style={{
+										textTransform: "capitalize",
+										fontSize: "14px",
+										textAlign: "center"
+									}}
+								>
+									{user && user.role ? user.role : "member"}
+								</Tag>
+							</Row>
+							<Row className="branch center-align-row">
+								<Col xs={0} sm={3} md={0}></Col>
+								<Col
+									xs={3}
+									sm={2}
+									md={4}
+									lg={3}
+									className="icon"
+								>
+									<FaUserGraduate />
 								</Col>
-								<Col span={0}></Col>
-								<Col span={14}>
-									<NameContainer>
-										<Name>
-											{user && user.name
-												? user.name
-												: "Not Available"}
-											<br />
-											<Tag
-												color={
-													user && user.role === "lead"
-														? "red"
-														: user &&
-														  user.role === "core"
-														? "geekblue"
-														: "orange"
-												}
-												style={{
-													marginTop: "5px",
-													marginBottom: "5px",
-													textTransform: "capitalize",
-													fontSize: "14px",
-													width: "20%",
-													textAlign: "center"
-												}}
-											>
-												{user && user.role
-													? user.role
-													: "member"}
-											</Tag>
-											<br />
-										</Name>
-										<Branch>
-											<Row gutter={12}>
-												<Col
-													xl={2}
-													lg={3}
-													md={4}
-													sm={5}
-													xs={6}
-													style={{
-														paddingTop: "2px"
-													}}
-												>
-													<FaUserGraduate />
-												</Col>
-												<Col
-													xl={4}
-													lg={5}
-													md={6}
-													sm={7}
-													xs={8}
-												>
-													{user && user.branch
-														? user.branch
-														: "N/A"}
-												</Col>
-												<Col
-													xl={2}
-													lg={3}
-													md={4}
-													sm={5}
-													xs={6}
-													style={{
-														paddingTop: "2px"
-													}}
-												>
-													<AiFillCalendar />
-												</Col>
-												<Col>
-													{user && user.year
-														? user.year
-														: "N/A"}
-												</Col>
-											</Row>
-										</Branch>
-									</NameContainer>
+								<Col
+									xs={5}
+									sm={3}
+									md={6}
+									lg={6}
+									className="text"
+								>
+									{user && user.branch ? user.branch : "N/A"}
+								</Col>
+								<Col
+									xs={3}
+									sm={2}
+									md={4}
+									lg={3}
+									className="icon"
+								>
+									<AiFillCalendar />
+								</Col>
+								<Col
+									xs={5}
+									sm={5}
+									md={6}
+									lg={6}
+									className="text"
+								>
+									{user && user.year ? user.year : "N/A"}
+								</Col>
+								<Col xs={0} sm={0}></Col>
+							</Row>
+						</Col>
+						<Col xs={0} sm={0} md={3} lg={6}></Col>
+					</Row>
+					<Divider style={{ color: "rgba(0,0,0,.25)" }}>
+						Personal Information
+					</Divider>
+					<Row>
+						<Col xs={0} sm={0} md={2} lg={6}></Col>
+						<Col xs={24} sm={12} md={10} lg={6}>
+							<Row
+								style={{ justifyContent: "center" }}
+								className="contact-container"
+							>
+								<Col
+									xs={6}
+									sm={6}
+									md={6}
+									lg={8}
+									className="logos"
+								>
+									<AiFillPhone style={{ fontSize: "26px" }} />
+								</Col>
+								<Col
+									xs={10}
+									sm={10}
+									md={12}
+									lg={16}
+									className="info"
+								>
+									{user && user.contact
+										? user.contact
+										: "Not Provided"}
 								</Col>
 							</Row>
-							<Divider style={{ color: "rgba(0,0,0,.25)" }}>
-								Personal Information
-							</Divider>
-							<Row>
-								<Col span={12}>
-									<Row>
-										<Col span={6}>
-											<Logo>
-												<AiFillPhone
-													style={{ fontSize: "26px" }}
-												/>
-											</Logo>
-										</Col>
-										<Col span={218}>
-											<Info>
-												{user && user.contact
-													? user.contact
-													: "Not Provided"}
-											</Info>
-										</Col>
-									</Row>
-								</Col>
-								<Col span={12}>
-									<Row>
-										<Col span={6}>
-											<Logo>
-												<FaBirthdayCake
-													style={{ fontSize: "24px" }}
-												/>
-											</Logo>
-										</Col>
-										<Col span={18}>
-											<Info>
-												{user && user.dob
-													? user.dob.split("T")[0]
-													: "Not Provided"}
-											</Info>
-										</Col>
-									</Row>
-								</Col>
-							</Row>
-							<Divider style={{ color: "rgba(0,0,0,.25)" }}>
-								Contact Information
-							</Divider>
+						</Col>
+						<Col xs={24} sm={12} md={10} lg={6}>
 							<Row
 								style={{
-									textAlign: "center",
-									marginRight: "auto !important",
-									marginLeft: "auto !important",
-									justifyContent: "center",
-									display: "flex"
+									justifyContent: "center"
 								}}
+								className="dob-container"
 							>
-								<Col span={2}></Col>
-
-								{user ? (
-									<>
-										{user.linkedin ? (
-											<Col span={4}>
-												<a
-													href={user.linkedin}
-													target="_blank"
-													rel="noopener noreferrer"
-												>
-													<LogoStyle>
-														<AiFillLinkedin />
-													</LogoStyle>
-												</a>
-											</Col>
-										) : null}
-										{user.twitter ? (
-											<Col span={4}>
-												<a
-													href={user.twitter}
-													target="_blank"
-													rel="noopener noreferrer"
-												>
-													<LogoStyle>
-														<FaTwitterSquare />
-													</LogoStyle>
-												</a>
-											</Col>
-										) : null}
-
-										<Col span={4}>
-											<a
-												href={`mailto:${user.email}`}
-												target="_blank"
-												rel="noopener noreferrer"
-											>
-												<LogoStyle>
-													<MdEmail />
-												</LogoStyle>
-											</a>
-										</Col>
-
-										{user.portfolio ? (
-											<Col span={4}>
-												<a
-													href={user.portfolio}
-													target="_blank"
-													rel="noopener noreferrer"
-												>
-													<LogoStyle>
-														<FiLink />
-													</LogoStyle>
-												</a>
-											</Col>
-										) : null}
-
-										{user.github ? (
-											<Col span={4}>
-												<a
-													href={user.github}
-													target="_blank"
-													rel="noopener noreferrer"
-												>
-													<LogoStyle>
-														<FaGithubSquare />
-													</LogoStyle>
-												</a>
-											</Col>
-										) : null}
-									</>
+								<Col xs={6} sm={6} lg={8} className="logos">
+									<FaBirthdayCake
+										style={{ fontSize: "24px" }}
+									/>
+								</Col>
+								<Col xs={10} sm={12} lg={12} className="info">
+									{user && user.dob
+										? user.dob.split("T")[0]
+										: "Not Provided"}
+								</Col>
+							</Row>
+						</Col>
+						<Col xs={0} sm={0} md={2} lg={6}></Col>
+					</Row>
+					<Divider style={{ color: "rgba(0,0,0,.25)" }}>
+						Contact Information
+					</Divider>
+					<Row className="social-links-container">
+						{user ? (
+							<>
+								{user.linkedin ? (
+									<Col xs={4} sm={4} md={3} lg={2}>
+										<a
+											href={user.linkedin}
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											<LogoStyle>
+												<AiFillLinkedin />
+											</LogoStyle>
+										</a>
+									</Col>
+								) : null}
+								{user.twitter ? (
+									<Col xs={4} sm={4} md={3} lg={2}>
+										<a
+											href={user.twitter}
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											<LogoStyle>
+												<FaTwitterSquare />
+											</LogoStyle>
+										</a>
+									</Col>
 								) : null}
 
-								<Col span={2}></Col>
-							</Row>
-							<Divider style={{ color: "rgba(0,0,0,.25)" }}>
-								Bio
-							</Divider>
-							<Row>
-								{user && user.bio
-									? user.bio
-									: "No Bio Available"}
-							</Row>
-							<Divider style={{ color: "rgba(0,0,0,.25)" }}>
+								<Col xs={4} sm={4} md={3} lg={2}>
+									<a
+										href={`mailto:${user.email}`}
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										<LogoStyle>
+											<MdEmail />
+										</LogoStyle>
+									</a>
+								</Col>
+
+								{user.portfolio ? (
+									<Col xs={4} sm={4} md={3} lg={2}>
+										<a
+											href={user.portfolio}
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											<LogoStyle>
+												<FiLink />
+											</LogoStyle>
+										</a>
+									</Col>
+								) : null}
+
+								{user.github ? (
+									<Col xs={4} sm={4} md={3} lg={2}>
+										<a
+											href={user.github}
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											<LogoStyle>
+												<FaGithubSquare />
+											</LogoStyle>
+										</a>
+									</Col>
+								) : null}
+							</>
+						) : null}
+					</Row>
+					<Divider
+						style={{
+							color: "rgba(0,0,0,.25)"
+						}}
+					>
+						Bio
+					</Divider>
+					<Row
+						style={{
+							justifyContent: "center",
+							textAlign: "center"
+						}}
+					>
+						<Col sm={0} md={4} lg={6}></Col>
+						<Col sm={24} md={16} lg={12}>
+							{user && user.bio ? user.bio : "No Bio Available"}
+						</Col>
+						<Col sm={0} md={4} lg={6}></Col>
+					</Row>
+					<Divider style={{ color: "rgba(0,0,0,.25)" }}>
+						Update Details
+					</Divider>
+					<Row>
+						<Col sm={0} md={4} lg={6}></Col>
+						<Col
+							xs={24}
+							sm={12}
+							md={8}
+							lg={6}
+							className="button-container"
+						>
+							<Button
+								type="primary"
+								className="login-form-button"
+								onClick={() => {
+									setProfileDrawer(true);
+								}}
+							>
 								Update Details
-							</Divider>
-							<Row>
-								<Col span={8}>
-									<Button
-										type="primary"
-										className="login-form-button"
-										onClick={() => {
-											setProfileDrawer(true);
-										}}
-									>
-										Update Details
-									</Button>
-								</Col>
-								<Col span={8}></Col>
-								<Col span={8}>
-									<Button
-										type="primary"
-										className="login-form-button"
-										onClick={() => {
-											setPasswordDrawer(true);
-										}}
-									>
-										Change Password
-									</Button>
-								</Col>
-							</Row>
-						</>
-					</Col>
-				</Row>
+							</Button>
+						</Col>
+
+						<Col
+							xs={24}
+							sm={12}
+							md={8}
+							lg={6}
+							className="button-container"
+						>
+							<Button
+								type="primary"
+								className="login-form-button"
+								onClick={() => {
+									setPasswordDrawer(true);
+								}}
+							>
+								Change Password
+							</Button>
+						</Col>
+						<Col sm={0} md={4} lg={6}></Col>
+					</Row>
+				</>
 				<UpdateOptions
 					profileDrawer={profileDrawer}
 					setProfileDrawer={setProfileDrawer}
