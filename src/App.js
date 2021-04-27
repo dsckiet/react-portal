@@ -8,6 +8,7 @@ import ResetPassword from "./components/Authentication/ResetPassword";
 import PrivateRoute from "./components/Layout/PrivateRoute";
 import "./index.css";
 import "./App.css";
+
 function App() {
 	return (
 		<Switch>
