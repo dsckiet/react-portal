@@ -127,7 +127,7 @@ const UpdateProfile = props => {
 	const uploadprops = {
 		name: "avatar",
 		listType: "picture-card",
-		action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
+		action: "https://www.api.dsckiet.com/dev",
 		headers: {
 			authorization: "authorization-text"
 		}
@@ -325,7 +325,7 @@ const UpdateProfile = props => {
 				</Divider>
 
 				<Row gutter={16}>
-					<Col span={12}>
+					<Col xs={24} md={24} lg={12}>
 						<Form.Item
 							label="Name"
 							required
@@ -340,7 +340,7 @@ const UpdateProfile = props => {
 							<Input type="text" placeholder="Name" disabled />
 						</Form.Item>
 					</Col>
-					<Col span={12}>
+					<Col xs={24} md={24} lg={12}>
 						<Form.Item
 							label="Email"
 							required
@@ -358,7 +358,7 @@ const UpdateProfile = props => {
 				</Row>
 
 				<Row gutter={16}>
-					<Col span={12}>
+					<Col xs={10} sm={24} md={12} lg={12}>
 						<Form.Item label="Branch" required name="branch">
 							<Select placeholder="Select Branch">
 								<Option value="CS">CS</Option>
@@ -373,7 +373,7 @@ const UpdateProfile = props => {
 							</Select>
 						</Form.Item>
 					</Col>
-					<Col span={12}>
+					<Col xs={14} sm={24} md={12} lg={12}>
 						<Form.Item
 							label="Year of Graduation"
 							required
