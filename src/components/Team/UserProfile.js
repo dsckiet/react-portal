@@ -339,7 +339,7 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 								<Tag color="green">
 									{user.lastActiveAt
 										? moment(user.lastActiveAt).format(
-												"DD MMM YYYY HH:MM A"
+												"DD MMM YYYY hh:mm"
 										  )
 										: "never"}
 								</Tag>

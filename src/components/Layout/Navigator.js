@@ -55,15 +55,6 @@ const Navigator = props => {
 		}
 	}, []);
 
-	// useEffect(() => {
-	// 	if (
-	// 		!localStorage.getItem("token") ||
-	// 		localStorage.getItem("token") === "undefined"
-	// 	) {
-	// 		props.history.push("/login");
-	// 	}
-	// }, [history]);
-
 	return (
 		<>
 			<Layout>
@@ -100,6 +91,7 @@ const Navigator = props => {
 							} else {
 								return (
 									<Menu.Item
+										title={route.name}
 										style={{
 											alignItems: "center"
 										}}
@@ -130,6 +122,7 @@ const Navigator = props => {
 						})}
 						<Menu.Item
 							key={"signout"}
+							title={"Sign-out"}
 							onClick={() => setVisible(true)}
 						>
 							<AiOutlineLock />
@@ -140,6 +133,7 @@ const Navigator = props => {
 							)}
 						</Menu.Item>
 						<Menu.Item
+							title={isCollapsed ? "Show" : "Hide"}
 							key={"collapse"}
 							onClick={() => setIsCollapsed(!isCollapsed)}
 						>

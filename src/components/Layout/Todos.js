@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import {
+	Row,
+	Col,
 	Card,
 	Checkbox,
 	Input,
 	Button,
 	Tooltip,
-	Row,
-	Col,
 	Popconfirm
 } from "antd";
+import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import "./style.css";
 import {
 	getTodo,
 	addTodo,
@@ -17,11 +17,18 @@ import {
 	deleteTodo,
 	deleteAllTodo
 } from "../../utils/services";
-import { _notification } from "./../../utils/_helpers";
+import { _notification } from "../../utils/_helpers";
+import EditTodoModal from "./EditTodoModal";
+import { useEffect, useState } from "react";
 
-const ToDo = ({ refresh, setRefresh, setEdit, setVisible }) => {
+const Todos = () => {
 	const [todo, setTodo] = useState("");
+	const [refresh, setRefresh] = useState(false);
 	const [todos, setTodos] = useState(null);
+	const [edit, setEdit] = useState(null);
+	const [visible, setVisible] = useState(false);
+	const [isTodoInputValid, setIsTodoInputValid] = useState(true);
+	const [isRateLimited, setIsRateLimited] = useState(false);
 
 	useEffect(() => {
 		(async () => {
@@ -40,15 +47,34 @@ const ToDo = ({ refresh, setRefresh, setEdit, setVisible }) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [refresh]);
 
+	const handleOnChangeTodo = val => {
+		if (todo && !val) {
+			if (!isTodoInputValid) setIsTodoInputValid(true);
+			setTodo("");
+			return;
+		}
+		if (val.length < 7 && isTodoInputValid) setIsTodoInputValid(false);
+		if (val.length >= 7 && !isTodoInputValid) setIsTodoInputValid(true);
+		setTodo(val);
+	};
+
 	const handleAddTodo = async val => {
-		if (val !== "") {
-			try {
-				const res = await addTodo({ title: val });
-				if (!res.error && res.message === "success") {
-					setRefresh(!refresh);
-				}
-			} catch (err) {
-				console.log(err);
+		if (!val || val.length < 7) return;
+		try {
+			const res = await addTodo({ title: val });
+			if (!res.error && res.message === "success") {
+				setRefresh(!refresh);
+			}
+		} catch (err) {
+			console.log(err);
+			if (err.message.includes("Temporarily blocked") && !isRateLimited) {
+				setTodo("");
+				setIsTodoInputValid(true);
+				setIsRateLimited(true);
+				_notification("error", "Warning", err.message);
+				setTimeout(() => {
+					setIsRateLimited(false);
+				}, 60000);
 			}
 		}
 		setTodo("");
@@ -93,6 +119,7 @@ const ToDo = ({ refresh, setRefresh, setEdit, setVisible }) => {
 			_notification("error", "Error", err.message);
 		}
 	};
+
 	return (
 		<>
 			<Card>
@@ -245,7 +272,6 @@ const ToDo = ({ refresh, setRefresh, setEdit, setVisible }) => {
 						  ))
 						: "No Todo"}
 				</div>
-
 				<div
 					style={{
 						backgroundColor: "#F4B400",
@@ -254,19 +280,27 @@ const ToDo = ({ refresh, setRefresh, setEdit, setVisible }) => {
 						marginTop: 16
 					}}
 				></div>
-
 				<Input
 					maxLength="72"
 					width={100}
 					placeholder="Type your To Do"
 					allowClear
 					value={todo}
-					onChange={e => setTodo(e.target.value)}
+					onChange={e => handleOnChangeTodo(e.target.value)}
 					onPressEnter={e => handleAddTodo(e.target.value)}
+					style={!isTodoInputValid ? { borderColor: "red" } : {}}
+					disabled={isRateLimited}
 				/>
 			</Card>
+			<EditTodoModal
+				visible={visible}
+				handleVisible={setVisible}
+				todo={edit}
+				refresh={refresh}
+				setRefresh={setRefresh}
+			/>
 		</>
 	);
 };
 
-export default ToDo;
+export default Todos;
