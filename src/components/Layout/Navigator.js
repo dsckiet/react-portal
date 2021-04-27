@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Layout, Menu, Modal, Row, Col, Button } from "antd";
 import routes from "../../utils/_routes";
 import { getRole } from "../../utils/services";
@@ -49,6 +49,12 @@ const Navigator = props => {
 		border: 2px solid #1890ff !important;
 	`;
 
+	useEffect(() => {
+		if (window.innerWidth <= 568) {
+			setIsCollapsed(true);
+		}
+	}, []);
+
 	// useEffect(() => {
 	// 	if (
 	// 		!localStorage.getItem("token") ||
@@ -63,12 +69,7 @@ const Navigator = props => {
 			<Layout>
 				<Sider
 					width={200}
-					style={{
-						overflow: "auto",
-						height: "100vh",
-						position: "fixed",
-						left: 0
-					}}
+					className="side-nav"
 					theme="dark"
 					trigger={null}
 					collapsible
@@ -78,7 +79,7 @@ const Navigator = props => {
 						<img
 							onClick={() => setIsCollapsed(!isCollapsed)}
 							src={isCollapsed ? logoCollapse : logo}
-							width={`${isCollapsed ? "84" : "160"}`}
+							width={`${isCollapsed ? "80" : "160"}`}
 							style={{ padding: "12px 24px", cursor: "pointer" }}
 							alt=""
 						/>
@@ -162,6 +163,7 @@ const Navigator = props => {
 						minHeight: "100vh",
 						marginLeft: `${isCollapsed ? "80px" : "200px"}`
 					}}
+					className="side-nav-layout"
 				>
 					<Content
 						style={{
