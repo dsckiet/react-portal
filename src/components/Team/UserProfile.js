@@ -121,6 +121,7 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 				footer={null}
 				closable={false}
 				onCancel={() => openProfile(false)}
+				style={{ top: "20px" }}
 			>
 				<IoIosArrowRoundBack
 					onClick={() => openProfile(false)}
@@ -242,6 +243,22 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 											</Info>
 										</Col>
 									</Row>
+								</Col>
+							</Row>
+							<Divider style={{ color: "rgba(0,0,0,.25)" }}>
+								Bio
+							</Divider>
+							<Row
+								style={{
+									textAlign: "center",
+									marginRight: "auto !important",
+									marginLeft: "auto !important",
+									justifyContent: "center",
+									display: "flex"
+								}}
+							>
+								<Col span={24}>
+									{user.bio ? user.bio : "No Bio Available"}
 								</Col>
 							</Row>
 							<Divider style={{ color: "rgba(0,0,0,.25)" }}>
