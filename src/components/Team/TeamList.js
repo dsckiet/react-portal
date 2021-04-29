@@ -58,6 +58,7 @@ const TeamList = props => {
 	const [yearOptions, setYearOptions] = useState([]);
 	const [searchText, setSearchText] = useState("");
 	const [searchedColumn, setSearchedColumn] = useState("");
+	const [page, setPage] = useState(1);
 	const ref = useRef();
 
 	const { Option } = Select;
@@ -304,7 +305,8 @@ const TeamList = props => {
 		{
 			title: "#",
 			dataIndex: "key",
-			key: "key"
+			key: "key",
+			render: (value, item, index) => (page - 1) * 10 + index + 1
 		},
 		{
 			title: "Name",
@@ -328,7 +330,7 @@ const TeamList = props => {
 			dataIndex: "branch",
 			key: "branch",
 			filters: branchOptions,
-			onFilter: (value, record) => record.branch.indexOf(value) === 0
+			onFilter: (value, record) => record.branch === value
 		},
 		{
 			title: "Year",
@@ -653,6 +655,11 @@ const TeamList = props => {
 						columns={columns}
 						dataSource={data}
 						role={userData.role}
+						pagination={{
+							onChange(current) {
+								setPage(current);
+							}
+						}}
 					/>
 				</Card>
 			</div>

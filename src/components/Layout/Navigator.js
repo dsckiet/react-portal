@@ -200,6 +200,7 @@ const Navigator = props => {
 							/>
 
 							<Redirect from="/dashboard" to="/" />
+							<Redirect to="/" />
 						</Switch>
 					</Content>
 				</Layout>

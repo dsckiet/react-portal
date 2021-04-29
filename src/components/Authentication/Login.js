@@ -68,7 +68,13 @@ const Login = props => {
 
 	return (
 		<div style={{ height: "100vh", overflow: "hidden" }}>
-			<img src={logo} width={160} className="vidgyor-logo" alt="" />
+			<img
+				src={logo}
+				width={160}
+				height={27.23}
+				className="vidgyor-logo"
+				alt=""
+			/>
 			<Card title="Log in to your account" className="login-form-wrapper">
 				<Form
 					form={form}

@@ -40,7 +40,7 @@
 			property="og:description"
 			content="An efficient and scalable software solution to manage everything @dsckiet."
 		/>
-		<meta property="og:image" content="icon.png" />
+		<meta property="og:image" content="android-chrome-512x512.png" />
 		<meta property="og:image:type" content="image/png" />
 		<meta property="og:image:width" content="512" />
 		<meta property="og:image:height" content="512" />
@@ -52,8 +52,36 @@
 			property="twitter:description"
 			content="An efficient and scalable software solution to manage everything @dsckiet."
 		/>
-		<meta property="twitter:image" content="icon.png" />
-
+		<meta property="twitter:image" content="android-chrome-512x512.png" />
+		<script>
+			if ("serviceWorker" in navigator) {
+				window.addEventListener("load", function () {
+					navigator.serviceWorker
+						.register("service-worker.js")
+						.then(
+							function (registration) {
+								// Registration was successful
+								console.log(
+									"ServiceWorker registration successful with scope: ",
+									registration.scope
+								);
+							},
+							function (err) {
+								// registration failed :(
+								console.log(
+									"ServiceWorker registration failed: ",
+									err
+								);
+							}
+						)
+						.catch(function (err) {
+							console.log(err);
+						});
+				});
+			} else {
+				console.log("service worker is not supported");
+			}
+		</script>
 		<script>
 			console.log = console.warn = console.error = () => {};
 		</script>

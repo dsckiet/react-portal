@@ -455,7 +455,7 @@ const UpdateProfile = props => {
 					name="github"
 					rules={[
 						{
-							pattern: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+							pattern: /^@?(\S){1,40}$/,
 							message: "Please input valid handle"
 						}
 					]}
@@ -476,7 +476,7 @@ const UpdateProfile = props => {
 					name="twitter"
 					rules={[
 						{
-							pattern: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+							pattern: /^@?(\S){1,20}$/,
 							message: "Please input valid handle"
 						}
 					]}
@@ -497,7 +497,7 @@ const UpdateProfile = props => {
 					name="linkedin"
 					rules={[
 						{
-							pattern: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+							pattern: /^@?(\S){1,100}$/,
 							message: "Please input valid handle"
 						}
 					]}

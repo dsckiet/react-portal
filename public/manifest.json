@@ -1,13 +1,8 @@
 {
-  "short_name": "DSC KIET Portal",
-  "name": "An efficient and scalable software solution to manage everything @dsckiet",
-  "icons": [
-    {
-      "src": "favicon.ico",
-      "sizes": "32x32 16x16",
-      "type": "image/x-icon"
-    },
-    {
+	"short_name": "DSC KIET Portal",
+	"name": "Developer Student Clubs KIET | Portal",
+	"icons": [
+		{
 			"src": "/favicon-16x16.png",
 			"sizes": "16x16",
 			"type": "image/png"
@@ -17,19 +12,20 @@
 			"sizes": "32x32",
 			"type": "image/png"
 		},
-    {
-      "src": "/android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/android-chrome-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ],
-  "start_url": "/",
-  "display": "standalone",
-  "theme_color": "#0F9D58",
-  "background_color": "##F9F9F9"
+		{
+			"src": "/android-chrome-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "/android-chrome-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any maskable"
+		}
+	],
+	"start_url": ".",
+	"display": "standalone",
+	"theme_color": "#0F9D58",
+	"background_color": "#F9F9F9"
 }
