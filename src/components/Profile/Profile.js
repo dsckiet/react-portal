@@ -26,6 +26,7 @@ const Profile = () => {
 	const [refresh, setRefresh] = useState(false);
 	const Image = styled.img`
 		width: 120px;
+		height: 120px;
 		border-radius: 50%;
 		padding: 4px;
 		border: 2px solid #d5d5d5;

@@ -35,7 +35,8 @@ const ImageContainer = styled.div`
 `;
 
 const Image = styled.img`
-	width: 70%;
+	width: 120px;
+	height: 120px;
 	border-radius: 50%;
 	padding: 4px;
 	border: 2px solid #d5d5d5;

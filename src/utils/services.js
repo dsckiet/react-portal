@@ -30,7 +30,8 @@ import {
 	DELETE_TODO,
 	DELETE_ALL_TODO,
 	EDIT,
-	CHANGE_PASSWORD
+	CHANGE_PASSWORD,
+	GET_MY_GROUPS
 } from "./routes";
 
 const BASE_URL =
@@ -468,6 +469,20 @@ export const addCertificateService = async (data, id) => {
 		return response.data;
 	} catch (error) {
 		throw error;
+	}
+};
+
+/************************* PROGRESS SERVICES ****************************/
+export const getGroupsService = async id => {
+	setUserToken();
+	try {
+		const response = await axios.get(GET_MY_GROUPS);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
 	}
 };
 

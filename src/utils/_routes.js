@@ -7,8 +7,10 @@ import Profile from "../components/Profile/Profile";
 import {
 	AiOutlineAppstore,
 	AiOutlineSmile,
-	AiOutlineTeam
+	AiOutlineTeam,
+	AiOutlineUsergroupAdd
 } from "react-icons/ai";
+import ManageGroups from "../components/Groups/ManageGroups";
 
 let routes = [
 	{
@@ -61,6 +63,16 @@ let routes = [
 	// 	description: "Add certificates for Events",
 	// 	color: "#F4B400"
 	// },
+	{
+		path: "/groups",
+		exact: true,
+		component: ManageGroups,
+		name: "Groups",
+		key: "groups",
+		icon: AiOutlineUsergroupAdd,
+		description: "Manage Groups",
+		color: "#DB4437"
+	},
 	{
 		path: "/profile",
 		exact: true,

@@ -14,6 +14,7 @@ import ParticipantsList from "../Participants/ParticipantsList";
 import TeamList from "../Team/TeamList";
 import Profile from "../Profile/Profile";
 import { AiOutlineLeft, AiOutlineLock, AiOutlineRight } from "react-icons/ai";
+import ManageGroups from "../Groups/ManageGroups";
 
 const { Content, Sider } = Layout;
 
@@ -196,6 +197,12 @@ const Navigator = props => {
 								exact
 								path="/profile"
 								component={Profile}
+								data={Creds}
+							/>
+							<PrivateRoute
+								exact
+								path="/groups"
+								component={ManageGroups}
 								data={Creds}
 							/>
 
