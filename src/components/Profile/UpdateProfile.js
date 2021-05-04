@@ -447,7 +447,7 @@ const UpdateProfile = props => {
 				</Form.Item>
 
 				<Divider style={{ color: "rgba(0,0,0,.25)" }}>
-					Profile Links
+					Profile Handles
 				</Divider>
 
 				<Form.Item
