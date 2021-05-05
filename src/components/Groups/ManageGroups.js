@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { getGroupsService, getUsersService } from "../../utils/services";
 import PageTitle from "../Layout/PageTitle";
 import CreateGroup from "./CreateGroup";
@@ -22,10 +23,10 @@ const ManageGroups = ({ data }) => {
 					console.log(members);
 					setMembersData(members.data);
 				}
-				// const res = await getGroupsService();
-				// if (!res.error && res.message === "success") {
-				// 	setGroups(res.data);
-				// }
+				const res = await getGroupsService();
+				if (!res.error && res.message === "success") {
+					setGroups(res.data);
+				}
 			} catch (err) {
 				console.log(err);
 			}
@@ -47,7 +48,9 @@ const ManageGroups = ({ data }) => {
 			</Row>
 			<Row gutter={[16, 16]}>
 				<Col lg={4}>
-					<Card />
+					<Link to="/tasks">
+						<Card />
+					</Link>
 				</Col>
 			</Row>
 

@@ -15,6 +15,7 @@ import TeamList from "../Team/TeamList";
 import Profile from "../Profile/Profile";
 import { AiOutlineLeft, AiOutlineLock, AiOutlineRight } from "react-icons/ai";
 import ManageGroups from "../Groups/ManageGroups";
+import ManageTasks from "../Tasks/ManageTasks";
 
 const { Content, Sider } = Layout;
 
@@ -203,6 +204,12 @@ const Navigator = props => {
 								exact
 								path="/groups"
 								component={ManageGroups}
+								data={Creds}
+							/>
+							<PrivateRoute
+								exact
+								path="/tasks"
+								component={ManageTasks}
 								data={Creds}
 							/>
 
