@@ -6,12 +6,11 @@ import CreateGroup from "./CreateGroup";
 import { Row, Col, Button, Drawer, Card } from "antd";
 
 const ManageGroups = ({ data }) => {
-	const [groups, setGroups] = useState(null);
+	//const [groups, setGroups] = useState(null);
 	const [membersData, setMembersData] = useState(null);
 	const [show, setShow] = useState(false);
 
 	useEffect(() => {
-		console.log(data);
 		(async () => {
 			try {
 				let params = {
@@ -25,7 +24,7 @@ const ManageGroups = ({ data }) => {
 				}
 				const res = await getGroupsService();
 				if (!res.error && res.message === "success") {
-					setGroups(res.data);
+					//setGroups(res.data);
 				}
 			} catch (err) {
 				console.log(err);
