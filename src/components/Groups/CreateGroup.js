@@ -83,7 +83,6 @@ const CreateGroup = ({ members }) => {
 										selectedHeads={selectedHeads}
 										selectedMembers={selectedMembers}
 										handleSelect={handleSelect}
-										activeTab={activeTab}
 									/>
 								</Col>
 							))}

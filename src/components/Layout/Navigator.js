@@ -16,6 +16,7 @@ import Profile from "../Profile/Profile";
 import { AiOutlineLeft, AiOutlineLock, AiOutlineRight } from "react-icons/ai";
 import ManageGroups from "../Groups/ManageGroups";
 import ManageTasks from "../Tasks/ManageTasks";
+import Task from "../Tasks/Task";
 
 const { Content, Sider } = Layout;
 
@@ -208,8 +209,14 @@ const Navigator = props => {
 							/>
 							<PrivateRoute
 								exact
-								path="/tasks"
+								path="/mytasks"
 								component={ManageTasks}
+								data={Creds}
+							/>
+							<PrivateRoute
+								exact
+								path="/task"
+								component={Task}
 								data={Creds}
 							/>
 

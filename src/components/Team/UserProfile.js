@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Row, Col, Divider, Tag, Skeleton } from "antd";
+import { Modal, Row, Col, Divider, Tag, Skeleton, Avatar, Image } from "antd";
 import styled from "styled-components";
 import { MdEmail } from "react-icons/md";
 import {
@@ -30,22 +30,22 @@ import moment from "moment";
 // 	"Dec"
 // ];
 
-const ImageContainer = styled.div`
-	align-items: center;
-`;
+// const ImageContainer = styled.div`
+// 	align-items: center;
+// `;
 
-const Image = styled.img`
-	width: 120px;
-	height: 120px;
-	border-radius: 50%;
-	padding: 4px;
-	border: 2px solid #d5d5d5;
-	transition: 0.2s all ease-out;
-	&:hover {
-		transition: 0.2s all ease-in;
-		border: 4px solid #4285f4;
-	}
-`;
+// const Img = styled(Image)`
+// 	width: 120px;
+// 	height: 120px;
+// 	border-radius: 50%;
+// 	padding: 4px;
+// 	border: 2px solid #d5d5d5;
+// 	transition: 0.2s all ease-out;
+// 	&:hover {
+// 		transition: 0.2s all ease-in;
+// 		border: 4px solid #4285f4;
+// 	}
+// `;
 
 const NameContainer = styled.div`
 	padding-top: 10px;
@@ -133,12 +133,15 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 						<Wrapper>
 							<Row gutter={16}>
 								<Col span={10}>
-									<ImageContainer>
-										<Image
-											src={user.image}
-											alt="Profilepic"
-										/>
-									</ImageContainer>
+									<Avatar
+										size={120}
+										src={
+											<Image
+												src={user.image}
+												alt="Profilepic"
+											/>
+										}
+									/>
 								</Col>
 								<Col span={14}>
 									<NameContainer>

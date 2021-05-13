@@ -3,12 +3,21 @@ import { Link } from "react-router-dom";
 import { getGroupsService, getUsersService } from "../../utils/services";
 import PageTitle from "../Layout/PageTitle";
 import CreateGroup from "./CreateGroup";
-import { Row, Col, Button, Drawer, Card } from "antd";
+import { Row, Col, Button, Drawer } from "antd";
+import GroupInfoCard from "./GroupInfoCard";
 
 const ManageGroups = ({ data }) => {
 	//const [groups, setGroups] = useState(null);
 	const [membersData, setMembersData] = useState(null);
 	const [show, setShow] = useState(false);
+	const groupInfo = [
+		{
+			groupName: "Web Frontend"
+		},
+		{
+			groupName: "Web Backend"
+		}
+	];
 
 	useEffect(() => {
 		(async () => {
@@ -36,7 +45,7 @@ const ManageGroups = ({ data }) => {
 		<>
 			<PageTitle title="Groups" bgColor="#DB4437" />
 			<Row style={{ justifyContent: "space-between" }}>
-				<h2 style={{ fontWeight: 700 }}>Your Groups</h2>
+				<h3>Your Groups</h3>
 				<Button
 					onClick={() => {
 						setShow(!show);
@@ -46,11 +55,13 @@ const ManageGroups = ({ data }) => {
 				</Button>
 			</Row>
 			<Row gutter={[16, 16]}>
-				<Col lg={4}>
-					<Link to="/tasks">
-						<Card />
-					</Link>
-				</Col>
+				{groupInfo.map(info => (
+					<Col lg={6}>
+						<Link to="/mytasks">
+							<GroupInfoCard data={info} />
+						</Link>
+					</Col>
+				))}
 			</Row>
 
 			<Drawer

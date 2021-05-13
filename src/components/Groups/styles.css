@@ -71,3 +71,7 @@
 .member {
 	background-color: rgb(66, 133, 244) !important;
 }
+
+.ant-avatar > img {
+	border-radius: 50%;
+}

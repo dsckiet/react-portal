@@ -18,7 +18,6 @@ const PersonCard = ({
 	member,
 	selectedMembers,
 	handleSelect,
-	activeTab,
 	selectedHeads
 }) => {
 	const { Meta } = Card;
@@ -26,7 +25,7 @@ const PersonCard = ({
 	return (
 		<>
 			<Card
-				onClick={() => handleSelect(member._id)}
+				onClick={() => handleSelect && handleSelect(member._id)}
 				hoverable
 				rounded
 				bordered={false}
@@ -63,19 +62,18 @@ const PersonCard = ({
 
 				<div
 					className={
-						selectedHeads.length > 0 &&
-						selectedHeads.includes(member._id)
+						selectedHeads && selectedHeads.includes(member._id)
 							? "selected head"
-							: selectedMembers.length > 0 &&
+							: selectedMembers &&
 							  selectedMembers.includes(member._id)
 							? "selected member"
 							: "onHover"
 					}
 				>
 					<div>
-						{(selectedMembers.length > 0 &&
+						{(selectedMembers &&
 							selectedMembers.includes(member._id)) ||
-						(selectedHeads.length > 0 &&
+						(selectedMembers &&
 							selectedHeads.includes(member._id)) ? (
 							<HiBadgeCheck
 								style={{
@@ -93,9 +91,9 @@ const PersonCard = ({
 						)}
 					</div>
 					<h2>
-						{(selectedHeads.length > 0 &&
+						{(selectedMembers &&
 							selectedHeads.includes(member._id)) ||
-						(selectedMembers.length > 0 &&
+						(selectedMembers &&
 							selectedMembers.includes(member._id))
 							? "Selected !"
 							: "Select"}
