@@ -1,0 +1,45 @@
+.comment-section-container {
+	border: 1px solid rgba(100, 100, 100, 0.2);
+	border-radius: 3px;
+}
+
+.comment-container {
+	margin: 0.5rem;
+	padding: 0rem 1rem;
+	border-radius: 3px;
+}
+
+.reply-container {
+	margin: 0.5rem;
+	padding: 0rem 1rem 0rem 4.25rem;
+	border-radius: 3px;
+}
+
+.comment-lead {
+	border: 1px solid rgb(219, 68, 55, 0.2);
+	background-color: rgb(269, 118, 105, 0.15) !important;
+}
+
+.comment-head {
+	border: 1px solid rgb(15, 157, 88, 0.2);
+	background-color: rgb(65, 207, 138, 0.15) !important;
+}
+
+.comment-member {
+	border: 1px solid rgb(66, 133, 244, 0.2);
+	background-color: rgb(116, 183, 294, 0.15) !important;
+}
+
+.reply-button {
+	background-color: rgb(125, 136, 131, 0.7) !important;
+	color: #ffffff !important;
+	padding: 2px 8px;
+	border-radius: 12px;
+	display: flex;
+	align-items: center;
+	font-size: 10px !important;
+}
+
+.reply-button:hover {
+	background-color: rgb(125, 136, 131) !important;
+}

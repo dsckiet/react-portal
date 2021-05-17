@@ -12,7 +12,7 @@ const ProgressModal = ({ visible, handleShow }) => {
 				footer={null}
 				onCancel={handleShow}
 				centered
-				width={1000}
+				width={900}
 			>
 				<h3>
 					Mayank Shakya <Tag color="red">Lead</Tag>
