@@ -9,11 +9,11 @@ import {
 	Select,
 	Input,
 	Button,
-	Space,
-	Col,
-	Row,
-	Avatar,
-	Image
+	Space
+	// Col,
+	// Row,
+	// Avatar,
+	// Image
 } from "antd";
 import "./style.css";
 import {
