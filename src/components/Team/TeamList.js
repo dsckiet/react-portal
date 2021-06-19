@@ -9,7 +9,11 @@ import {
 	Select,
 	Input,
 	Button,
-	Space
+	Space,
+	Col,
+	Row,
+	Avatar,
+	Image
 } from "antd";
 import "./style.css";
 import {
@@ -669,6 +673,66 @@ const TeamList = props => {
 				uid={uid}
 			/>
 		</>
+		// <>
+		// 	<PageTitle title="Team" bgColor="#0F9D58" />
+		// 	<Row gutter={(24, 24)}>
+		// 		{users.map(user => (
+		// 			<Col span={6}>
+		// 				<Card>
+		// 					<Row style={{ justifyContent: "center" }}>
+		// 						<Avatar
+		// 							size={80}
+		// 							src={
+		// 								<Image
+		// 									src={user.image}
+		// 									alt="Profilepic"
+		// 								/>
+		// 							}
+		// 						/>
+		// 					</Row>
+		// 					<Row
+		// 						style={{
+		// 							justifyContent: "center",
+		// 							paddingTop: ".5rem"
+		// 						}}
+		// 					>
+		// 						<h3 style={{ fontSize: "18px" }}>
+		// 							{user.name}
+		// 						</h3>
+		// 					</Row>
+		// 					<Row style={{ justifyContent: "center" }}>
+		// 						<Col
+		// 							span={6}
+		// 							style={{
+		// 								justifyContent: "center",
+		// 								display: "flex"
+		// 							}}
+		// 						>
+		// 							<h3>{user.branch ? user.branch : "N/A"}</h3>
+		// 						</Col>
+		// 						<Col
+		// 							span={8}
+		// 							style={{
+		// 								justifyContent: "center",
+		// 								display: "flex"
+		// 							}}
+		// 						>
+		// 							<h3>{user.year ? user.year : "N/A"}</h3>
+		// 						</Col>
+		// 					</Row>
+		// 					<Row style={{ justifyContent: "center" }}>
+		// 						<h3>{user.designation}</h3>
+		// 					</Row>
+		// 					<Row style={{ justifyContent: "center" }}>
+		// 						<h3>
+		// 							{user.bio ? user.bio : "no bio available"}
+		// 						</h3>
+		// 					</Row>
+		// 				</Card>
+		// 			</Col>
+		// 		))}
+		// 	</Row>
+		// </>
 	);
 };
 

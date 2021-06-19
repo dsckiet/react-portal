@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Comment, Avatar, Form, Input, Button, Row, Col } from "antd";
 import { GoReply } from "react-icons/go";
 import { AiOutlineClose } from "react-icons/ai";
@@ -8,6 +8,8 @@ const { TextArea } = Input;
 const CommentSection = () => {
 	const [count, setCount] = useState(4);
 	const [replyingTo, setReplyingTo] = useState(null);
+	const myRef = useRef();
+	const formRef = useRef();
 	const [comments, setComments] = useState([
 		{
 			id: 1,
@@ -41,8 +43,10 @@ const CommentSection = () => {
 		}
 	]);
 	const [form] = Form.useForm();
-	window.scrollTo(0, document.body.height);
+
 	const handleReply = id => {
+		myRef.current.scrollIntoView({ behavior: "smooth" });
+		formRef.current.focus();
 		setReplyingTo(id);
 	};
 
@@ -209,6 +213,7 @@ const CommentSection = () => {
 						) : null}
 						<Form.Item name="comment">
 							<TextArea
+								ref={formRef}
 								type="text"
 								placeholder="Enter your comment ..."
 								rows={3}
@@ -216,6 +221,7 @@ const CommentSection = () => {
 						</Form.Item>
 						<Form.Item>
 							<Button
+								ref={myRef}
 								htmlType="submit"
 								// loading={submitting}
 								type="primary"
