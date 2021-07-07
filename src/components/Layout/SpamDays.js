@@ -36,14 +36,17 @@ const SpamDays = () => {
 			let bdayThisYear = new Date(
 				today.getFullYear(),
 				bday.getMonth(),
-				bday.getDate() + 1
+				bday.getDate()
 			);
-			if (today.getTime() > bdayThisYear.getTime()) {
+			today.setHours(0, 0, 0, 0);
+			if (today > bdayThisYear) {
 				bdayThisYear.setFullYear(today.getFullYear() + 1);
 			}
-			let diff = bdayThisYear.getTime() - today.getTime();
+			let diff = bdayThisYear - today;
 			days = Math.round(diff / 8.64e7);
 		}
+
+		console.log(days, " ooo");
 
 		if (days <= 30) {
 			return { ...obj, daysLeft: days };
@@ -63,6 +66,8 @@ const SpamDays = () => {
 				data.forEach(d => {
 					if (getBday(d)) arr.push(getBday(d));
 				});
+
+				console.log(arr);
 
 				setUsers(arr);
 
