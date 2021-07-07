@@ -107,8 +107,6 @@ const TeamList = props => {
 				setYearOptions(arrayYears);
 				console.log(arrayBranches, arrayYears);
 
-				//setUsers(data.filter(checkLoggedInUser));
-
 				setIsLoading(false);
 			} catch (err) {
 				_notification("warning", "Error", err.message);
@@ -116,10 +114,6 @@ const TeamList = props => {
 		})();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [refresh]);
-
-	// const checkLoggedInUser = user => {
-	// 	if (user._id !== userData.id) return user;
-	// };
 
 	const getColumnSearchProps = dataIndex => ({
 		filterDropdown: ({
