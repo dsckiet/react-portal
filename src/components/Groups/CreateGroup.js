@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { Row, Col, Form, Input, Button, Tabs } from "antd";
 import PersonCard from "./PersonCard";
 import "./styles.css";
+import { addGroupService } from "../../utils/services";
+import { _notification } from "../../utils/_helpers";
 
-const CreateGroup = ({ members }) => {
+const CreateGroup = ({ members, setShow, setRefreshGroups, refreshGroups }) => {
 	const [activeTab, setActiveTab] = useState("head");
 	const [form] = Form.useForm();
 	const { TabPane } = Tabs;
@@ -31,8 +33,26 @@ const CreateGroup = ({ members }) => {
 		}
 	};
 
-	const handleFinish = () => {
-		console.log("submit?");
+	const handleFinish = async val => {
+		let groupData = {
+			name: val.name,
+			members: selectedMembers,
+			heads: selectedHeads
+		};
+		try {
+			const { message, error } = await addGroupService(groupData);
+			if (!error && message === "success") {
+				_notification(
+					"success",
+					"Success",
+					"Group created successfully!"
+				);
+			}
+			setRefreshGroups(!refreshGroups);
+			setShow(false);
+		} catch (err) {
+			_notification("error", "Error", err.message);
+		}
 	};
 
 	const handleTabChange = key => {

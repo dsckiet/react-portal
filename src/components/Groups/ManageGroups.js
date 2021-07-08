@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { getGroupsService, getUsersService } from "../../utils/services";
+import { useHistory } from "react-router-dom";
+import {
+	getGroupsService,
+	getUsersService,
+	getRole
+} from "../../utils/services";
 import PageTitle from "../Layout/PageTitle";
 import CreateGroup from "./CreateGroup";
-import { Row, Col, Button, Drawer } from "antd";
+import { Row, Col, Button, Drawer, Tabs } from "antd";
 import GroupInfoCard from "./GroupInfoCard";
 
-const ManageGroups = ({ data }) => {
-	//const [groups, setGroups] = useState(null);
+const ManageGroups = () => {
+	const { TabPane } = Tabs;
+	const history = useHistory();
+	const [groups, setGroups] = useState(null);
+	const [userData] = useState(getRole());
 	const [membersData, setMembersData] = useState(null);
 	const [show, setShow] = useState(false);
-	const groupInfo = [
-		{
-			groupName: "Web Frontend"
-		},
-		{
-			groupName: "Web Backend"
-		}
-	];
+	const [refreshGroups, setRefreshGroups] = useState(false);
 
 	useEffect(() => {
 		(async () => {
@@ -26,43 +26,236 @@ const ManageGroups = ({ data }) => {
 					sortBy: "name"
 				};
 				const members = await getUsersService(params);
-				console.log(members, "hhhh");
 				if (!members.error && members.message === "success") {
-					console.log(members);
 					setMembersData(members.data);
 				}
-				const res = await getGroupsService();
+				const res = await getGroupsService(userData);
 				if (!res.error && res.message === "success") {
-					//setGroups(res.data);
+					setGroups(res.data[0]);
 				}
 			} catch (err) {
 				console.log(err);
 			}
 		})();
-	}, []);
+	}, [userData, refreshGroups]);
+
+	const operations = (
+		<Button
+			onClick={() => {
+				setShow(!show);
+			}}
+		>
+			Create Group
+		</Button>
+	);
+
+	const colors = [
+		{
+			primary: "rgb(219,68,55)",
+			secondary: "rgb(219,68,55,.1)",
+			tertiary: "#fde3cf"
+		},
+		{
+			primary: "rgb(15,157,88)",
+			secondary: "rgb(15,157,88,.1)",
+			tertiary: "#CFFDD6"
+		},
+		{
+			primary: "rgb(244,180,0)",
+			secondary: "rgb(244,180,0,.1)",
+			tertiary: "#FDF6CF"
+		},
+		{
+			primary: "rgb(66,133,244)",
+			secondary: "rgb(66,133,244,.1)",
+			tertiary: "#CFEAFD"
+		}
+	];
 
 	return (
 		<>
 			<PageTitle title="Groups" bgColor="#DB4437" />
-			<Row style={{ justifyContent: "space-between" }}>
-				<h3>Your Groups</h3>
-				<Button
-					onClick={() => {
-						setShow(!show);
-					}}
-				>
-					Create Group
-				</Button>
-			</Row>
-			<Row gutter={[16, 16]}>
-				{groupInfo.map(info => (
-					<Col lg={6}>
-						<Link to="/mytasks">
-							<GroupInfoCard data={info} />
-						</Link>
-					</Col>
-				))}
-			</Row>
+			{userData.role === "lead" ? (
+				<>
+					<Tabs
+						defaultActiveKey="all"
+						type="tabs"
+						tabBarExtraContent={operations}
+					>
+						<TabPane tab="All Groups" key="all">
+							<Row gutter={[16, 16]}>
+								{groups &&
+									groups[`All Groups`].map((info, idx) => (
+										<Col lg={6} key={idx}>
+											<GroupInfoCard
+												refreshGroups={refreshGroups}
+												setRefreshGroups={
+													setRefreshGroups
+												}
+												onClick={() =>
+													history.push("/mytasks")
+												}
+												data={info}
+												cardConfig={
+													colors[
+														Math.floor(
+															Math.random() * 4
+														)
+													]
+												}
+											/>
+										</Col>
+									))}
+							</Row>
+						</TabPane>
+						<TabPane tab="My Groups" key="my">
+							<>
+								<>
+									{groups &&
+										groups[`Head Groups`].length !== 0 && (
+											<Row>
+												<h3>Head Groups</h3>
+											</Row>
+										)}
+									<Row gutter={[16, 16]}>
+										{groups &&
+											groups[`Head Groups`].map(
+												(info, idx) => (
+													<Col lg={6} key={idx}>
+														<GroupInfoCard
+															refreshGroups={
+																refreshGroups
+															}
+															setRefreshGroups={
+																setRefreshGroups
+															}
+															onClick={() =>
+																history.push(
+																	"/mytasks/"
+																)
+															}
+															data={info}
+															cardConfig={
+																colors[
+																	Math.floor(
+																		Math.random() *
+																			4
+																	)
+																]
+															}
+														/>
+													</Col>
+												)
+											)}
+									</Row>
+								</>
+								<>
+									{groups &&
+										groups[`Member Groups`].length !==
+											0 && (
+											<Row style={{ marginTop: "16px" }}>
+												<h3>Member Groups</h3>
+											</Row>
+										)}
+
+									<Row gutter={[16, 16]}>
+										{groups &&
+											groups[`Member Groups`].map(
+												(info, idx) => (
+													<Col lg={6} key={idx}>
+														<GroupInfoCard
+															refreshGroups={
+																refreshGroups
+															}
+															setRefreshGroups={
+																setRefreshGroups
+															}
+															onClick={() =>
+																history.push(
+																	"/mytasks/"
+																)
+															}
+															data={info}
+															cardConfig={
+																colors[
+																	Math.floor(
+																		Math.random() *
+																			4
+																	)
+																]
+															}
+														/>
+													</Col>
+												)
+											)}
+									</Row>
+								</>
+							</>
+						</TabPane>
+					</Tabs>
+				</>
+			) : (
+				<>
+					<>
+						{groups && groups[`Head Groups`].length !== 0 && (
+							<Row>
+								<h3>Head Groups</h3>
+							</Row>
+						)}
+						<Row gutter={[16, 16]}>
+							{groups &&
+								groups[`Head Groups`].map((info, idx) => (
+									<Col lg={6} key={idx}>
+										<GroupInfoCard
+											refreshGroups={refreshGroups}
+											setRefreshGroups={setRefreshGroups}
+											onClick={() =>
+												history.push("/mytasks/")
+											}
+											data={info}
+											cardConfig={
+												colors[
+													Math.floor(
+														Math.random() * 4
+													)
+												]
+											}
+										/>
+									</Col>
+								))}
+						</Row>
+					</>
+					<>
+						{groups && groups[`Member Groups`].length !== 0 && (
+							<Row style={{ marginTop: "16px" }}>
+								<h3>Member Groups</h3>
+							</Row>
+						)}
+						<Row gutter={[16, 16]}>
+							{groups &&
+								groups[`Member Groups`].map((info, idx) => (
+									<Col lg={6} key={idx}>
+										<GroupInfoCard
+											refreshGroups={refreshGroups}
+											setRefreshGroups={setRefreshGroups}
+											onClick={() =>
+												history.push("/mytasks/")
+											}
+											data={info}
+											cardConfig={
+												colors[
+													Math.floor(
+														Math.random() * 4
+													)
+												]
+											}
+										/>
+									</Col>
+								))}
+						</Row>
+					</>
+				</>
+			)}
 
 			<Drawer
 				title="Create A New Group"
@@ -73,7 +266,12 @@ const ManageGroups = ({ data }) => {
 				onClose={() => setShow(false)}
 				visible={show}
 			>
-				<CreateGroup members={membersData} />
+				<CreateGroup
+					members={membersData}
+					setShow={setShow}
+					setRefreshGroups={setRefreshGroups}
+					refreshGroups={refreshGroups}
+				/>
 			</Drawer>
 		</>
 	);

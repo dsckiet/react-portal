@@ -31,7 +31,9 @@ import {
 	DELETE_ALL_TODO,
 	EDIT,
 	CHANGE_PASSWORD,
-	GET_MY_GROUPS
+	GET_GROUPS,
+	ADD_GROUP,
+	DELETE_GROUP
 } from "./routes";
 
 const BASE_URL =
@@ -473,10 +475,10 @@ export const addCertificateService = async (data, id) => {
 };
 
 /************************* PROGRESS SERVICES ****************************/
-export const getGroupsService = async id => {
+export const getGroupsService = async () => {
 	setUserToken();
 	try {
-		const response = await axios.get(GET_MY_GROUPS);
+		const response = await axios.get(GET_GROUPS);
 		if (response.status === 200 && response.data.error === false) {
 			return response.data;
 		} else return response.data;
@@ -486,6 +488,31 @@ export const getGroupsService = async id => {
 	}
 };
 
+export const addGroupService = async data => {
+	setUserToken();
+	try {
+		const response = await axios.post(ADD_GROUP, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const deleteGroupService = async id => {
+	setUserToken();
+	try {
+		const response = await axios.delete(`${DELETE_GROUP}/${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
 /******************Helper SERVICES********************/
 export const getRole = () => {
 	let AUTH_TOKEN = JSON.parse(localStorage.getItem("token"));

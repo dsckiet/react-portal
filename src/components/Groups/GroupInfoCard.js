@@ -1,27 +1,61 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Avatar, Tooltip, Row } from "antd";
 import { FaCrown } from "react-icons/fa";
+import { IoIosCloseCircle } from "react-icons/io";
+import { deleteGroupService, getRole } from "../../utils/services";
+import { _notification } from "../../utils/_helpers";
+//import { useHistory } from "react-router-dom";
 
-const GroupInfoCard = ({ data }) => {
+const GroupInfoCard = ({
+	data,
+	cardConfig,
+	setRefreshGroups,
+	refreshGroups
+}) => {
+	//const history = useHistory();
+	const [userData] = useState(getRole());
+	const deleteGroup = async (e, id) => {
+		try {
+			const res = await deleteGroupService(id);
+			if (!res.error && res.message === "success") {
+				setRefreshGroups(!refreshGroups);
+				_notification("success", "Success", "Successfully Deleted!");
+			}
+		} catch (err) {
+			_notification("error", "Error", err.message);
+		}
+		e.stopPropagation();
+	};
+
 	return (
 		<>
 			<Card hoverable>
 				<div
 					style={{
-						backgroundColor: "rgb(219,68,55)",
+						backgroundColor: cardConfig && cardConfig.primary,
 						margin: "-16px -16px 16px -16px",
 						padding: "16px",
 						fontSize: "28px",
 						fontWeight: "400",
-						color: "white"
+						color: "white",
+						display: "flex",
+						justifyContent: "space-between",
+						alignItems: "center"
 					}}
 				>
-					{data.groupName}
+					{data.name}
+					{userData.role === "lead" && (
+						<IoIosCloseCircle
+							onClick={e => {
+								deleteGroup(e, data._id);
+							}}
+						/>
+					)}
 				</div>
 				<div
 					style={{
 						overflow: "auto",
-						backgroundColor: "rgb(219,68,55,.1)",
+						backgroundColor: cardConfig && cardConfig.secondary,
 						margin: "-16px",
 						padding: "16px"
 					}}
@@ -37,8 +71,8 @@ const GroupInfoCard = ({ data }) => {
 						<Avatar.Group
 							maxCount={4}
 							maxStyle={{
-								color: "#f56a00",
-								backgroundColor: "#fde3cf"
+								color: cardConfig.primary,
+								backgroundColor: cardConfig.tertiary
 							}}
 						>
 							<Tooltip title="User Name" placement="top">
@@ -51,7 +85,7 @@ const GroupInfoCard = ({ data }) => {
 						<FaCrown
 							style={{
 								fontSize: "18px",
-								color: "rgb(219,68,55)"
+								color: cardConfig.primary
 							}}
 						/>
 					</Row>
@@ -60,8 +94,8 @@ const GroupInfoCard = ({ data }) => {
 						<Avatar.Group
 							maxCount={4}
 							maxStyle={{
-								color: "#f56a00",
-								backgroundColor: "#fde3cf"
+								color: cardConfig.primary,
+								backgroundColor: cardConfig.tertiary
 							}}
 						>
 							<Tooltip title="User Name" placement="top">

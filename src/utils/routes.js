@@ -56,4 +56,6 @@ export const PREVIEW_CERTIFICATE = "/events/certificate/preview"; // POST
 export const ADD_CERTIFICATE = "/events/certificate"; // POST
 
 /** Progress Module **/
-export const GET_MY_GROUPS = "/group/my";
+export const GET_GROUPS = "/groups/";
+export const ADD_GROUP = "/groups";
+export const DELETE_GROUP = "/groups";
