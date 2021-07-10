@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import { Card, Avatar, Tooltip, Row } from "antd";
+import { Card, Avatar, Tooltip, Row, Popconfirm } from "antd";
 import { FaCrown } from "react-icons/fa";
 import { IoIosCloseCircle } from "react-icons/io";
 import { deleteGroupService, getRole } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
-//import { useHistory } from "react-router-dom";
 
 const GroupInfoCard = ({
 	data,
 	cardConfig,
 	setRefreshGroups,
-	refreshGroups
+	refreshGroups,
+	onClick,
+	memberDetails
 }) => {
-	//const history = useHistory();
 	const [userData] = useState(getRole());
 	const deleteGroup = async (e, id) => {
+		e.stopPropagation();
 		try {
 			const res = await deleteGroupService(id);
 			if (!res.error && res.message === "success") {
@@ -24,12 +25,11 @@ const GroupInfoCard = ({
 		} catch (err) {
 			_notification("error", "Error", err.message);
 		}
-		e.stopPropagation();
 	};
 
 	return (
 		<>
-			<Card hoverable>
+			<Card hoverable onClick={onClick}>
 				<div
 					style={{
 						backgroundColor: cardConfig && cardConfig.primary,
@@ -45,11 +45,18 @@ const GroupInfoCard = ({
 				>
 					{data.name}
 					{userData.role === "lead" && (
-						<IoIosCloseCircle
-							onClick={e => {
+						<Popconfirm
+							onClick={e => e.stopPropagation()}
+							okText="Yes"
+							cancelText="No"
+							title="Are you sure to delete this group?"
+							onConfirm={e => {
 								deleteGroup(e, data._id);
 							}}
-						/>
+							onCancel={e => e.stopPropagation()}
+						>
+							<IoIosCloseCircle />
+						</Popconfirm>
 					)}
 				</div>
 				<div
@@ -75,12 +82,15 @@ const GroupInfoCard = ({
 								backgroundColor: cardConfig.tertiary
 							}}
 						>
-							<Tooltip title="User Name" placement="top">
-								<Avatar src="https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg" />
-							</Tooltip>
-							<Tooltip title="User Name" placement="top">
-								<Avatar src="https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg" />
-							</Tooltip>
+							{memberDetails.heads.map((head, id) => (
+								<Tooltip
+									title="User Name"
+									placement="top"
+									key={id}
+								>
+									<Avatar src={head.image} />
+								</Tooltip>
+							))}
 						</Avatar.Group>
 						<FaCrown
 							style={{
@@ -98,21 +108,15 @@ const GroupInfoCard = ({
 								backgroundColor: cardConfig.tertiary
 							}}
 						>
-							<Tooltip title="User Name" placement="top">
-								<Avatar src="https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg" />
-							</Tooltip>
-							<Tooltip title="User Name" placement="top">
-								<Avatar src="https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg" />
-							</Tooltip>
-							<Tooltip title="User Name" placement="top">
-								<Avatar src="https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg" />
-							</Tooltip>
-							<Tooltip title="User Name" placement="top">
-								<Avatar src="https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg" />
-							</Tooltip>
-							<Tooltip title="User Name" placement="top">
-								<Avatar src="https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg" />
-							</Tooltip>
+							{memberDetails.members.map((mem, id) => (
+								<Tooltip
+									title="User Name"
+									placement="top"
+									key={id}
+								>
+									<Avatar src={mem.image} />
+								</Tooltip>
+							))}
 						</Avatar.Group>
 					</Row>
 				</div>

@@ -72,6 +72,47 @@ const ManageGroups = () => {
 		}
 	];
 
+	const getInfoCardProps = info => {
+		return {
+			refreshGroups: refreshGroups,
+			setRefreshGroups: setRefreshGroups,
+			cardConfig: colors[Math.floor(Math.random() * 4)],
+			memberDetails: getMembers(info),
+			data: info,
+			onClick: () =>
+				history.push({
+					pathname: `/mytasks/${info._id}`,
+					state: {
+						memberDetails: getMembers(info)
+					}
+				})
+		};
+	};
+
+	const getMembers = info => {
+		let heads = info.heads.map(head => {
+			let data;
+			membersData.forEach(member => {
+				if (member._id === head) {
+					data = member;
+				}
+			});
+			return data;
+		});
+
+		let members = info.members.map(mem => {
+			let data;
+			membersData.forEach(member => {
+				if (member._id === mem) {
+					data = member;
+				}
+			});
+			return data;
+		});
+
+		return { heads: heads, members: members };
+	};
+
 	return (
 		<>
 			<PageTitle title="Groups" bgColor="#DB4437" />
@@ -88,21 +129,7 @@ const ManageGroups = () => {
 									groups[`All Groups`].map((info, idx) => (
 										<Col lg={6} key={idx}>
 											<GroupInfoCard
-												refreshGroups={refreshGroups}
-												setRefreshGroups={
-													setRefreshGroups
-												}
-												onClick={() =>
-													history.push("/mytasks")
-												}
-												data={info}
-												cardConfig={
-													colors[
-														Math.floor(
-															Math.random() * 4
-														)
-													]
-												}
+												{...getInfoCardProps(info)}
 											/>
 										</Col>
 									))}
@@ -123,26 +150,9 @@ const ManageGroups = () => {
 												(info, idx) => (
 													<Col lg={6} key={idx}>
 														<GroupInfoCard
-															refreshGroups={
-																refreshGroups
-															}
-															setRefreshGroups={
-																setRefreshGroups
-															}
-															onClick={() =>
-																history.push(
-																	"/mytasks/"
-																)
-															}
-															data={info}
-															cardConfig={
-																colors[
-																	Math.floor(
-																		Math.random() *
-																			4
-																	)
-																]
-															}
+															{...getInfoCardProps(
+																info
+															)}
 														/>
 													</Col>
 												)
@@ -164,26 +174,9 @@ const ManageGroups = () => {
 												(info, idx) => (
 													<Col lg={6} key={idx}>
 														<GroupInfoCard
-															refreshGroups={
-																refreshGroups
-															}
-															setRefreshGroups={
-																setRefreshGroups
-															}
-															onClick={() =>
-																history.push(
-																	"/mytasks/"
-																)
-															}
-															data={info}
-															cardConfig={
-																colors[
-																	Math.floor(
-																		Math.random() *
-																			4
-																	)
-																]
-															}
+															{...getInfoCardProps(
+																info
+															)}
 														/>
 													</Col>
 												)
@@ -207,19 +200,7 @@ const ManageGroups = () => {
 								groups[`Head Groups`].map((info, idx) => (
 									<Col lg={6} key={idx}>
 										<GroupInfoCard
-											refreshGroups={refreshGroups}
-											setRefreshGroups={setRefreshGroups}
-											onClick={() =>
-												history.push("/mytasks/")
-											}
-											data={info}
-											cardConfig={
-												colors[
-													Math.floor(
-														Math.random() * 4
-													)
-												]
-											}
+											{...getInfoCardProps(info)}
 										/>
 									</Col>
 								))}
@@ -236,19 +217,7 @@ const ManageGroups = () => {
 								groups[`Member Groups`].map((info, idx) => (
 									<Col lg={6} key={idx}>
 										<GroupInfoCard
-											refreshGroups={refreshGroups}
-											setRefreshGroups={setRefreshGroups}
-											onClick={() =>
-												history.push("/mytasks/")
-											}
-											data={info}
-											cardConfig={
-												colors[
-													Math.floor(
-														Math.random() * 4
-													)
-												]
-											}
+											{...getInfoCardProps(info)}
 										/>
 									</Col>
 								))}

@@ -85,7 +85,7 @@ const Navigator = props => {
 						mode="inline"
 						defaultSelectedKeys={"dashboard"}
 					>
-						{routes.map((route, idx) => {
+						{routes.map(route => {
 							if (
 								Creds.role === "member" &&
 								route.key === "participants"
@@ -209,7 +209,7 @@ const Navigator = props => {
 							/>
 							<PrivateRoute
 								exact
-								path="/mytasks"
+								path="/mytasks/:id"
 								component={ManageTasks}
 								data={Creds}
 							/>

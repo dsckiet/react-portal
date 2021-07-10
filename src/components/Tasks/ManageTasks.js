@@ -1,25 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import PageTitle from "../Layout/PageTitle";
 import MemberInfoCard from "./MemberInfoCard";
 import { Row, Col, Button } from "antd";
 import TaskInfoCard from "./TaskInfoCard";
-const ManageTasks = () => {
-	const data = [
-		{
-			name: "Mayank Shakya",
-			image:
-				"https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg",
-			role: "Lead",
-			type: "head"
-		},
-		{
-			name: "Mayank Shakya",
-			image:
-				"https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg",
-			role: "Lead"
-		}
-	];
+const ManageTasks = props => {
+	//const { id } = props.match.params;
+	const history = useHistory();
+	const { memberDetails } = history.location.state;
+
 	const taskData = [
 		{
 			taskName: "Task 1",
@@ -39,8 +28,14 @@ const ManageTasks = () => {
 			<Row gutter={[16, 16]}>
 				<Col span={8}>
 					<PageTitle title="Group Name" bgColor="#DB4437" />
-					{data.map(memberInfo => (
-						<MemberInfoCard data={memberInfo} />
+					{memberDetails.heads.map((memberInfo, idx) => (
+						<MemberInfoCard
+							key={idx}
+							data={{ ...memberInfo, type: "head" }}
+						/>
+					))}
+					{memberDetails.members.map((memberInfo, idx) => (
+						<MemberInfoCard data={memberInfo} key={idx} />
 					))}
 				</Col>
 				<Col span={16}>
@@ -56,8 +51,8 @@ const ManageTasks = () => {
 						<Button>Create Task</Button>
 					</Row>
 					<Row gutter={[4, 4]} style={{ marginBottom: "24px" }}>
-						{taskData.map(task => (
-							<Col span={8}>
+						{taskData.map((task, id) => (
+							<Col span={8} key={id}>
 								<Link to="/task">
 									<TaskInfoCard data={task} />
 								</Link>
@@ -67,8 +62,8 @@ const ManageTasks = () => {
 
 					<h3 style={{ paddingBottom: "16px" }}>Assigned Tasks</h3>
 					<Row gutter={[4, 4]}>
-						{taskData.map(task => (
-							<Col span={8}>
+						{taskData.map((task, id) => (
+							<Col span={8} key={id}>
 								<Link to="/task">
 									<TaskInfoCard data={task} />
 								</Link>

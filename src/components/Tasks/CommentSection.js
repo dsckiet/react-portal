@@ -15,8 +15,7 @@ const CommentSection = () => {
 			id: 1,
 			role: "head",
 			author: "Mayank Shakya",
-			image:
-				"https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg",
+			image: "https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg",
 			comment:
 				"Tej kaam kro bhut dheere chal rha sab. Portal may tak khtm krna h :)",
 			replies: [
@@ -24,8 +23,7 @@ const CommentSection = () => {
 					id: 2,
 					role: "member",
 					author: "Mayank Shakya",
-					image:
-						"https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg",
+					image: "https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg",
 					comment:
 						"Tej kaam kro bhut dheere chal rha sab. Portal may tak khtm krna h :)"
 				}
@@ -35,8 +33,7 @@ const CommentSection = () => {
 			id: 3,
 			role: "lead",
 			author: "Mayank Shakya",
-			image:
-				"https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg",
+			image: "https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg",
 			comment:
 				"Tej kaam kro bhut dheere chal rha sab. Portal may tak khtm krna h :)",
 			replies: []
@@ -61,8 +58,7 @@ const CommentSection = () => {
 							id: count,
 							role: "lead",
 							author: "Mayank Shakya",
-							image:
-								"https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg",
+							image: "https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg",
 							comment: values.comment
 						}
 					];
@@ -77,8 +73,7 @@ const CommentSection = () => {
 					id: count,
 					role: "lead",
 					author: "Mayank Shakya",
-					image:
-						"https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg",
+					image: "https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg",
 					comment: values.comment,
 					replies: []
 				}
@@ -89,9 +84,10 @@ const CommentSection = () => {
 	};
 	return (
 		<div className="comment-section-container">
-			{comments.map(comment => (
+			{comments.map((comment, id) => (
 				<>
 					<Comment
+						key={id}
 						className={`comment-container ${
 							comment.role === "lead"
 								? "comment-lead"
@@ -116,8 +112,9 @@ const CommentSection = () => {
 						content={<p>{comment.comment}</p>}
 					/>
 					{comment.replies.length > 0
-						? comment.replies.map(reply => (
+						? comment.replies.map((reply, id) => (
 								<Comment
+									key={id}
 									className={`reply-container ${
 										reply.role === "lead"
 											? "comment-lead"
