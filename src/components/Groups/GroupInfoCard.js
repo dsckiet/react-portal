@@ -84,7 +84,7 @@ const GroupInfoCard = ({
 						>
 							{memberDetails.heads.map((head, id) => (
 								<Tooltip
-									title="User Name"
+									title={head.name}
 									placement="top"
 									key={id}
 								>
@@ -110,7 +110,7 @@ const GroupInfoCard = ({
 						>
 							{memberDetails.members.map((mem, id) => (
 								<Tooltip
-									title="User Name"
+									title={mem.name}
 									placement="top"
 									key={id}
 								>

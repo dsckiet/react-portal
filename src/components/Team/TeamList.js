@@ -105,7 +105,6 @@ const TeamList = props => {
 				});
 				setBranchOptions(arrayBranches);
 				setYearOptions(arrayYears);
-				console.log(arrayBranches, arrayYears);
 
 				setIsLoading(false);
 			} catch (err) {

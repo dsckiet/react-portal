@@ -1,14 +1,105 @@
-import React from "react";
-import { Card, Row, Tag, Avatar, Tooltip } from "antd";
+import React, { useState } from "react";
+import { Card, Row, Tag, Avatar, Tooltip, Col, Popconfirm } from "antd";
+import { AiOutlineDelete, AiOutlineInfoCircle } from "react-icons/ai";
+import { BiEditAlt } from "react-icons/bi";
+import { _notification } from "../../utils/_helpers";
+import { deleteTaskService } from "../../utils/services";
+import InfoModal from "./InfoModal";
 
-const TaskInfoCard = ({ data }) => {
+const TaskInfoCard = ({
+	data,
+	refreshTasks,
+	setRefreshTasks,
+	onClick,
+	userData
+}) => {
+	const [showInfo, setShowInfo] = useState(false);
+
+	console.log(data, "yeh kaam wala h");
+
+	const deleteTask = async (e, id) => {
+		e.stopPropagation();
+		try {
+			const res = await deleteTaskService(id);
+			if (!res.error && res.message === "success") {
+				setRefreshTasks(!refreshTasks);
+				_notification("success", "Success", "Successfully Deleted!");
+			}
+		} catch (err) {
+			_notification("error", "Error", err.message);
+		}
+	};
+
+	const showTaskInfo = e => {
+		e.stopPropagation();
+		setShowInfo(true);
+	};
+
+	const editTask = (e, id) => {
+		e.stopPropagation();
+		console.log(id, "edit");
+	};
+
 	return (
 		<>
-			<Card hoverable>
+			<Card hoverable onClick={onClick}>
 				<Row
-				//style={{ margin: "-8px -4px" }}
+					style={{
+						display: "flex",
+						justifyContent: "space-between",
+						alignItems: "center",
+						textTransform: "capitalize",
+						paddingBottom: "6px"
+					}}
 				>
-					{data.taskName}
+					<Col style={{ overflowWrap: "anywhere" }}>{data.title}</Col>
+					<Col>
+						<Row>
+							<AiOutlineInfoCircle
+								color="#4285F4"
+								style={{
+									marginLeft: "8px",
+									height: "1.25em",
+									width: "1.25em"
+								}}
+								onClick={e => showTaskInfo(e)}
+							/>
+							{(userData.role === "lead" ||
+								data.headIds.includes(userData.id)) && (
+								<>
+									<Popconfirm
+										onClick={e => e.stopPropagation()}
+										okText="Yes"
+										cancelText="No"
+										title="Are you sure to delete this task?"
+										onConfirm={e => {
+											deleteTask(e, data._id);
+										}}
+										onCancel={e => e.stopPropagation()}
+									>
+										<AiOutlineDelete
+											color="#DB4437"
+											style={{
+												marginLeft: "8px",
+												height: "1.25em",
+												width: "1.25em"
+											}}
+										/>
+									</Popconfirm>
+
+									<BiEditAlt
+										color="#F4B400"
+										style={{
+											marginLeft: "8px",
+											height: "1.25em",
+											width: "1.25em"
+										}}
+										onClick={e => editTask(e, data._id)}
+									/>
+								</>
+							)}
+						</Row>
+					</Col>
 				</Row>
 				<Row
 					style={{
@@ -17,7 +108,7 @@ const TaskInfoCard = ({ data }) => {
 						paddingTop: "12px"
 					}}
 				>
-					<Tag color="green">{data.dueDate}</Tag>
+					<Tag color="green">{data.createdAt.split("T")[0]}</Tag>
 					<Avatar.Group
 						size="small"
 						maxCount={3}
@@ -26,21 +117,24 @@ const TaskInfoCard = ({ data }) => {
 							backgroundColor: "#fde3cf"
 						}}
 					>
-						<Tooltip title="User Name" placement="top">
-							<Avatar src="https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg" />
-						</Tooltip>
-						<Tooltip title="User Name" placement="top">
-							<Avatar src="https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg" />
-						</Tooltip>
-						<Tooltip title="User Name" placement="top">
-							<Avatar src="https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg" />
-						</Tooltip>
-						<Tooltip title="User Name" placement="top">
-							<Avatar src="https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg" />
-						</Tooltip>
+						{data.taskAssigneeData.map(data => (
+							<Tooltip
+								title={data.userData[0].name}
+								placement="top"
+								key={data._id}
+							>
+								<Avatar src={data.userData[0].image} />
+							</Tooltip>
+						))}
 					</Avatar.Group>
 				</Row>
 			</Card>
+
+			<InfoModal
+				setShowInfo={setShowInfo}
+				showInfo={showInfo}
+				data={data}
+			/>
 		</>
 	);
 };

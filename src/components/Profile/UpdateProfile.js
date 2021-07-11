@@ -70,7 +70,6 @@ const UpdateProfile = props => {
 	}, [showNotif]);
 
 	const onChange = ({ fileList: newFileList }) => {
-		console.log(newFileList);
 		if (newFileList.length !== 0) {
 			const isJpgOrPng =
 				(newFileList &&
@@ -519,7 +518,8 @@ const UpdateProfile = props => {
 					rules={[
 						{
 							// eslint-disable-next-line no-useless-escape
-							pattern: /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)$/,
+							pattern:
+								/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)$/,
 							message: "Please input valid portfolio url"
 						}
 					]}

@@ -209,13 +209,13 @@ const Navigator = props => {
 							/>
 							<PrivateRoute
 								exact
-								path="/mytasks/:id"
+								path="/tasks/:id"
 								component={ManageTasks}
 								data={Creds}
 							/>
 							<PrivateRoute
 								exact
-								path="/task"
+								path="/task/:id"
 								component={Task}
 								data={Creds}
 							/>

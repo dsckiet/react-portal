@@ -1,28 +1,35 @@
-import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import PageTitle from "../Layout/PageTitle";
 import MemberInfoCard from "./MemberInfoCard";
-import { Row, Col, Button } from "antd";
+import { Row, Col, Button, Drawer } from "antd";
 import TaskInfoCard from "./TaskInfoCard";
+import CreateTask from "./CreateTask";
+import { getTaskService, getRole } from "../../utils/services";
+
 const ManageTasks = props => {
-	//const { id } = props.match.params;
+	const { id } = props.match.params;
+	const [userData] = useState(getRole());
 	const history = useHistory();
 	const { memberDetails } = history.location.state;
+	const [show, setShow] = useState(false);
+	const [refreshTasks, setRefreshTasks] = useState(false);
+	const [taskData, setTaskData] = useState([]);
 
-	const taskData = [
-		{
-			taskName: "Task 1",
-			dueDate: "10/20/3030"
-		},
-		{
-			taskName: "Task 2",
-			dueDate: "10/20/3030"
-		},
-		{
-			taskName: "Task 3",
-			dueDate: "10/20/3030"
-		}
-	];
+	useEffect(() => {
+		(async () => {
+			try {
+				const res = await getTaskService(id);
+				if (!res.error && res.message === "success") {
+					console.log(res, "res");
+					setTaskData(res.data);
+				}
+			} catch (err) {
+				console.log(err);
+			}
+		})();
+	}, [id, refreshTasks]);
+
 	return (
 		<>
 			<Row gutter={[16, 16]}>
@@ -48,30 +55,50 @@ const ManageTasks = props => {
 					>
 						<h3>Created Tasks</h3>
 
-						<Button>Create Task</Button>
+						{(userData.role === "lead" ||
+							memberDetails.headIds.includes(userData.id)) && (
+							<Button onClick={() => setShow(true)}>
+								Create Task
+							</Button>
+						)}
 					</Row>
 					<Row gutter={[4, 4]} style={{ marginBottom: "24px" }}>
 						{taskData.map((task, id) => (
 							<Col span={8} key={id}>
-								<Link to="/task">
-									<TaskInfoCard data={task} />
-								</Link>
-							</Col>
-						))}
-					</Row>
-
-					<h3 style={{ paddingBottom: "16px" }}>Assigned Tasks</h3>
-					<Row gutter={[4, 4]}>
-						{taskData.map((task, id) => (
-							<Col span={8} key={id}>
-								<Link to="/task">
-									<TaskInfoCard data={task} />
-								</Link>
+								<TaskInfoCard
+									setRefreshTasks={setRefreshTasks}
+									refreshTasks={refreshTasks}
+									data={{ ...task, ...memberDetails }}
+									onClick={() =>
+										history.push({
+											pathname: `/task/${task._id}`
+										})
+									}
+									userData={userData}
+								/>
 							</Col>
 						))}
 					</Row>
 				</Col>
 			</Row>
+
+			<Drawer
+				title="Create A New Task"
+				placement="right"
+				closable={true}
+				width={"100%"}
+				destroyOnClose={true}
+				onClose={() => setShow(false)}
+				visible={show}
+			>
+				<CreateTask
+					members={memberDetails.members}
+					setShow={setShow}
+					setRefreshTasks={setRefreshTasks}
+					refreshTasks={refreshTasks}
+					groupId={id}
+				/>
+			</Drawer>
 		</>
 	);
 };

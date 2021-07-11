@@ -77,11 +77,11 @@ const ManageGroups = () => {
 			refreshGroups: refreshGroups,
 			setRefreshGroups: setRefreshGroups,
 			cardConfig: colors[Math.floor(Math.random() * 4)],
-			memberDetails: getMembers(info),
+			memberDetails: { ...getMembers(info) },
 			data: info,
 			onClick: () =>
 				history.push({
-					pathname: `/mytasks/${info._id}`,
+					pathname: `/tasks/${info._id}`,
 					state: {
 						memberDetails: getMembers(info)
 					}
@@ -110,7 +110,7 @@ const ManageGroups = () => {
 			return data;
 		});
 
-		return { heads: heads, members: members };
+		return { heads: heads, members: members, headIds: info.heads };
 	};
 
 	return (

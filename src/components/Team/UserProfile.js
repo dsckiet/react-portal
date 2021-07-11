@@ -100,9 +100,8 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 			try {
 				if (uid) {
 					const res = await getUserService(uid);
-					console.log(res);
+
 					if (res.message === "success") {
-						console.log(res.data);
 						setUser(res.data);
 						setShowSkeleton(false);
 					} else {

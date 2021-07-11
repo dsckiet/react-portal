@@ -1,0 +1,114 @@
+import React, { useState } from "react";
+import { Row, Col, Form, Input, Button } from "antd";
+import PersonCard from "../Groups/PersonCard";
+import { _notification } from "../../utils/_helpers";
+import { addTaskService } from "../../utils/services";
+
+const CreateTask = ({
+	members,
+	setShow,
+	refreshTasks,
+	setRefreshTasks,
+	groupId
+}) => {
+	const [form] = Form.useForm();
+	const { TextArea } = Input;
+	const [selectedMembers, setSelectedMembers] = useState([]);
+
+	const handleSelect = id => {
+		if (selectedMembers.includes(id)) {
+			setSelectedMembers(selectedMembers.filter(member => member !== id));
+		} else {
+			setSelectedMembers([...selectedMembers, id]);
+		}
+	};
+
+	const handleFinish = async val => {
+		let taskData = {
+			title: val.title,
+			assignees: selectedMembers,
+			description: val.description ? val.description : " ",
+			dueDate: "2021-10-31"
+		};
+		try {
+			const { message, error } = await addTaskService(groupId, taskData);
+			if (!error && message === "success") {
+				_notification(
+					"success",
+					"Success",
+					"Task created successfully!"
+				);
+			}
+			setRefreshTasks(!refreshTasks);
+			setShow(false);
+		} catch (err) {
+			_notification("error", "Error", err.message);
+		}
+	};
+
+	return (
+		<>
+			<Form layout="vertical" form={form} onFinish={handleFinish}>
+				<Form.Item
+					label="Task Title"
+					required
+					name="title"
+					rules={[
+						{
+							required: true,
+							message: "Task title cannot be empty !"
+						}
+					]}
+				>
+					<Input
+						type="text"
+						placeholder="Task title"
+						maxLength="20"
+					/>
+				</Form.Item>
+				<Form.Item label="Task Description" name="description">
+					<TextArea
+						type="text"
+						placeholder="Task description"
+						rows={4}
+					/>
+				</Form.Item>
+
+				<Form.Item label="Select" name="select">
+					<Row gutter={[16, 16]}>
+						{members &&
+							members.map(member => (
+								<Col
+									xs={12}
+									sm={8}
+									md={6}
+									lg={4}
+									xl={3}
+									key={member._id}
+								>
+									<PersonCard
+										member={member}
+										selectedMembers={selectedMembers}
+										handleSelect={handleSelect}
+										selectedHeads={[]}
+									/>
+								</Col>
+							))}
+					</Row>
+				</Form.Item>
+
+				<Form.Item>
+					<Button
+						type="primary"
+						htmlType="submit"
+						className="login-form-button"
+					>
+						Create Task
+					</Button>
+				</Form.Item>
+			</Form>
+		</>
+	);
+};
+
+export default CreateTask;

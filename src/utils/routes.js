@@ -59,3 +59,7 @@ export const ADD_CERTIFICATE = "/events/certificate"; // POST
 export const GET_GROUPS = "/groups/";
 export const ADD_GROUP = "/groups";
 export const DELETE_GROUP = "/groups";
+export const ADD_TASK = "/tasks";
+export const GET_TASK = "/tasks";
+export const DELETE_TASK = "/tasks";
+export const GET_MY_TASK = "/tasks/user/my";

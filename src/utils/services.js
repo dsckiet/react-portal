@@ -33,7 +33,10 @@ import {
 	CHANGE_PASSWORD,
 	GET_GROUPS,
 	ADD_GROUP,
-	DELETE_GROUP
+	DELETE_GROUP,
+	ADD_TASK,
+	GET_MY_TASK,
+	DELETE_TASK
 } from "./routes";
 
 const BASE_URL =
@@ -453,7 +456,6 @@ export const previewCertificateService = async data => {
 		let response = await axios.post(PREVIEW_CERTIFICATE, data, {
 			responseType: "blob" //Force to receive data in a Blob Format
 		});
-		console.log(response);
 		const file = new Blob([response.data], { type: "application/pdf" });
 		//Build a URL from the file
 		const fileURL = URL.createObjectURL(file);
@@ -505,6 +507,58 @@ export const deleteGroupService = async id => {
 	setUserToken();
 	try {
 		const response = await axios.delete(`${DELETE_GROUP}/${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const addTaskService = async (id, data) => {
+	setUserToken();
+	try {
+		const response = await axios.post(`${ADD_TASK}/${id}`, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const getTaskService = async id => {
+	setUserToken();
+	try {
+		const response = await axios.get(`${ADD_TASK}/${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const deleteTaskService = async id => {
+	setUserToken();
+	try {
+		const response = await axios.delete(`${DELETE_TASK}/${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const getMyTaskService = async () => {
+	setUserToken();
+	try {
+		const response = await axios.get(GET_MY_TASK);
 		if (response.status === 200 && response.data.error === false) {
 			return response.data;
 		} else return response.data;

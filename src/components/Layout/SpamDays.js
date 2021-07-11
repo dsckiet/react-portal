@@ -46,8 +46,6 @@ const SpamDays = () => {
 			days = Math.round(diff / 8.64e7);
 		}
 
-		console.log(days, " ooo");
-
 		if (days <= 30) {
 			return { ...obj, daysLeft: days };
 		}

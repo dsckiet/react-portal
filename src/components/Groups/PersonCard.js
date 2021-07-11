@@ -27,7 +27,6 @@ const PersonCard = ({
 			<Card
 				onClick={() => handleSelect && handleSelect(member._id)}
 				hoverable
-				rounded
 				bordered={false}
 				style={{
 					display: "flex",
