@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Row, Col, Form, Input, Button } from "antd";
+import { Row, Col, Form, Input, Button, DatePicker } from "antd";
 import PersonCard from "../Groups/PersonCard";
 import { _notification } from "../../utils/_helpers";
 import { addTaskService } from "../../utils/services";
+import moment from "moment";
 
 const CreateTask = ({
 	members,
@@ -46,26 +47,54 @@ const CreateTask = ({
 		}
 	};
 
+	const disabledDatesForDob = current => {
+		return current < moment(new Date());
+	};
+
 	return (
 		<>
 			<Form layout="vertical" form={form} onFinish={handleFinish}>
-				<Form.Item
-					label="Task Title"
-					required
-					name="title"
-					rules={[
-						{
-							required: true,
-							message: "Task title cannot be empty !"
-						}
-					]}
-				>
-					<Input
-						type="text"
-						placeholder="Task title"
-						maxLength="20"
-					/>
-				</Form.Item>
+				<Row gutter={16}>
+					<Col xs={10} sm={24} md={12} lg={12}>
+						<Form.Item
+							label="Task Title"
+							required
+							name="title"
+							rules={[
+								{
+									required: true,
+									message: "Task title cannot be empty !"
+								}
+							]}
+						>
+							<Input
+								type="text"
+								placeholder="Task title"
+								maxLength="20"
+							/>
+						</Form.Item>
+					</Col>
+					<Col xs={10} sm={24} md={12} lg={12}>
+						<Form.Item
+							label="Due Date for Task"
+							name="dueDate"
+							rules={[
+								{
+									required: true,
+									message: "Please input due Date!"
+								}
+							]}
+						>
+							<DatePicker
+								picker="week"
+								style={{ width: "100%" }}
+								format="YYYY-MM-DD"
+								disabledDate={disabledDatesForDob}
+							/>
+						</Form.Item>
+					</Col>
+				</Row>
+
 				<Form.Item label="Task Description" name="description">
 					<TextArea
 						type="text"
