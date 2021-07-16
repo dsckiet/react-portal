@@ -62,6 +62,7 @@ const Task = () => {
 				try {
 					const res = await getTaskAssignee(info._id);
 					if (!res.error && res.message === "success") {
+						console.log(res.data);
 						setAssigneeData(res.data);
 					}
 				} catch (err) {
