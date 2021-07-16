@@ -11,7 +11,7 @@ const ManageTasks = props => {
 	const { id } = props.match.params;
 	const [userData] = useState(getRole());
 	const history = useHistory();
-	const { memberDetails } = history.location.state;
+	const { memberDetails, groupName } = history.location.state;
 	const [show, setShow] = useState(false);
 	const [refreshTasks, setRefreshTasks] = useState(false);
 	const [taskData, setTaskData] = useState([]);
@@ -21,7 +21,6 @@ const ManageTasks = props => {
 			try {
 				const res = await getTaskService(id);
 				if (!res.error && res.message === "success") {
-					console.log(res, "res");
 					setTaskData(res.data);
 				}
 			} catch (err) {
@@ -34,7 +33,7 @@ const ManageTasks = props => {
 		<>
 			<Row gutter={[16, 16]}>
 				<Col span={8}>
-					<PageTitle title="Group Name" bgColor="#DB4437" />
+					<PageTitle title={groupName} bgColor="#DB4437" />
 					{memberDetails.heads.map((memberInfo, idx) => (
 						<MemberInfoCard
 							key={idx}
@@ -71,7 +70,13 @@ const ManageTasks = props => {
 									data={{ ...task, ...memberDetails }}
 									onClick={() =>
 										history.push({
-											pathname: `/task/${task._id}`
+											pathname: `/task/${task._id}`,
+											state: {
+												data: {
+													...task,
+													...memberDetails
+												}
+											}
 										})
 									}
 									userData={userData}

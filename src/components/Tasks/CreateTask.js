@@ -95,7 +95,16 @@ const CreateTask = ({
 					</Col>
 				</Row>
 
-				<Form.Item label="Task Description" name="description">
+				<Form.Item
+					label="Task Description"
+					name="description"
+					rules={[
+						{
+							required: true,
+							message: "Please input description!"
+						}
+					]}
+				>
 					<TextArea
 						type="text"
 						placeholder="Task description"

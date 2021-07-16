@@ -36,7 +36,10 @@ import {
 	DELETE_GROUP,
 	ADD_TASK,
 	GET_MY_TASK,
-	DELETE_TASK
+	DELETE_TASK,
+	GET_TASK,
+	UPDATE_TASK_STATUS,
+	GET_COMMENTS
 } from "./routes";
 
 const BASE_URL =
@@ -532,7 +535,7 @@ export const addTaskService = async (id, data) => {
 export const getTaskService = async id => {
 	setUserToken();
 	try {
-		const response = await axios.get(`${ADD_TASK}/${id}`);
+		const response = await axios.get(`${GET_TASK}/${id}`);
 		if (response.status === 200 && response.data.error === false) {
 			return response.data;
 		} else return response.data;
@@ -555,10 +558,62 @@ export const deleteTaskService = async id => {
 	}
 };
 
+export const updateTaskStatus = async (id, data) => {
+	setUserToken();
+	try {
+		const response = await axios.put(`${UPDATE_TASK_STATUS}/${id}`, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const getTaskAssignee = async id => {
+	setUserToken();
+	try {
+		const response = await axios.get(`${UPDATE_TASK_STATUS}/${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
 export const getMyTaskService = async () => {
 	setUserToken();
 	try {
 		const response = await axios.get(GET_MY_TASK);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const getCommentService = async id => {
+	setUserToken();
+	try {
+		const response = await axios.get(`${GET_COMMENTS}/${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const addCommentService = async (id, data) => {
+	setUserToken();
+	try {
+		const response = await axios.post(`${GET_COMMENTS}/${id}`, data);
 		if (response.status === 200 && response.data.error === false) {
 			return response.data;
 		} else return response.data;

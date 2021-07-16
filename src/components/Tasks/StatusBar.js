@@ -1,14 +1,37 @@
 import React from "react";
 import { Row, Tag } from "antd";
 import { AiOutlineEdit } from "react-icons/ai";
+import { updateTaskStatus } from "../../utils/services";
 
-const StatusBar = ({ status, modal }) => {
+const StatusBar = ({ status, modal, data, refresh, setRefresh }) => {
+	let color =
+		status === "pending"
+			? "orange"
+			: status === "completed"
+			? "green"
+			: status === "closed"
+			? "geekBlue"
+			: status === "overdue"
+			? "red"
+			: "gold";
+
+	const editTaskStatus = async id => {
+		let data = { status: "pending" };
+		try {
+			const res = await updateTaskStatus(id, data);
+			if (!res.error && res.message === "success") {
+				setRefresh(!refresh);
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	};
 	return (
 		<>
 			<Row style={{ alignItems: "center", fontSize: "16px" }}>
-				Task Status :{" "}
+				Task Status :
 				<Tag
-					color="orange"
+					color={color}
 					style={{
 						textTransform: "capitalize",
 						fontSize: "14px",
@@ -19,7 +42,17 @@ const StatusBar = ({ status, modal }) => {
 				>
 					{status}
 				</Tag>
-				{!modal ? <AiOutlineEdit style={{ color: "#D46D2C" }} /> : null}
+				{!modal && (
+					<AiOutlineEdit
+						onClick={() => editTaskStatus(data._id)}
+						style={{
+							color: `${color}`,
+							width: "1.25em",
+							height: "1.25em",
+							cursor: "pointer"
+						}}
+					/>
+				)}
 			</Row>
 		</>
 	);

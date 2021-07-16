@@ -4,7 +4,7 @@ import StatusBar from "./StatusBar";
 import CommentSection from "./CommentSection";
 const { Text } = Typography;
 
-const ProgressModal = ({ visible, handleShow }) => {
+const ProgressModal = ({ visible, handleShow, data, destroy }) => {
 	return (
 		<>
 			<Modal
@@ -13,24 +13,29 @@ const ProgressModal = ({ visible, handleShow }) => {
 				onCancel={handleShow}
 				centered
 				width={900}
+				destroyOnClose={destroy}
 			>
-				<h3>
-					Mayank Shakya <Tag color="red">Lead</Tag>
-				</h3>
+				{data[0] && (
+					<>
+						<h3>
+							{data[0].userData[0].name}{" "}
+							<Tag color="red">{data[0].userData[0].role}</Tag>
+						</h3>
 
-				<h3>Clone the UI part of Le-Mugs website</h3>
-				<Text code style={{ display: "flex", fontSize: "1.1rem" }}>
-					Lorem Ipsum is simply dummy text of the printing and
-					typesetting industry. Lorem Ipsum has been the industry's
-					standard dummy text ever since the 1500s, when an unknown
-					printer took a galley of type and scrambled it to make a
-					type specimen book.
-				</Text>
-				<br />
-				<StatusBar status="pending" modal />
-				<br />
+						<h3>{data.title}</h3>
+						<Text
+							code
+							style={{ display: "flex", fontSize: "1.1rem" }}
+						>
+							{data.description}
+						</Text>
+						<br />
+						<StatusBar status={data[0].status} modal />
+						<br />
+					</>
+				)}
 				<h3>Added Comments</h3>
-				<CommentSection />
+				<CommentSection details={data[0]} />
 			</Modal>
 		</>
 	);

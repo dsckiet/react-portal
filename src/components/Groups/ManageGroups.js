@@ -83,7 +83,8 @@ const ManageGroups = () => {
 				history.push({
 					pathname: `/tasks/${info._id}`,
 					state: {
-						memberDetails: getMembers(info)
+						memberDetails: getMembers(info),
+						groupName: info.name
 					}
 				})
 		};

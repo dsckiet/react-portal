@@ -1,44 +1,26 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Comment, Avatar, Form, Input, Button, Row, Col } from "antd";
 import { GoReply } from "react-icons/go";
 import { AiOutlineClose } from "react-icons/ai";
 import "./style.css";
+import {
+	addCommentService,
+	getCommentService,
+	getRole,
+	getUserService
+} from "../../utils/services";
+import { _notification } from "../../utils/_helpers";
 const { TextArea } = Input;
 
-const CommentSection = () => {
-	const [count, setCount] = useState(4);
+const CommentSection = ({ details }) => {
 	const [replyingTo, setReplyingTo] = useState(null);
 	const myRef = useRef();
 	const formRef = useRef();
-	const [comments, setComments] = useState([
-		{
-			id: 1,
-			role: "head",
-			author: "Mayank Shakya",
-			image: "https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg",
-			comment:
-				"Tej kaam kro bhut dheere chal rha sab. Portal may tak khtm krna h :)",
-			replies: [
-				{
-					id: 2,
-					role: "member",
-					author: "Mayank Shakya",
-					image: "https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg",
-					comment:
-						"Tej kaam kro bhut dheere chal rha sab. Portal may tak khtm krna h :)"
-				}
-			]
-		},
-		{
-			id: 3,
-			role: "lead",
-			author: "Mayank Shakya",
-			image: "https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg",
-			comment:
-				"Tej kaam kro bhut dheere chal rha sab. Portal may tak khtm krna h :)",
-			replies: []
-		}
-	]);
+	const [refresh, setRefresh] = useState(false);
+	const [comments, setComments] = useState([]);
+	const [user, setUser] = useState({});
+	const userData = getRole();
+
 	const [form] = Form.useForm();
 
 	const handleReply = id => {
@@ -47,51 +29,43 @@ const CommentSection = () => {
 		setReplyingTo(id);
 	};
 
-	const onSubmit = values => {
-		if (replyingTo) {
-			let data = [...comments];
-			for (let i = 0; i < data.length; i++) {
-				if (data[i].id === replyingTo) {
-					data[i].replies = [
-						...data[i].replies,
-						{
-							id: count,
-							role: "lead",
-							author: "Mayank Shakya",
-							image: "https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg",
-							comment: values.comment
-						}
-					];
+	useEffect(() => {
+		(async () => {
+			try {
+				const res = await getCommentService(details._id);
+				setUser((await getUserService(userData.id)).data);
+				if (!res.error && res.message === "success") {
+					setComments(res.data);
 				}
+			} catch (err) {
+				console.log(err);
 			}
-			setComments(data);
-			setTimeout(() => setReplyingTo(null), 100);
-		} else {
-			setComments([
-				...comments,
-				{
-					id: count,
-					role: "lead",
-					author: "Mayank Shakya",
-					image: "https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg",
-					comment: values.comment,
-					replies: []
-				}
-			]);
+		})();
+		//eslint-disable-next-line
+	}, [refresh]);
+
+	const onSubmit = async val => {
+		let data = { text: val.comment };
+		try {
+			const res = await addCommentService(details._id, data);
+			if (!res.error && res.message === "success") {
+				form.setFieldsValue({ comment: "" });
+				setRefresh(!refresh);
+			}
+		} catch (err) {
+			_notification("error", "Error", err.message);
 		}
-		setCount(count + 1);
-		setTimeout(() => form.setFieldsValue({ comment: "" }), 100);
 	};
+
 	return (
 		<div className="comment-section-container">
 			{comments.map((comment, id) => (
-				<>
+				<div key={id}>
 					<Comment
-						key={id}
 						className={`comment-container ${
-							comment.role === "lead"
+							comment.userData[0].role === "lead"
 								? "comment-lead"
-								: comment.role === "head"
+								: comment.userData[0].role === "head"
 								? "comment-head"
 								: "comment-member"
 						}`}
@@ -99,19 +73,22 @@ const CommentSection = () => {
 							<span
 								className="reply-button"
 								key="comment-nested-reply-to"
-								onClick={() => handleReply(comment.id)}
+								onClick={() => handleReply(comment._id)}
 							>
 								<GoReply style={{ marginRight: ".25rem" }} />
 								Reply{" "}
 							</span>
 						]}
-						author={<h3>{comment.author}</h3>}
+						author={<h3>{comment.userData[0].name}</h3>}
 						avatar={
-							<Avatar src={comment.image} alt={comment.author} />
+							<Avatar
+								src={comment.userData[0].image}
+								alt={comment.userData[0].name}
+							/>
 						}
-						content={<p>{comment.comment}</p>}
+						content={<p>{comment.text}</p>}
 					/>
-					{comment.replies.length > 0
+					{/* {comment.replies.length > 0
 						? comment.replies.map((reply, id) => (
 								<Comment
 									key={id}
@@ -132,18 +109,13 @@ const CommentSection = () => {
 									content={<p>{reply.comment}</p>}
 								/>
 						  ))
-						: null}
-				</>
+						: null} */}
+				</div>
 			))}
 
 			<Comment
 				style={{ padding: "0 .5rem" }}
-				avatar={
-					<Avatar
-						src="https://dsc-portal-static.s3.ap-south-1.amazonaws.com/users/1619509451803984020.jpeg"
-						alt="Mayank Shakya"
-					/>
-				}
+				avatar={<Avatar src={user && user.image} alt={userData.name} />}
 				content={
 					<Form form={form} onFinish={onSubmit}>
 						{replyingTo ? (
@@ -168,9 +140,9 @@ const CommentSection = () => {
 													{
 														comments.filter(
 															comment =>
-																comment.id ===
+																comment._id ===
 																replyingTo
-														)[0].comment
+														)[0].text
 													}
 												</span>
 											</p>
@@ -186,7 +158,7 @@ const CommentSection = () => {
 															comment =>
 																comment.id ===
 																replyingTo
-														)[0].author
+														)[0].userData[0].name
 													}
 												</span>
 											</p>

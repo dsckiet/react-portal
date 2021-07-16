@@ -15,8 +15,6 @@ const TaskInfoCard = ({
 }) => {
 	const [showInfo, setShowInfo] = useState(false);
 
-	console.log(data, "yeh kaam wala h");
-
 	const deleteTask = async (e, id) => {
 		e.stopPropagation();
 		try {

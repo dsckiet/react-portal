@@ -201,7 +201,6 @@ const UpdateProfile = props => {
 	// };
 
 	const handleSubmit = async values => {
-		console.log(values, "submit info");
 		try {
 			const formData = new FormData();
 			formData.append("name", values.name);

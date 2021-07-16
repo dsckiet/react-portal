@@ -65,8 +65,6 @@ const SpamDays = () => {
 					if (getBday(d)) arr.push(getBday(d));
 				});
 
-				console.log(arr);
-
 				setUsers(arr);
 
 				setIsLoading(false);
