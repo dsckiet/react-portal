@@ -11,7 +11,8 @@ const PageTitle = props => {
 				color: "#fff!important",
 				marginBottom: 16,
 				borderRadius: 4,
-				borderBottom: "1px solid rgb(235, 237, 240)"
+				borderBottom: "1px solid rgb(235, 237, 240)",
+				textTransform: "capitalize"
 			}}
 			title={props.title}
 		/>

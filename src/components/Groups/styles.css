@@ -46,7 +46,6 @@
 .selected {
 	z-index: 1;
 	cursor: pointer;
-	background-color: rgb(24, 144, 255) !important;
 	width: 100%;
 	height: 100%;
 	display: flex;
@@ -63,4 +62,16 @@
 .selected h2 {
 	color: #ffffff;
 	margin: 0;
+}
+
+.head {
+	background-color: rgb(15, 157, 88) !important;
+}
+
+.member {
+	background-color: rgb(66, 133, 244) !important;
+}
+
+.ant-avatar > img {
+	border-radius: 50%;
 }

@@ -1,9 +1,14 @@
-@import url("https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap"); */
 @import "~antd/dist/antd.css";
+
+@font-face {
+	font-family: "GoogleSansRG";
+	src: url("utils/assets/fonts/GoogleSansDisplayRegular.ttf");
+}
 
 body {
 	overflow-x: hidden;
-	font-family: Sen !important;
+	font-family: "GoogleSansRG" !important;
 	background-color: #fafbfc;
 }
 
@@ -21,8 +26,8 @@ body {
 	background-color: #fafafa !important;
 }
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
 }

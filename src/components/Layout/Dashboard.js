@@ -4,6 +4,7 @@ import PageTitle from "./PageTitle";
 import "./style.css";
 import { DashCards } from "./DashCards";
 import Todos from "./Todos";
+import SpamDays from "./SpamDays";
 
 const Dashboard = () => (
 	<>
@@ -15,8 +16,16 @@ const Dashboard = () => (
 					<Col xs={24} sm={24} xl={16} lg={16} md={12}>
 						<DashCards />
 					</Col>
-					<Col xs={24} sm={24} lg={8} xl={8} md={12}>
+					<Col
+						xs={24}
+						sm={24}
+						lg={8}
+						xl={8}
+						md={12}
+						gutter={[16, 16]}
+					>
 						<Todos />
+						<SpamDays />
 					</Col>
 				</Row>
 			</div>
