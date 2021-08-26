@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Card, Form, Input, Icon, Button } from "antd";
+import { Card, Form, Input, Button } from "antd";
+import Icon from "@ant-design/icons";
 import logo from "../../utils/assets/images/logo-black.svg";
 import "./style.css";
 import { _notification } from "./../../utils/_helpers";
@@ -14,7 +15,7 @@ const Forgot = styled.div`
 
 const ForgotPassword = props => {
 	const [isLoading, setIsLoading] = useState(false);
-	const { getFieldDecorator } = props.form;
+	const [form] = Form.useForm();
 
 	useEffect(() => {
 		const token = JSON.parse(localStorage.getItem("token"));
@@ -26,75 +27,75 @@ const ForgotPassword = props => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const handleSubmit = e => {
-		e.preventDefault();
-		setIsLoading(true);
+	const handleSubmit = async values => {
+		try {
+			const data = {
+				email: values.email
+			};
+			const res = await forgotPassService(data);
 
-		props.form.validateFields(async (err, values) => {
-			if (!err) {
-				try {
-					const data = {
-						email: values.email
-					};
-					const res = await forgotPassService(data);
-
-					if (res.error) {
-						console.log(res);
-						_notification("error", "Error", res.message);
-						props.form.setFieldsValue({
-							email: ""
-						});
-					} else if (res.message === "success") {
-						_notification("success", "Success", "Mail Sent");
-						props.form.setFieldsValue({
-							email: ""
-						});
-					}
-					setIsLoading(false);
-				} catch (err) {
-					props.form.setFieldsValue({
-						email: ""
-					});
-					console.log(err);
-					_notification("error", "Error", err.message);
-					setIsLoading(false);
-				}
-			} else {
-				setIsLoading(false);
+			if (res.error) {
+				console.log(res);
+				_notification("error", "Error", res.message);
+				form.setFieldsValue({
+					email: ""
+				});
+			} else if (res.message === "success") {
+				_notification("success", "Success", "Mail Sent");
+				form.setFieldsValue({
+					email: ""
+				});
 			}
-		});
+			setIsLoading(false);
+		} catch (err) {
+			form.setFieldsValue({
+				email: ""
+			});
+			console.log(err);
+			_notification("error", "Error", err.message);
+			setIsLoading(false);
+		}
 	};
 
 	return (
 		<div style={{ height: "100vh", overflow: "hidden" }}>
-			<img src={logo} width={160} className="vidgyor-logo" alt="" />
+			<img
+				src={logo}
+				width={160}
+				height={27.23}
+				className="vidgyor-logo"
+				alt=""
+			/>
 			<Card title="Forgot Password" className="login-form-wrapper">
-				<Form onSubmit={handleSubmit} className="login-form">
+				<Form
+					onFinish={handleSubmit}
+					className="login-form"
+					form={form}
+				>
 					<p style={{ textAlign: "center", fontWeight: "300" }}>
-						We will sent a mail to your email with reset password
+						We will send a mail to your email with reset password
 						link
 					</p>
-					<Form.Item>
-						{getFieldDecorator("email", {
-							rules: [
-								{
-									type: "email",
-									required: true,
-									message: "Please input your email!"
-								}
-							]
-						})(
-							<Input
-								prefix={
-									<Icon
-										type="mail"
-										style={{ color: "rgba(0,0,0,.25)" }}
-									/>
-								}
-								type="email"
-								placeholder="Email"
-							/>
-						)}
+					<Form.Item
+						name="email"
+						rules={[
+							{
+								type: "email",
+								required: true,
+								message: "Please input your email!"
+							}
+						]}
+					>
+						<Input
+							prefix={
+								<Icon
+									type="mail"
+									style={{ color: "rgba(0,0,0,.25)" }}
+								/>
+							}
+							type="email"
+							placeholder="Email"
+						/>
 					</Form.Item>
 					<Form.Item>
 						<Button
@@ -115,6 +116,4 @@ const ForgotPassword = props => {
 	);
 };
 
-const ForgotPasswordForm = Form.create({ name: "forgot_form" })(ForgotPassword);
-
-export default ForgotPasswordForm;
+export default ForgotPassword;

@@ -1,8 +1,16 @@
 /** USERS MODULE **/
 export const ADD_USER = "/users"; // POST
 export const LOGIN = "/users/login"; // POST
-export const FORGOTPASS = "/users/forgot"; // POST
-export const RESETPASS = "/users/reset"; // POST
+export const FORGOTPASS = "/users/forgot-pwd"; // POST
+export const RESETPASS = "/users/reset-pwd"; // POST
+export const EDIT = "/users"; //PUT
+export const GET_TODO = "/todos"; // GET
+export const ADD_TODO = "/todos"; // POST
+export const UPDATE_TODO = "/todos"; //PUT
+export const DELETE_TODO = "/todos"; //DEL
+export const DELETE_ALL_TODO = "/todos/all"; //DEL
+export const EDIT_TODO = "/todos"; //PUT
+export const CHANGE_PASSWORD = "/users/change-pwd";
 // @queryParams userId
 export const UPDATE_USER = "/users/5deab2193026f30ec826a0cc"; // PUT
 export const TOGGLE_WEBSITE_SEEN = "/users/approve";
@@ -11,7 +19,7 @@ export const DELETE_USER = "/users";
 // @queryParams userId
 export const GET_PROFILE = "/users/profile"; // GET
 export const UPDATE_PROFILE = "/users/profile"; // POST
-export const VIEW_USERS = "/users?sortBy=createdAt&sortType=asc"; // GET
+export const VIEW_USERS = "/users"; // GET
 
 /** EVENTS MODULE : PARTICIPANTS **/
 export const REGISTER_PARTICIPANT = "/events/participants/"; // POST
@@ -46,3 +54,9 @@ export const PARTICIPANT_EVENT_ATTENDANCE =
 /**CERTIFICATE MODULE**/
 export const PREVIEW_CERTIFICATE = "/events/certificate/preview"; // POST
 export const ADD_CERTIFICATE = "/events/certificate"; // POST
+<<<<<<< HEAD
+=======
+
+/** Progress Module **/
+export const GET_MY_GROUPS = "/group/my";
+>>>>>>> 4751e61d57fa2cca5b7065a8560cf55bbf2a4624

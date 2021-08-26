@@ -23,11 +23,25 @@ import {
 	DELETE_PARTICIPANT,
 	REVOKE_PARTICIPANT,
 	PREVIEW_CERTIFICATE,
+<<<<<<< HEAD
 	ADD_CERTIFICATE
+=======
+	ADD_CERTIFICATE,
+	GET_TODO,
+	ADD_TODO,
+	UPDATE_TODO,
+	DELETE_TODO,
+	DELETE_ALL_TODO,
+	EDIT,
+	CHANGE_PASSWORD,
+	GET_MY_GROUPS
+>>>>>>> 4751e61d57fa2cca5b7065a8560cf55bbf2a4624
 } from "./routes";
 
-const BASE_URL = "https://api.dsckiet.com/dev";
-
+const BASE_URL =
+	window.location.host === "portal.dsckiet.com"
+		? "https://api.dsckiet.com/prod"
+		: "https://api.dsckiet.com/dev";
 axios.defaults.baseURL = BASE_URL;
 
 function setUserToken(token) {
@@ -188,9 +202,10 @@ export async function deleteEventsService(eventId) {
 }
 
 /******************USER/TEAM SERVICES********************/
-export async function getUsersService() {
+export async function getUsersService(params) {
+	setUserToken();
 	try {
-		const response = await axios.get(VIEW_USERS);
+		const response = await axios.get(VIEW_USERS, { params });
 		if (response.status === 200 && response.data.error === false) {
 			return response.data;
 		} else return response.data;
@@ -278,6 +293,110 @@ export const deleteUser = async id => {
 	}
 };
 
+export const getTodo = async () => {
+	setUserToken();
+	try {
+		const response = await axios.get(GET_TODO);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const addTodo = async data => {
+	setUserToken();
+	try {
+		const response = await axios.post(ADD_TODO, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const updateTodo = async (id, data) => {
+	setUserToken();
+	try {
+		const response = await axios.put(`${UPDATE_TODO}/${id}`, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const editTodo = async (id, data) => {
+	setUserToken();
+	try {
+		const response = await axios.put(`${UPDATE_TODO}/${id}`, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const deleteTodo = async id => {
+	setUserToken();
+	try {
+		const response = await axios.delete(`${DELETE_TODO}/${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const deleteAllTodo = async () => {
+	setUserToken();
+	try {
+		const response = await axios.delete(DELETE_ALL_TODO);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const editService = async (id, data) => {
+	setUserToken();
+	try {
+		const response = await axios.put(`${EDIT}/${id}`, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const changePassword = async data => {
+	setUserToken();
+	try {
+		const response = await axios.post(CHANGE_PASSWORD, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
 /******************PARTICIPANTS SERVICES********************/
 export async function getParticipantsService(params) {
 	setUserToken();
@@ -348,6 +467,10 @@ export const previewCertificateService = async data => {
 };
 
 export const addCertificateService = async (data, id) => {
+<<<<<<< HEAD
+=======
+	setUserToken();
+>>>>>>> 4751e61d57fa2cca5b7065a8560cf55bbf2a4624
 	try {
 		const response = await axios.post(`${ADD_CERTIFICATE}/${id}`, data);
 		return response.data;
@@ -356,6 +479,23 @@ export const addCertificateService = async (data, id) => {
 	}
 };
 
+<<<<<<< HEAD
+=======
+/************************* PROGRESS SERVICES ****************************/
+export const getGroupsService = async id => {
+	setUserToken();
+	try {
+		const response = await axios.get(GET_MY_GROUPS);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+>>>>>>> 4751e61d57fa2cca5b7065a8560cf55bbf2a4624
 /******************Helper SERVICES********************/
 export const getRole = () => {
 	let AUTH_TOKEN = JSON.parse(localStorage.getItem("token"));

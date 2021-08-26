@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import PageTitle from "../Layout/PageTitle";
 import ParticipantsOptions from "./ParticipantsOptions";
 import ParticipantDetail from "./ParticipantDetail";
-import { Table, Card, Drawer, Popconfirm, Icon, Divider } from "antd";
+import { Table, Card, Drawer, Popconfirm, Divider } from "antd";
+import Icon from "@ant-design/icons";
 import "./style.css";
 import {
 	getParticipantsService,

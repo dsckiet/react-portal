@@ -1,16 +1,9 @@
 import React from "react";
-import { Row, Col, Card, Icon } from "antd";
+import { Row, Col, Card } from "antd";
 import { Link } from "react-router-dom";
 import _routes from "../../utils/_routes";
 
 export const DashCards = () => {
-	const iconStyle = color => {
-		return {
-			fontSize: "40px",
-			paddingRight: 8,
-			color: color
-		};
-	};
 	return (
 		<Row gutter={[16, 16]}>
 			{_routes.map(route => {
@@ -18,7 +11,14 @@ export const DashCards = () => {
 					return null;
 				}
 				return (
-					<Col lg={8} md={8} sm={12} key={route.key}>
+					<Col
+						lg={12}
+						xl={12}
+						md={24}
+						xs={24}
+						sm={24}
+						key={route.key}
+					>
 						<Link
 							to={route.path}
 							onClick={() => {
@@ -38,9 +38,9 @@ export const DashCards = () => {
 									<Col
 										xl={18}
 										lg={18}
-										sm={12}
+										sm={18}
 										md={16}
-										xs={12}
+										xs={16}
 									>
 										<h2
 											style={{
@@ -52,11 +52,28 @@ export const DashCards = () => {
 										</h2>
 										{route.description}
 									</Col>
-									<Col xl={6} lg={6} sm={12} md={8} xs={12}>
-										<Icon
+									<Col
+										xl={6}
+										lg={6}
+										sm={6}
+										md={8}
+										xs={8}
+										style={{
+											justifyContent: "center",
+											alignItems: "center",
+											display: "flex"
+										}}
+									>
+										<route.icon
+											style={{
+												color: route.color,
+												fontSize: "48px"
+											}}
+										/>
+										{/* <Icon
 											style={iconStyle(route.color)}
 											type={route.icon}
-										/>
+										/> */}
 									</Col>
 								</Row>
 							</Card>

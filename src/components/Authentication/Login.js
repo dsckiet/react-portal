@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Form, Icon, Input, Button, Card } from "antd";
+import { Form, Input, Button, Card } from "antd";
+import Icon from "@ant-design/icons";
 import logo from "../../utils/assets/images/logo-black.svg";
 import "./style.css";
 import { _notification } from "../../utils/_helpers";
@@ -16,7 +17,7 @@ const Forgot = styled.div`
 const Login = props => {
 	const [isLoading, setIsLoading] = useState(false);
 	const Dispatch = useContext(DispatchContext);
-	const { getFieldDecorator } = props.form;
+	const [form] = Form.useForm();
 
 	useEffect(() => {
 		const token = JSON.parse(localStorage.getItem("token"));
@@ -28,98 +29,98 @@ const Login = props => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const handleSubmit = e => {
-		e.preventDefault();
-		setIsLoading(true);
+	const handleSubmit = async values => {
+		try {
+			const data = {
+				email: values.email,
+				password: values.password
+			};
+			const res = await loginService(data);
 
-		props.form.validateFields(async (err, values) => {
-			if (!err) {
-				try {
-					const data = {
-						email: values.email,
-						password: values.password
-					};
-					const res = await loginService(data);
-
-					if (res.error) {
-						_notification("error", "Error", res.message);
-						props.form.setFieldsValue({
-							password: ""
-						});
-					} else if (res.res.message === "success") {
-						Dispatch({
-							type: "IN",
-							token: res.token
-						});
-						_notification("success", "Success", "Logged In");
-						props.form.setFieldsValue({
-							email: "",
-							password: ""
-						});
-						setTimeout(() => {
-							props.history.push("/");
-						}, 200);
-					}
-					setIsLoading(false);
-				} catch (err) {
-					props.form.setFieldsValue({
-						password: ""
-					});
-					_notification("error", "Error", err.message);
-					setIsLoading(false);
-				}
-			} else {
-				setIsLoading(false);
+			if (res.error) {
+				_notification("error", "Error", res.message);
+				form.setFieldsValue({
+					password: ""
+				});
+			} else if (res.res.message === "success") {
+				Dispatch({
+					type: "IN",
+					token: res.token
+				});
+				_notification("success", "Success", "Logged In");
+				form.setFieldsValue({
+					email: "",
+					password: ""
+				});
+				setTimeout(() => {
+					props.history.push("/");
+				}, 200);
 			}
-		});
+			setIsLoading(false);
+		} catch (err) {
+			form.setFieldsValue({
+				password: ""
+			});
+			_notification("error", "Error", err.message);
+			setIsLoading(false);
+		}
 	};
+
 	return (
 		<div style={{ height: "100vh", overflow: "hidden" }}>
-			<img src={logo} width={160} className="vidgyor-logo" alt="" />
+			<img
+				src={logo}
+				width={160}
+				height={27.23}
+				className="vidgyor-logo"
+				alt=""
+			/>
 			<Card title="Log in to your account" className="login-form-wrapper">
-				<Form onSubmit={handleSubmit} className="login-form">
-					<Form.Item>
-						{getFieldDecorator("email", {
-							rules: [
-								{
-									type: "email",
-									required: true,
-									message: "Please input your email!"
-								}
-							]
-						})(
-							<Input
-								prefix={
-									<Icon
-										type="user"
-										style={{ color: "rgba(0,0,0,.25)" }}
-									/>
-								}
-								type="email"
-								placeholder="Email"
-							/>
-						)}
+				<Form
+					form={form}
+					onFinish={handleSubmit}
+					className="login-form"
+				>
+					<Form.Item
+						name="email"
+						rules={[
+							{
+								type: "email",
+								required: true,
+								message: "Please input your email!"
+							}
+						]}
+					>
+						<Input
+							prefix={
+								<Icon
+									type="user"
+									style={{ color: "rgba(0,0,0,.25)" }}
+								/>
+							}
+							type="email"
+							placeholder="Email"
+						/>
 					</Form.Item>
-					<Form.Item>
-						{getFieldDecorator("password", {
-							rules: [
-								{
-									required: true,
-									message: "Please input your Password!"
-								}
-							]
-						})(
-							<Input.Password
-								prefix={
-									<Icon
-										type="lock"
-										style={{ color: "rgba(0,0,0,.25)" }}
-									/>
-								}
-								type="password"
-								placeholder="Password"
-							/>
-						)}
+					<Form.Item
+						name="password"
+						rules={[
+							{
+								required: true,
+								message: "Please input your Password!"
+							}
+						]}
+					>
+						<Input.Password
+							prefix={
+								<Icon
+									type="lock"
+									style={{ color: "rgba(0,0,0,.25)" }}
+								/>
+							}
+							type="password"
+							placeholder="Password"
+						/>
 					</Form.Item>
 					<Form.Item>
 						<Button
@@ -143,6 +144,4 @@ const Login = props => {
 	);
 };
 
-const LoginForm = Form.create({ name: "login_form" })(Login);
-
-export default LoginForm;
+export default Login;

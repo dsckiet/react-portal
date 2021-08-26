@@ -1,0 +1,24 @@
+.w-lead {
+	width: 65%;
+	text-align: center;
+	text-transform: capitalize;
+}
+
+.w-else {
+	width: 75%;
+	text-align: center;
+	text-transform: capitalize;
+}
+
+.login-form-button {
+	width: 100%;
+	font-weight: 700 !important;
+	background-color: #1890ff !important;
+	border: 0 !important;
+}
+
+@media screen and (max-width: 992px) {
+	.w-lead {
+		width: 80%;
+	}
+}

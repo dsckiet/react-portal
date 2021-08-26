@@ -5,13 +5,15 @@ import { MdEmail } from "react-icons/md";
 import {
 	FaTwitterSquare,
 	FaGithubSquare,
-	FaBirthdayCake
+	FaBirthdayCake,
+	FaUserGraduate
 } from "react-icons/fa";
 import { FiLink } from "react-icons/fi";
-import { AiFillLinkedin, AiFillPhone } from "react-icons/ai";
+import { AiFillLinkedin, AiFillPhone, AiFillCalendar } from "react-icons/ai";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { getUserService } from "../../utils/services";
 import { _notification } from "./../../utils/_helpers";
+import moment from "moment";
 
 // const Months = [
 // 	"Jan",
@@ -33,7 +35,8 @@ const ImageContainer = styled.div`
 `;
 
 const Image = styled.img`
-	width: 70%;
+	width: 120px;
+	height: 120px;
 	border-radius: 50%;
 	padding: 4px;
 	border: 2px solid #d5d5d5;
@@ -45,12 +48,23 @@ const Image = styled.img`
 `;
 
 const NameContainer = styled.div`
-	padding-top: 30px;
+	padding-top: 10px;
 `;
 
-const Name = styled.p`
+const Name = styled.div`
 	font-size: 23px;
 	font-weight: 700;
+`;
+
+const Branch = styled.div`
+	padding-top: 10px;
+	font-size: 16px;
+`;
+
+const Designation = styled(Col)`
+	margin-top: 7px;
+	font-size: 16px;
+	font-weight: 400;
 `;
 
 const Logo = styled.div`
@@ -86,7 +100,9 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 			try {
 				if (uid) {
 					const res = await getUserService(uid);
+					console.log(res);
 					if (res.message === "success") {
+						console.log(res.data);
 						setUser(res.data);
 						setShowSkeleton(false);
 					} else {
@@ -106,6 +122,7 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 				footer={null}
 				closable={false}
 				onCancel={() => openProfile(false)}
+				style={{ top: "20px" }}
 			>
 				<IoIosArrowRoundBack
 					onClick={() => openProfile(false)}
@@ -127,9 +144,64 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 									<NameContainer>
 										<Name>
 											{user.name} <br />
-											<Tag color="lime">{user.role}</Tag>
-											<br />
+											<Row style={{ paddingTop: "10px" }}>
+												<Col span={12}>
+													<Tag
+														color={
+															user.role === "lead"
+																? "red"
+																: user.role ===
+																  "core"
+																? "geekblue"
+																: "orange"
+														}
+														style={{
+															marginBottom: "5px",
+															textTransform:
+																"capitalize",
+															fontSize: "14px",
+															width: "75%",
+															textAlign: "center"
+														}}
+													>
+														{user.role}
+													</Tag>
+												</Col>
+												<Designation span="12">
+													{user.designation}
+												</Designation>
+											</Row>
 										</Name>
+										<Branch>
+											<Row gutter={12}>
+												<Col
+													span={2}
+													style={{
+														paddingTop: "2px"
+													}}
+												>
+													<FaUserGraduate />
+												</Col>
+												<Col span={6}>
+													{user.branch
+														? user.branch
+														: "N/A"}
+												</Col>
+												<Col
+													span={3}
+													style={{
+														marginTop: "2px"
+													}}
+												>
+													<AiFillCalendar />
+												</Col>
+												<Col>
+													{user.year
+														? user.year
+														: "N/A"}
+												</Col>
+											</Row>
+										</Branch>
 									</NameContainer>
 								</Col>
 							</Row>
@@ -175,13 +247,31 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 								</Col>
 							</Row>
 							<Divider style={{ color: "rgba(0,0,0,.25)" }}>
+								Bio
+							</Divider>
+							<Row
+								style={{
+									textAlign: "center",
+									marginRight: "auto !important",
+									marginLeft: "auto !important",
+									justifyContent: "center",
+									display: "flex"
+								}}
+							>
+								<Col span={24}>
+									{user.bio ? user.bio : "No Bio Available"}
+								</Col>
+							</Row>
+							<Divider style={{ color: "rgba(0,0,0,.25)" }}>
 								Contact Me
 							</Divider>
 							<Row
 								style={{
 									textAlign: "center",
 									marginRight: "auto !important",
-									marginLeft: "auto !important"
+									marginLeft: "auto !important",
+									justifyContent: "center",
+									display: "flex"
 								}}
 							>
 								<Col span={2}></Col>
@@ -253,6 +343,24 @@ const UserProfile = ({ visible, openProfile, uid }) => {
 								) : null}
 
 								<Col span={2}></Col>
+							</Row>
+							<Row
+								style={{
+									float: "right",
+									paddingBottom: "10px"
+								}}
+							>
+								<span style={{ paddingRight: "10px" }}>
+									Last active
+								</span>
+
+								<Tag color="green">
+									{user.lastActiveAt
+										? moment(user.lastActiveAt).format(
+												"DD MMM YYYY hh:mm"
+										  )
+										: "never"}
+								</Tag>
 							</Row>
 						</Wrapper>
 					) : null}
