@@ -24,6 +24,8 @@ const ParticipantsList = props => {
 	const [branch, setBranch] = useState(null);
 	const [year, setYear] = useState(null);
 	const [query, setQuery] = useState(null);
+	const [page, setPage] = useState(1);
+
 	// const [allEvents, setAllEvents] = useState([]);
 
 	useEffect(() => {
@@ -141,6 +143,12 @@ const ParticipantsList = props => {
 
 	const columns = [
 		{
+			title: "#",
+			dataIndex: "key",
+			key: "key",
+			render: (value, item, index) => (page - 1) * 10 + index + 1
+		},
+		{
 			title: "Name",
 			dataIndex: "name",
 			key: "name",
@@ -252,6 +260,12 @@ const ParticipantsList = props => {
 						loading={isLoading}
 						columns={columns}
 						dataSource={data}
+						pagination={{
+							onChange(current) {
+								setPage(current);
+							},
+							defaultPageSize: 500
+						}}
 					/>
 				</Card>
 			</div>
