@@ -1,4 +1,4 @@
-//import EventsList from "../components/Events/EventsList";
+import EventsList from "../components/Events/EventsList";
 import Dashboard from "../components/Layout/Dashboard";
 import TeamList from "../components/Team/TeamList";
 //import ParticipantsList from "../components/Participants/ParticipantsList";
@@ -7,10 +7,12 @@ import Profile from "../components/Profile/Profile";
 import {
 	AiOutlineAppstore,
 	AiOutlineSmile,
-	AiOutlineTeam,
-	AiOutlineUsergroupAdd
+	AiOutlineTeam
+	//AiOutlineUsergroupAdd
 } from "react-icons/ai";
-import ManageGroups from "../components/Groups/ManageGroups";
+import { MdEvent } from "react-icons/md";
+//import { RiContactsLine } from "react-icons/ri";
+//import ManageGroups from "../components/Groups/ManageGroups";
 
 let routes = [
 	{
@@ -23,23 +25,23 @@ let routes = [
 		description: "List of all the events",
 		color: "#F4B400"
 	},
-	// {
-	// 	path: "/events",
-	// 	exact: true,
-	// 	component: EventsList,
-	// 	name: "Events",
-	// 	key: "events",
-	// 	icon: "calendar",
-	// 	description: "List of all the events",
-	// 	color: "#DB4437"
-	// },
+	{
+		path: "/events",
+		exact: true,
+		component: EventsList,
+		name: "Events",
+		key: "events",
+		description: "List of all the events",
+		color: "#DB4437",
+		icon: MdEvent
+	},
 	// {
 	// 	path: "/participants",
 	// 	exact: true,
 	// 	component: ParticipantsList,
 	// 	name: "Participants",
 	// 	key: "participants",
-	// 	icon: "team",
+	// 	icon: RiContactsLine,
 	// 	description: "List of all the participants",
 	// 	color: "#4285F4"
 	// },
@@ -63,16 +65,16 @@ let routes = [
 	// 	description: "Add certificates for Events",
 	// 	color: "#F4B400"
 	// },
-	{
-		path: "/groups",
-		exact: true,
-		component: ManageGroups,
-		name: "Groups",
-		key: "groups",
-		icon: AiOutlineUsergroupAdd,
-		description: "Manage Groups",
-		color: "#DB4437"
-	},
+	// {
+	// 	path: "/groups",
+	// 	exact: true,
+	// 	component: ManageGroups,
+	// 	name: "Groups",
+	// 	key: "groups",
+	// 	icon: AiOutlineUsergroupAdd,
+	// 	description: "Manage Groups",
+	// 	color: "#DB4437"
+	// },
 	{
 		path: "/profile",
 		exact: true,

@@ -31,7 +31,16 @@ import {
 	DELETE_ALL_TODO,
 	EDIT,
 	CHANGE_PASSWORD,
-	GET_MY_GROUPS
+	GET_GROUPS,
+	ADD_GROUP,
+	DELETE_GROUP,
+	ADD_TASK,
+	GET_MY_TASK,
+	DELETE_TASK,
+	GET_TASK,
+	UPDATE_TASK_STATUS,
+	GET_COMMENTS,
+	UPDATE_TASK
 } from "./routes";
 
 const BASE_URL =
@@ -451,7 +460,6 @@ export const previewCertificateService = async data => {
 		let response = await axios.post(PREVIEW_CERTIFICATE, data, {
 			responseType: "blob" //Force to receive data in a Blob Format
 		});
-		console.log(response);
 		const file = new Blob([response.data], { type: "application/pdf" });
 		//Build a URL from the file
 		const fileURL = URL.createObjectURL(file);
@@ -473,10 +481,10 @@ export const addCertificateService = async (data, id) => {
 };
 
 /************************* PROGRESS SERVICES ****************************/
-export const getGroupsService = async id => {
+export const getGroupsService = async () => {
 	setUserToken();
 	try {
-		const response = await axios.get(GET_MY_GROUPS);
+		const response = await axios.get(GET_GROUPS);
 		if (response.status === 200 && response.data.error === false) {
 			return response.data;
 		} else return response.data;
@@ -486,6 +494,148 @@ export const getGroupsService = async id => {
 	}
 };
 
+export const addGroupService = async data => {
+	setUserToken();
+	try {
+		const response = await axios.post(ADD_GROUP, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const deleteGroupService = async id => {
+	setUserToken();
+	try {
+		const response = await axios.delete(`${DELETE_GROUP}/${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const addTaskService = async (id, data) => {
+	setUserToken();
+	try {
+		const response = await axios.post(`${ADD_TASK}/${id}`, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const getTaskService = async id => {
+	setUserToken();
+	try {
+		const response = await axios.get(`${GET_TASK}/${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const deleteTaskService = async id => {
+	setUserToken();
+	try {
+		const response = await axios.delete(`${DELETE_TASK}/${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const updateTaskService = async (id, data) => {
+	setUserToken();
+	try {
+		const response = await axios.put(`${UPDATE_TASK}/${id}`, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const updateTaskStatus = async (id, data) => {
+	setUserToken();
+	try {
+		const response = await axios.put(`${UPDATE_TASK_STATUS}/${id}`, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const getTaskAssignee = async id => {
+	setUserToken();
+	try {
+		const response = await axios.get(`${UPDATE_TASK_STATUS}/${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const getMyTaskService = async () => {
+	setUserToken();
+	try {
+		const response = await axios.get(GET_MY_TASK);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const getCommentService = async id => {
+	setUserToken();
+	try {
+		const response = await axios.get(`${GET_COMMENTS}/${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const addCommentService = async (id, data) => {
+	setUserToken();
+	try {
+		const response = await axios.post(`${GET_COMMENTS}/${id}`, data);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
 /******************Helper SERVICES********************/
 export const getRole = () => {
 	let AUTH_TOKEN = JSON.parse(localStorage.getItem("token"));
