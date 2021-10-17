@@ -52,7 +52,7 @@ const ManageTasks = props => {
 							marginBottom: "16px"
 						}}
 					>
-						<h3>Created Tasks</h3>
+						<h3> Tasks</h3>
 
 						{(userData.role === "lead" ||
 							memberDetails.headIds.includes(userData.id)) && (

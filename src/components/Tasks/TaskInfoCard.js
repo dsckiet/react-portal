@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Card, Row, Tag, Avatar, Tooltip, Col, Popconfirm } from "antd";
+import { Card, Row, Tag, Avatar, Tooltip, Col, Popconfirm, Drawer } from "antd";
 import { AiOutlineDelete, AiOutlineInfoCircle } from "react-icons/ai";
 import { BiEditAlt } from "react-icons/bi";
 import { _notification } from "../../utils/_helpers";
 import { deleteTaskService } from "../../utils/services";
 import InfoModal from "./InfoModal";
+import EditTask from "./EditTask";
 
 const TaskInfoCard = ({
 	data,
@@ -14,6 +15,7 @@ const TaskInfoCard = ({
 	userData
 }) => {
 	const [showInfo, setShowInfo] = useState(false);
+	const [show, setShow] = useState(false);
 
 	const deleteTask = async (e, id) => {
 		e.stopPropagation();
@@ -33,9 +35,9 @@ const TaskInfoCard = ({
 		setShowInfo(true);
 	};
 
-	const editTask = (e, id) => {
+	const editTask = e => {
 		e.stopPropagation();
-		console.log(id, "edit");
+		setShow(true);
 	};
 
 	return (
@@ -133,6 +135,18 @@ const TaskInfoCard = ({
 				showInfo={showInfo}
 				data={data}
 			/>
+
+			<Drawer
+				title="Edit Task"
+				placement="right"
+				closable={true}
+				width={"100%"}
+				destroyOnClose={true}
+				onClose={() => setShow(false)}
+				visible={show}
+			>
+				<EditTask data={data} setShow={setShow} />
+			</Drawer>
 		</>
 	);
 };

@@ -62,6 +62,7 @@ export const DELETE_GROUP = "/groups";
 export const ADD_TASK = "/tasks";
 export const GET_TASK = "/tasks";
 export const DELETE_TASK = "/tasks";
+export const UPDATE_TASK = "/tasks";
 export const UPDATE_TASK_STATUS = "/tasks/assignees";
 export const TASK_ASSIGNEE = "tasks/assignees";
 export const GET_COMMENTS = "/comments";

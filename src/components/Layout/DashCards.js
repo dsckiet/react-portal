@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { Row, Col, Card } from "antd";
 import { Link } from "react-router-dom";
 import _routes from "../../utils/_routes";
+import { getRole } from "./../../utils/services";
 
 export const DashCards = () => {
+	const [userData] = useState(getRole());
 	return (
 		<Row gutter={[16, 16]}>
 			{_routes.map(route => {
 				if (route.key === "dashboard") {
+					return null;
+				}
+				if (
+					(route.key === "participants" || route.key === "groups") &&
+					userData.role === "member"
+				) {
 					return null;
 				}
 				return (

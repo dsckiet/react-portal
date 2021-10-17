@@ -39,7 +39,8 @@ import {
 	DELETE_TASK,
 	GET_TASK,
 	UPDATE_TASK_STATUS,
-	GET_COMMENTS
+	GET_COMMENTS,
+	UPDATE_TASK
 } from "./routes";
 
 const BASE_URL =
@@ -549,6 +550,19 @@ export const deleteTaskService = async id => {
 	setUserToken();
 	try {
 		const response = await axios.delete(`${DELETE_TASK}/${id}`);
+		if (response.status === 200 && response.data.error === false) {
+			return response.data;
+		} else return response.data;
+	} catch (err) {
+		if (err.response) throw err.response.data;
+		else throw err.message;
+	}
+};
+
+export const updateTaskService = async (id, data) => {
+	setUserToken();
+	try {
+		const response = await axios.put(`${UPDATE_TASK}/${id}`, data);
 		if (response.status === 200 && response.data.error === false) {
 			return response.data;
 		} else return response.data;
