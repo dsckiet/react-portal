@@ -183,6 +183,12 @@ const EventsList = props => {
 			className: "registrations"
 		},
 		{
+			title: "Total Registrations",
+			dataIndex: "totalRegistrations",
+			key: "totalRegistrations",
+			className: "registrations"
+		},
+		{
 			title: "Registration",
 			dataIndex: "reg",
 			key: "reg",
@@ -225,6 +231,8 @@ const EventsList = props => {
 		}
 	];
 
+	console.log(events);
+
 	const data = events
 		? events.map((event, id) => {
 				const {
@@ -237,7 +245,8 @@ const EventsList = props => {
 					code,
 					isRegistrationRequired,
 					isRegistrationOpened,
-					maxRegister
+					maxRegister,
+					registrations
 				} = event;
 				return {
 					index: ++id,
@@ -251,7 +260,8 @@ const EventsList = props => {
 					status: [isRegistrationOpened, _id],
 					reg: isRegistrationRequired,
 					action: _id,
-					maxRegister
+					maxRegister,
+					totalRegistrations: registrations
 				};
 		  })
 		: null;
