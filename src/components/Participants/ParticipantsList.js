@@ -3,11 +3,16 @@ import PageTitle from "../Layout/PageTitle";
 import ParticipantsOptions from "./ParticipantsOptions";
 import ParticipantDetail from "./ParticipantDetail";
 import { Table, Card, Drawer, Popconfirm, Divider } from "antd";
-import Icon from "@ant-design/icons";
+import {
+	CloseOutlined,
+	CheckOutlined,
+	DeleteOutlined
+} from "@ant-design/icons";
 import "./style.css";
 import {
 	getParticipantsService,
-	deleteParticipantServices
+	deleteParticipantServices,
+	getRole
 } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
 import { Link } from "react-router-dom";
@@ -25,6 +30,8 @@ const ParticipantsList = props => {
 	const [year, setYear] = useState(null);
 	const [query, setQuery] = useState(null);
 	const [page, setPage] = useState(1);
+	const [count, setCount] = useState(0);
+	const userData = getRole();
 
 	// const [allEvents, setAllEvents] = useState([]);
 
@@ -35,6 +42,8 @@ const ParticipantsList = props => {
 				const { data } = await getParticipantsService();
 				setAllParticipants(data.participants);
 				setParticipants(data.participants);
+				setCount(data.totalParticipants);
+
 				setIsLoading(false);
 			} catch (err) {
 				_notification("warning", "Error", err.message);
@@ -47,6 +56,7 @@ const ParticipantsList = props => {
 		try {
 			if (id === "All") {
 				setParticipants(allParticipants);
+				setCount(data.totalParticipants);
 				setBranch(null);
 				setYear(null);
 				setEID(null);
@@ -57,6 +67,7 @@ const ParticipantsList = props => {
 				if (year) params = { ...params, year };
 				const { data } = await getParticipantsService(params);
 				setParticipants(data.participants);
+				setCount(data.totalParticipants);
 			}
 			setIsLoading(false);
 		} catch (err) {
@@ -71,6 +82,7 @@ const ParticipantsList = props => {
 			let params = { eid: eId, query: val, branch, year };
 			const { data } = await getParticipantsService(params);
 			setParticipants(data.participants);
+			setCount(data.totalParticipants);
 			setIsLoading(false);
 		} catch (err) {
 			_notification("warning", "Error", err.message);
@@ -87,6 +99,7 @@ const ParticipantsList = props => {
 			if (eId) params = { ...params, eid: eId };
 			const { data } = await getParticipantsService(params);
 			setParticipants(data.participants);
+			setCount(data.totalParticipants);
 			setIsLoading(false);
 		} catch (error) {
 			_notification("warning", "Error", error.message);
@@ -103,6 +116,7 @@ const ParticipantsList = props => {
 			if (eId) params = { ...params, eid: eId };
 			const { data } = await getParticipantsService(params);
 			setParticipants(data.participants);
+			setCount(data.totalParticipants);
 			setIsLoading(false);
 		} catch (error) {
 			_notification("warning", "Error", error.message);
@@ -192,6 +206,7 @@ const ParticipantsList = props => {
 			title: "Action",
 			dataIndex: "action",
 			key: "action",
+			role: "lead",
 			render: action => (
 				<span>
 					<Popconfirm
@@ -201,36 +216,39 @@ const ParticipantsList = props => {
 						cancelText="No"
 					>
 						{action[0] ? (
-							<Icon type="close" style={{ color: "#F4B400" }} />
+							<CloseOutlined style={{ color: "#F4B400" }} />
 						) : (
-							<Icon type="check" style={{ color: "green" }} />
+							<CheckOutlined style={{ color: "green" }} />
 						)}
 					</Popconfirm>
-					<Divider type="vertical" />
-					<Popconfirm
-						title="Are you sure delete this user?"
-						onConfirm={() => handleParticipantDelete(action[1])}
-						okText="Yes"
-						cancelText="No"
-					>
-						<Icon style={{ color: "#DB4437" }} type="delete" />
-					</Popconfirm>
+					{userData && userData.role === "lead" ? (
+						<>
+							<Divider type="vertical" />
+							<Popconfirm
+								title="Are you sure delete this user?"
+								onConfirm={() =>
+									handleParticipantDelete(action[1])
+								}
+								okText="Yes"
+								cancelText="No"
+							>
+								<DeleteOutlined style={{ color: "#DB4437" }} />
+							</Popconfirm>
+						</>
+					) : null}
 				</span>
 			)
 		}
-	];
+	].filter(
+		item =>
+			(userData.role !== "lead" && item.role !== "lead") ||
+			userData.role === "lead"
+	);
 
 	const data = participants
 		? participants.map((event, id) => {
-				const {
-					_id,
-					name,
-					email,
-					branch,
-					phone,
-					year,
-					isRevoked
-				} = event;
+				const { _id, name, email, branch, phone, year, isRevoked } =
+					event;
 				return {
 					index: ++id,
 					key: _id,
@@ -255,11 +273,16 @@ const ParticipantsList = props => {
 					onBranchChange={handleBranchChange}
 					onYearChange={handleYearChange}
 				/>
-				<Card style={{ padding: 0, width: "100%", overflowX: "auto" }}>
+
+				<Card
+					title={`Total Count: ${count}`}
+					style={{ padding: 0, width: "100%", overflowX: "auto" }}
+				>
 					<Table
 						loading={isLoading}
 						columns={columns}
 						dataSource={data}
+						onChange={(d, e) => console.log(d, e)}
 						pagination={{
 							onChange(current) {
 								setPage(current);
