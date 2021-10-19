@@ -15,7 +15,7 @@ function App() {
 			<Route exact path="/login" component={Login} />
 			<Route exact path="/forgot" component={ForgotPassword} />
 			<Route exact path="/reset/:id/:token" component={ResetPassword} />
-			<PrivateRoute exact="/" component={Navigator} />
+			<PrivateRoute exact component={Navigator} />
 		</Switch>
 	);
 }

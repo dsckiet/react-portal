@@ -104,75 +104,59 @@ const UpdateEvent = props => {
 		return current && current < moment().endOf("day");
 	}
 
-	const handleSubmit = e => {
-		e.preventDefault();
+	const handleSubmit = async values => {
 		setIsLoading(true);
 		if (form.getFieldValue("isRegistrationRequired") === false) {
 			form.setFieldsValue({ isRegistrationOpened: false });
 		}
-		form.validateFields(async (err, values) => {
-			console.log(values);
-			if (!err) {
-				try {
-					let xtime =
-						values.startTime.format("h:mm a") +
-						" to " +
-						values.endTime.format("h:mm a");
+		try {
+			let xtime =
+				values.startTime.format("h:mm a") +
+				" to " +
+				values.endTime.format("h:mm a");
 
-					const formData = new FormData();
-					if (values.image.file) {
-						formData.append(
-							"image",
-							values.image.file.originFileObj
-						);
-					} else {
-						formData.append("image", values.image);
-					}
-					formData.append("title", values.title);
-					formData.append("description", values.description);
-					formData.append(
-						"startDate",
-						values.dates[0].format("YYYY-MM-DD")
-					);
-					formData.append(
-						"endDate",
-						values.dates[1].format("YYYY-MM-DD")
-					);
-					formData.append("time", xtime);
-					formData.append("venue", values.venue);
-					formData.append(
-						"isRegistrationRequired",
-						values.isRegistrationRequired
-					);
-					formData.append(
-						"isRegistrationOpened",
-						values.isRegistrationOpened
-					);
-					formData.append("maxRegister", values.maxRegister);
-
-					let params = props.eventId;
-
-					const res = await updateEventService(formData, params);
-					if (res.message === "success") {
-						_notification("success", "Success", "Event Updated");
-						props.onUpdateEvent();
-					} else {
-						_notification("error", "Error", res.message);
-					}
-					setIsLoading(false);
-				} catch (err) {
-					_notification("error", "Error", err.message);
-					setIsLoading(false);
-				}
+			const formData = new FormData();
+			if (values.image.file) {
+				formData.append("image", values.image.file.originFileObj);
 			} else {
-				setIsLoading(false);
+				formData.append("image", values.image);
 			}
-		});
+			formData.append("title", values.title);
+			formData.append("description", values.description);
+			formData.append("startDate", values.dates[0].format("YYYY-MM-DD"));
+			formData.append("endDate", values.dates[1].format("YYYY-MM-DD"));
+			formData.append("time", xtime);
+			formData.append("venue", values.venue);
+			formData.append(
+				"isRegistrationRequired",
+				values.isRegistrationRequired
+			);
+			formData.append(
+				"isRegistrationOpened",
+				values.isRegistrationOpened
+			);
+			formData.append("maxRegister", values.maxRegister);
+
+			let params = props.eventId;
+			console.log(formData, "yeh h final");
+
+			const res = await updateEventService(formData, params);
+			if (res.message === "success") {
+				_notification("success", "Success", "Event Updated");
+				props.onUpdateEvent();
+			} else {
+				_notification("error", "Error", res.message);
+			}
+			setIsLoading(false);
+		} catch (err) {
+			_notification("error", "Error", err.message);
+			setIsLoading(false);
+		}
 	};
 
 	return (
 		<Skeleton loading={showSkeleton} active>
-			<Form onSubmit={handleSubmit} layout="vertical" form={form}>
+			<Form onFinish={handleSubmit} layout="vertical" form={form}>
 				<Form.Item
 					label="Event Title"
 					required
@@ -308,7 +292,7 @@ const UpdateEvent = props => {
 					<Col span={12}>
 						<Form.Item name="isRegistrationRequired">
 							<Checkbox
-								checked={props.form.getFieldValue(
+								checked={form.getFieldValue(
 									"isRegistrationRequired"
 								)}
 							>

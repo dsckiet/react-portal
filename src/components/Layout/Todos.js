@@ -59,9 +59,9 @@ const Todos = () => {
 	};
 
 	const handleAddTodo = async val => {
-		if (!val || val.length < 7) return;
+		if (!val || val.trim().length < 7) return;
 		try {
-			const res = await addTodo({ title: val });
+			const res = await addTodo({ title: val.trim() });
 			if (!res.error && res.message === "success") {
 				setRefresh(!refresh);
 			}
@@ -179,8 +179,7 @@ const Todos = () => {
 														margin: "5px 0px",
 														padding: "2px 5px",
 														borderRadius: "4px",
-														border:
-															"1px solid rgb(24,144,255,0.3)",
+														border: "1px solid rgb(24,144,255,0.3)",
 														backgroundColor:
 															"rgb(24,144,255,0.05)"
 												  }
@@ -193,8 +192,7 @@ const Todos = () => {
 														margin: "5px 0px",
 														padding: "2px 5px",
 														borderRadius: "4px",
-														border:
-															"1px solid rgb(191,191,191,.3)",
+														border: "1px solid rgb(191,191,191,.3)",
 														backgroundColor:
 															"rgb(191,191,191,.05)"
 												  }

@@ -17,6 +17,10 @@
 	border: 0 !important;
 }
 
+.ant-image-mask-info {
+	display: none !important;
+}
+
 @media screen and (max-width: 992px) {
 	.w-lead {
 		width: 80%;

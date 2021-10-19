@@ -1,40 +1,64 @@
 import React, { useState } from "react";
-import { Row, Col, Form, Input, Button, Card } from "antd";
-import styled from "styled-components";
-import { HiBadgeCheck, HiCheckCircle } from "react-icons/hi";
+import { Row, Col, Form, Input, Button, Tabs } from "antd";
+import PersonCard from "./PersonCard";
 import "./styles.css";
+import { addGroupService } from "../../utils/services";
+import { _notification } from "../../utils/_helpers";
 
-const CreateGroup = ({ members }) => {
+const CreateGroup = ({ members, setShow, setRefreshGroups, refreshGroups }) => {
+	const [activeTab, setActiveTab] = useState("head");
 	const [form] = Form.useForm();
-	const { Meta } = Card;
+	const { TabPane } = Tabs;
 	const [selectedMembers, setSelectedMembers] = useState([]);
-	//let selectedMembers = [];
+	const [selectedHeads, setSelectedHeads] = useState([]);
 
-	const Image = styled.img`
-		width: 80px;
-		height: 80px;
-		margin-top: 25px;
-		border-radius: 50%;
-		padding: 2px;
-		border: 2px solid #d5d5d5;
-		position: relative;
-		background-color: #ffffff;
-	`;
-
-	const handleSelectMember = id => {
-		if (selectedMembers.includes(id)) {
-			//selectedMembers.filter(member => member !== id);
-			setSelectedMembers(selectedMembers.filter(member => member !== id));
+	const handleSelect = id => {
+		if (activeTab === "head") {
+			if (selectedHeads.includes(id)) {
+				setSelectedHeads(selectedHeads.filter(head => head !== id));
+			}
+			if (!selectedHeads.includes(id) && !selectedMembers.includes(id)) {
+				setSelectedHeads([...selectedHeads, id]);
+			}
 		}
-		if (!selectedMembers.includes(id)) {
-			//selectedMembers.push(id);
-			setSelectedMembers([...selectedMembers, id]);
+		if (activeTab === "member") {
+			if (selectedMembers.includes(id)) {
+				setSelectedMembers(
+					selectedMembers.filter(member => member !== id)
+				);
+			}
+			if (!selectedMembers.includes(id) && !selectedHeads.includes(id)) {
+				setSelectedMembers([...selectedMembers, id]);
+			}
 		}
 	};
 
-	const handleFinish = () => {
-		document.write(selectedMembers);
+	const handleFinish = async val => {
+		let groupData = {
+			name: val.name,
+			members: selectedMembers,
+			heads: selectedHeads
+		};
+		try {
+			const { message, error } = await addGroupService(groupData);
+			if (!error && message === "success") {
+				_notification(
+					"success",
+					"Success",
+					"Group created successfully!"
+				);
+			}
+			setRefreshGroups(!refreshGroups);
+			setShow(false);
+		} catch (err) {
+			_notification("error", "Error", err.message);
+		}
 	};
+
+	const handleTabChange = key => {
+		setActiveTab(key);
+	};
+
 	return (
 		<>
 			<Form onFinish={handleFinish} layout="vertical" form={form}>
@@ -52,7 +76,17 @@ const CreateGroup = ({ members }) => {
 					<Input type="text" placeholder="Group name" />
 				</Form.Item>
 
-				<Form.Item label="Select members" required name="members">
+				<Form.Item label="Select" name="select">
+					<Tabs
+						defaultActiveKey="head"
+						type="tabs"
+						onChange={key => {
+							handleTabChange(key);
+						}}
+					>
+						<TabPane tab="Heads" key="head" />
+						<TabPane tab="Members" key="member" />
+					</Tabs>
 					<Row gutter={[16, 16]}>
 						{members &&
 							members.map(member => (
@@ -64,94 +98,12 @@ const CreateGroup = ({ members }) => {
 									xl={3}
 									key={member._id}
 								>
-									<Card
-										onClick={() =>
-											handleSelectMember(member._id)
-										}
-										hoverable
-										rounded
-										bordered={false}
-										style={{
-											display: "flex",
-											justifyContent: "center",
-											textAlign: "center",
-											backgroundColor: `${
-												member.role === "lead"
-													? "rgb(219,68,55,.1)"
-													: member.role === "core"
-													? "	rgb(66, 133, 244,.1)"
-													: "rgb(244,180,0,.1)"
-											}`,
-											height: "100%"
-										}}
-									>
-										<div
-											style={{
-												backgroundColor: `${
-													member.role === "lead"
-														? "#DB4437"
-														: member.role === "core"
-														? "#4285F4"
-														: "#F4B400"
-												}`,
-												position: "absolute",
-												height: "38%",
-												top: 0,
-												left: 0,
-												width: "100%"
-											}}
-										/>
-
-										<div
-											className={
-												selectedMembers.length !== 0 &&
-												selectedMembers.includes(
-													member._id
-												)
-													? "selected"
-													: "onHover"
-											}
-										>
-											<div>
-												{selectedMembers.length !== 0 &&
-												selectedMembers.includes(
-													member._id
-												) ? (
-													<HiBadgeCheck
-														style={{
-															height: "80px",
-															width: "80px"
-														}}
-													/>
-												) : (
-													<HiCheckCircle
-														style={{
-															height: "80px",
-															width: "80px"
-														}}
-													/>
-												)}
-											</div>
-											<h2>
-												{selectedMembers.length !== 0 &&
-												selectedMembers.includes(
-													member._id
-												)
-													? "Selected !"
-													: "Select"}
-											</h2>
-										</div>
-
-										<Image src={member.image} alt="" />
-										<Meta
-											style={{
-												paddingTop: "20px",
-												paddingBottom: "10px"
-											}}
-											title={member.name}
-											description={member.designation}
-										/>
-									</Card>
+									<PersonCard
+										member={member}
+										selectedHeads={selectedHeads}
+										selectedMembers={selectedMembers}
+										handleSelect={handleSelect}
+									/>
 								</Col>
 							))}
 					</Row>

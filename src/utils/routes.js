@@ -56,4 +56,15 @@ export const PREVIEW_CERTIFICATE = "/events/certificate/preview"; // POST
 export const ADD_CERTIFICATE = "/events/certificate"; // POST
 
 /** Progress Module **/
-export const GET_MY_GROUPS = "/group/my";
+export const GET_GROUPS = "/groups/";
+export const ADD_GROUP = "/groups";
+export const DELETE_GROUP = "/groups";
+export const ADD_TASK = "/tasks";
+export const GET_TASK = "/tasks";
+export const DELETE_TASK = "/tasks";
+export const UPDATE_TASK = "/tasks";
+export const UPDATE_TASK_STATUS = "/tasks/assignees";
+export const TASK_ASSIGNEE = "tasks/assignees";
+export const GET_COMMENTS = "/comments";
+export const ADD_COMMENTS = "/comments";
+export const GET_MY_TASK = "/tasks/user/my";
