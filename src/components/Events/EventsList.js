@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PageTitle from "../Layout/PageTitle";
 import EventOptions from "./EventOptions";
 import { Table, Divider, Tag, Card, Drawer, Popconfirm } from "antd";
-import Icon from "@ant-design/icons";
+import { RedoOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import "./style.css";
 import {
 	getEventsService,
@@ -148,7 +148,7 @@ const EventsList = props => {
 						okText="Yes"
 						cancelText="No"
 					>
-						<Icon type="redo" />
+						<RedoOutlined />
 					</Popconfirm>
 				</>
 			)
@@ -170,7 +170,7 @@ const EventsList = props => {
 							okText="Yes"
 							cancelText="No"
 						>
-							<Icon type="redo" />
+							<RedoOutlined />
 						</Popconfirm>
 					</>
 				);
@@ -208,7 +208,7 @@ const EventsList = props => {
 							setEventId(_id);
 						}}
 					>
-						<Icon type="edit" style={{ color: "#F4B400" }} />
+						<EditOutlined style={{ color: "#F4B400" }} />
 					</Link>
 					<Divider type="vertical" />
 					<Popconfirm
@@ -218,7 +218,7 @@ const EventsList = props => {
 						okText="Yes"
 						cancelText="No"
 					>
-						<Icon style={{ color: "#DB4437" }} type="delete" />
+						<DeleteOutlined style={{ color: "#DB4437" }} />
 					</Popconfirm>
 				</span>
 			)
