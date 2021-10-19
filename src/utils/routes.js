@@ -54,9 +54,6 @@ export const PARTICIPANT_EVENT_ATTENDANCE =
 /**CERTIFICATE MODULE**/
 export const PREVIEW_CERTIFICATE = "/events/certificate/preview"; // POST
 export const ADD_CERTIFICATE = "/events/certificate"; // POST
-<<<<<<< HEAD
-=======
 
 /** Progress Module **/
 export const GET_MY_GROUPS = "/group/my";
->>>>>>> 4751e61d57fa2cca5b7065a8560cf55bbf2a4624
