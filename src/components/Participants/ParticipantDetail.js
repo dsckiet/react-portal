@@ -63,6 +63,17 @@ const ParticipantsDetails = props => {
 								<p>
 									{event.details.title}{" "}
 									<Tag>{event.status.toUpperCase()}</Tag>
+									<Tag
+										color={
+											event.isRsvpAccepted
+												? "green"
+												: "red"
+										}
+									>
+										{event.isRsvpAccepted
+											? "RSVP: Accepted"
+											: "RSVP: Not Accepted"}
+									</Tag>
 								</p>
 								<p>{event.details.description}</p>
 								<p>

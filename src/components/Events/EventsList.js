@@ -189,6 +189,12 @@ const EventsList = props => {
 			className: "registrations"
 		},
 		{
+			title: "Total RSVPs",
+			dataIndex: "totalRsvps",
+			key: "totalRsvps",
+			className: "rsvps"
+		},
+		{
 			title: "Registration",
 			dataIndex: "reg",
 			key: "reg",
@@ -246,7 +252,8 @@ const EventsList = props => {
 					isRegistrationRequired,
 					isRegistrationOpened,
 					maxRegister,
-					registrations
+					registrations,
+					rsvps
 				} = event;
 				return {
 					index: ++id,
@@ -261,7 +268,8 @@ const EventsList = props => {
 					reg: isRegistrationRequired,
 					action: _id,
 					maxRegister,
-					totalRegistrations: registrations
+					totalRegistrations: registrations,
+					totalRsvps: rsvps
 				};
 		  })
 		: null;
