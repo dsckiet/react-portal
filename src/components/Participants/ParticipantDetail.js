@@ -9,7 +9,6 @@ const ParticipantsDetails = props => {
 	const [info, setInfo] = useState(null);
 	const [eventsData, setEventsData] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
-	const [attendance, setAttendance] = useState(null);
 
 	useEffect(() => {
 		(async () => {
@@ -19,10 +18,7 @@ const ParticipantsDetails = props => {
 				const { data } = await getParticipantsDetailService(params);
 
 				setInfo(data.profileData);
-				setEventsData(data.events);
-				attendanceCalc(data.events);
-				// let date = [];
-
+				setEventsData(attendanceCalc(data.events));
 				setIsLoading(false);
 			} catch (err) {
 				_notification("warning", "Error", err.message);
@@ -72,7 +68,7 @@ const ParticipantsDetails = props => {
 				}
 				event.attendance.dayWiseAttendance = data;
 			});
-			setEventsData(events);
+			return events;
 		}
 	};
 
