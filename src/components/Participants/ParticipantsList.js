@@ -43,7 +43,6 @@ const ParticipantsList = props => {
 				setAllParticipants(data.participants);
 				setParticipants(data.participants);
 				setCount(data.totalParticipants);
-
 				setIsLoading(false);
 			} catch (err) {
 				_notification("warning", "Error", err.message);
@@ -167,7 +166,6 @@ const ParticipantsList = props => {
 			dataIndex: "name",
 			key: "name",
 			sorter: (a, b) => a.name[0].localeCompare(b.name[0]),
-			sortDirections: ["descend"],
 			render: text => (
 				<Link
 					to="#"

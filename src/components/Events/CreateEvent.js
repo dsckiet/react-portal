@@ -54,7 +54,6 @@ const CreateEvent = props => {
 	}
 
 	const handleSubmit = async values => {
-		console.log(values, "event ki");
 		if (values.isRegistrationRequired === false) {
 			values.isRegistrationOpened = false;
 		}
@@ -223,13 +222,19 @@ const CreateEvent = props => {
 
 			<Row gutter={16}>
 				<Col span={12}>
-					<Form.Item name="isRegistrationRequired">
+					<Form.Item
+						valuePropName="checked"
+						name="isRegistrationRequired"
+					>
 						<Checkbox>Is Registration Required?</Checkbox>
 					</Form.Item>
 				</Col>
 				<Col span={12}>
 					<Checkbox.Group>
-						<Form.Item name="isRegistrationCompleted">
+						<Form.Item
+							name="isRegistrationCompleted"
+							valuePropName="checked"
+						>
 							<Checkbox>Is Registration Open?</Checkbox>
 						</Form.Item>
 					</Checkbox.Group>
