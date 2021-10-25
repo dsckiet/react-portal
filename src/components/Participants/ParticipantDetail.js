@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Skeleton, Timeline, Card, Avatar, Tag } from "antd";
-import Icon from "@ant-design/icons";
+import { PhoneOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { getParticipantsDetailService } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
+import moment from "moment";
 
 const ParticipantsDetails = props => {
 	const [info, setInfo] = useState(null);
@@ -15,8 +16,9 @@ const ParticipantsDetails = props => {
 			try {
 				const params = { pid: props.participantId };
 				const { data } = await getParticipantsDetailService(params);
+
 				setInfo(data.profileData);
-				setEventsData(data.events);
+				setEventsData(attendanceCalc(data.events));
 				setIsLoading(false);
 			} catch (err) {
 				_notification("warning", "Error", err.message);
@@ -24,6 +26,51 @@ const ParticipantsDetails = props => {
 		})();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	const attendanceCalc = events => {
+		if (events) {
+			events.forEach(event => {
+				let start = new Date(event.details.startDate);
+				let end = new Date(event.details.endDate);
+				let data = [];
+				let dayAttend = [];
+				dayAttend = event.attendance.daysAttended.map(d => {
+					return d.split("T")[0];
+				});
+
+				let status;
+				for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
+					if (
+						dayAttend.includes(
+							moment(new Date(d)).format("YYYY-MM-DD")
+						)
+					) {
+						status = "Present";
+					} else if (
+						!dayAttend.includes(
+							moment(new Date(d)).format("YYYY-MM-DD")
+						) &&
+						moment(new Date(d)).format("YYYY-MM-DD") <
+							moment(Date.now()).format("YYYY-MM-DD")
+					) {
+						status = "Absent";
+					} else if (
+						!dayAttend.includes(
+							moment(new Date(d)).format("YYYY-MM-DD")
+						)
+					) {
+						status = "Pending";
+					}
+					data.push({
+						status,
+						date: moment(new Date(d)).format("YYYY-MM-DD")
+					});
+				}
+				event.attendance.dayWiseAttendance = data;
+			});
+			return events;
+		}
+	};
 
 	return (
 		<>
@@ -37,8 +84,8 @@ const ParticipantsDetails = props => {
 							title={`${info.name} (${info.email})`}
 							description={
 								<>
-									<Icon type="phone" /> {info.phone}{" "}
-									<Icon type="info" /> {info.branch},
+									<PhoneOutlined /> {info.phone}{" "}
+									<InfoCircleOutlined /> {info.branch},{" "}
 									{info.year}
 								</>
 							}
@@ -61,7 +108,9 @@ const ParticipantsDetails = props => {
 								}
 							>
 								<p>
-									{event.details.title}{" "}
+									<span style={{ fontWeight: "700" }}>
+										{event.details.title}
+									</span>{" "}
 									<Tag>{event.status.toUpperCase()}</Tag>
 									<Tag
 										color={
@@ -86,6 +135,33 @@ const ParticipantsDetails = props => {
 									).toDateString()}{" "}
 									({event.details.venue})
 								</p>
+								<p style={{ fontWeight: "600" }}>Attendance</p>
+								<div style={{ display: "flex" }}>
+									{event.attendance.dayWiseAttendance &&
+										event.attendance.dayWiseAttendance.map(
+											(attendance, id) => {
+												return (
+													<Tag
+														key={id}
+														color={
+															attendance.status ===
+															"Pending"
+																? "#108ee9"
+																: attendance.status ===
+																  "Present"
+																? "#87d068"
+																: "#f50"
+														}
+													>
+														{moment(
+															attendance.date
+														).format("DD/MM/YYYY")}
+														- {attendance.status}
+													</Tag>
+												);
+											}
+										)}
+								</div>
 							</Timeline.Item>
 						))
 					) : (

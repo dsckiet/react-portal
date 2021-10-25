@@ -76,6 +76,7 @@ const UpdateEvent = props => {
 				maxRegister,
 				image
 			} = event;
+			console.log(event);
 
 			startDate = startDate.split("T")[0];
 			endDate = endDate.split("T")[0];
