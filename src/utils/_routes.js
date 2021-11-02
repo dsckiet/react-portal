@@ -2,7 +2,7 @@ import EventsList from "../components/Events/EventsList";
 import Dashboard from "../components/Layout/Dashboard";
 import TeamList from "../components/Team/TeamList";
 import ParticipantsList from "../components/Participants/ParticipantsList";
-//import AddCertificate from "./../components/Certificates/AddCertificate";
+import AddCertificate from "./../components/Certificates/AddCertificate";
 import Profile from "../components/Profile/Profile";
 import {
 	AiOutlineAppstore,
@@ -55,16 +55,16 @@ let routes = [
 		description: "List of all the members",
 		color: "#0F9D58"
 	},
-	// {
-	// 	path: "/certificate",
-	// 	exact: true,
-	// 	component: AddCertificate,
-	// 	name: "Certificates",
-	// 	key: "certificates",
-	// 	icon: "file",
-	// 	description: "Add certificates for Events",
-	// 	color: "#F4B400"
-	// },
+	{
+		path: "/certificate",
+		exact: true,
+		component: AddCertificate,
+		name: "Certificates",
+		key: "certificates",
+		icon: "file",
+		description: "Add certificates for Events",
+		color: "#F4B400"
+	},
 	// {
 	// 	path: "/groups",
 	// 	exact: true,
