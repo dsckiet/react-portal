@@ -10,9 +10,9 @@ import {
 	Divider,
 	Input,
 	Button,
-	Icon,
 	TreeSelect
 } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { _notification } from "./../../utils/_helpers";
 import {
@@ -49,7 +49,8 @@ const AddCertificate = props => {
 	const [eventID, setEventId] = useState(null);
 	const [isShown, setIsShown] = useState(false);
 	const [events, setEvents] = useState([]);
-	const { getFieldDecorator } = props.form;
+	const [formData, setFormData] = useState(null);
+	const [form] = Form.useForm();
 
 	useEffect(() => {
 		(async () => {
@@ -57,6 +58,7 @@ const AddCertificate = props => {
 			try {
 				const { data } = await getEventsService();
 				setEvents(data);
+				console.log(data);
 				setIsLoading(false);
 			} catch (err) {
 				_notification("warning", "Error", err.message);
@@ -117,90 +119,52 @@ const AddCertificate = props => {
 		}
 	};
 
-	const handlePreview = e => {
-		e.preventDefault();
+	const handlePreview = async values => {
 		setIsLoading(true);
-		props.form.validateFields(async (err, values) => {
-			if (!err) {
-				try {
-					const formData = new FormData();
-					formData.append("name", values.name);
-					formData.append("x", values.x);
-					formData.append("y", values.y);
-					formData.append("size", values.size);
-					formData.append("red", values.red);
-					formData.append("green", values.green);
-					formData.append("blue", values.blue);
-					formData.append(
-						"pdffile",
-						values.pdffile.file.originFileObj
-					);
-					formData.append(
-						"fontfile",
-						values.fontfile.file.originFileObj
-					);
 
-					await previewCertificateService(formData);
-					setIsShown(true);
-					setIsLoading(false);
-				} catch (error) {
-					_notification("error", "Error", error.message);
-					setIsLoading(false);
-				}
-			} else {
-				setIsLoading(false);
-			}
-		});
+		try {
+			const formDataa = new FormData();
+			formDataa.append("name", values.name);
+			formDataa.append("x", values.x);
+			formDataa.append("y", values.y);
+			formDataa.append("size", values.size);
+			formDataa.append("red", values.red);
+			formDataa.append("green", values.green);
+			formDataa.append("blue", values.blue);
+			formDataa.append("pdffile", values.pdffile.file.originFileObj);
+			formDataa.append("fontfile", values.fontfile.file.originFileObj);
+
+			await previewCertificateService(formDataa);
+			setFormData(formDataa);
+			setIsShown(true);
+			setIsLoading(false);
+		} catch (error) {
+			_notification("error", "Error", error.message);
+			setIsLoading(false);
+		}
 	};
 
-	const handleSubmit = e => {
-		e.preventDefault();
+	const handleSubmit = async () => {
 		setIsSubmitBtnLoading(true);
-		props.form.validateFields(async (err, values) => {
-			if (!err) {
-				try {
-					const formData = new FormData();
-					formData.append("name", values.name);
-					formData.append("x", values.x);
-					formData.append("y", values.y);
-					formData.append("size", values.size);
-					formData.append("red", values.red);
-					formData.append("green", values.green);
-					formData.append("blue", values.blue);
-					formData.append(
-						"pdffile",
-						values.pdffile.file.originFileObj
-					);
-					formData.append(
-						"fontfile",
-						values.fontfile.file.originFileObj
-					);
-
-					const res = await addCertificateService(formData, eventID);
-					if (res.message === "success") {
-						_notification(
-							"success",
-							"Success",
-							"Certificate Saved"
-						);
-						setTimeout(() => {
-							window.location.reload();
-						}, 200);
-					} else {
-						_notification("error", "Error", res.message);
-					}
-					setIsSubmitBtnLoading(false);
-				} catch (error) {
-					_notification("error", "Error", error.message);
-					setIsSubmitBtnLoading(false);
-				}
+		try {
+			const res = await addCertificateService(formData, eventID);
+			if (res.message === "success") {
+				_notification("success", "Success", "Certificate Saved");
+				setTimeout(() => {
+					window.location.reload();
+				}, 200);
 			} else {
-				setIsSubmitBtnLoading(false);
+				_notification("error", "Error", res.message);
 			}
-		});
+			setIsSubmitBtnLoading(false);
+		} catch (error) {
+			_notification("error", "Error", error.message);
+			setIsSubmitBtnLoading(false);
+		}
 	};
 
 	const handleChange = value => {
+		console.log(value);
 		setEventId(value);
 	};
 
@@ -215,181 +179,181 @@ const AddCertificate = props => {
 							Preview Certificate
 							<Divider style={{ marginTop: "10px" }} />
 						</Heading>
-						<Form onSubmit={handleSubmit} layout="vertical">
+						<Form
+							onFinish={handlePreview}
+							layout="vertical"
+							form={form}
+						>
 							<Row>
 								<Col
 									span={12}
 									style={{ height: "100% !important" }}
 								>
-									<Form.Item label="Upload Pdf">
-										{getFieldDecorator("pdffile", {
-											rules: [
-												{
-													required: true,
-													message:
-														"Please select pdf file"
-												}
-											]
-										})(
-											<Upload {...uploadprops}>
-												<p>Click to upload</p>
-											</Upload>
-										)}
+									<Form.Item
+										label="Upload Pdf"
+										name="pdffile"
+										rules={[
+											{
+												required: true,
+												message:
+													"Please select pdf file"
+											}
+										]}
+									>
+										<Upload {...uploadprops}>
+											<p>Click to upload</p>
+										</Upload>
 									</Form.Item>
 								</Col>
 								<Col span={12}>
-									<Form.Item label="Name">
-										{getFieldDecorator("name", {
-											// rules: [
-											// 	{
-											// 		required: true,
-											// 		message:
-											// 			"Please input name!"
-											// 	}
-											// ]
-										})(
-											<Input
-												type="text"
-												placeholder="Name"
-											/>
-										)}
+									<Form.Item
+										label="Name"
+										name="name"
+										rules={[
+											{
+												required: true,
+												message: "Please input name!"
+											}
+										]}
+									>
+										<Input type="text" placeholder="Name" />
 									</Form.Item>
 									<Row gutter={24}>
 										<Col span={12}>
-											<Form.Item label="X-axis">
-												{getFieldDecorator("x", {
-													rules: [
-														{
-															required: true,
-															message:
-																"Please input x-axis!"
-														}
-													]
-												})(
-													<Input
-														type="number"
-														placeholder="X"
-													/>
-												)}
-											</Form.Item>
-										</Col>
-										<Col span={12}>
-											<Form.Item label="Y-axis">
-												{getFieldDecorator("y", {
-													rules: [
-														{
-															required: true,
-															message:
-																"Please input y-axis!"
-														}
-													]
-												})(
-													<Input
-														type="number"
-														placeholder="Y"
-													/>
-												)}
-											</Form.Item>
-										</Col>
-									</Row>
-									<Form.Item label="Font size">
-										{getFieldDecorator("size", {
-											rules: [
-												{
-													required: true,
-													message:
-														"Please input font size!"
-												}
-											]
-										})(
-											<Input
-												type="number"
-												placeholder="Size"
-											/>
-										)}
-									</Form.Item>
-									<Row gutter={24}>
-										<Col span={8}>
-											<Form.Item label="Red">
-												{getFieldDecorator("red", {
-													rules: [
-														{
-															required: true,
-															message:
-																"Please input red value of RGB"
-														}
-													]
-												})(
-													<Input
-														type="number"
-														placeholder="Red"
-														min={0}
-														max={255}
-													/>
-												)}
-											</Form.Item>
-										</Col>
-										<Col span={8}>
-											<Form.Item label="Green">
-												{getFieldDecorator("green", {
-													rules: [
-														{
-															required: true,
-															message:
-																"Please input green value of RGB"
-														}
-													]
-												})(
-													<Input
-														type="number"
-														placeholder="Green"
-														min={0}
-														max={255}
-													/>
-												)}
-											</Form.Item>
-										</Col>
-										<Col span={8}>
-											<Form.Item label="Blue">
-												{getFieldDecorator("blue", {
-													rules: [
-														{
-															required: true,
-															message:
-																"Please input blue value of RGB"
-														}
-													]
-												})(
-													<Input
-														type="number"
-														placeholder="Blue"
-														min={0}
-														max={255}
-													/>
-												)}
-											</Form.Item>
-										</Col>
-									</Row>
-									<Form.Item label="Upload Font">
-										{getFieldDecorator("fontfile", {
-											rules: [
-												{
-													required: true,
-													message:
-														"Please select font file"
-												}
-											]
-										})(
-											<Upload
-												// listType="ttf"
-												{...fontprops}
+											<Form.Item
+												label="X-axis"
+												name="x"
+												rules={[
+													{
+														required: true,
+														message:
+															"Please input x-axis!"
+													}
+												]}
 											>
-												<Button type="primary">
-													<Icon type="upload" />
-													Upload
-												</Button>
-											</Upload>
-										)}
+												<Input
+													type="number"
+													placeholder="X"
+												/>
+											</Form.Item>
+										</Col>
+										<Col span={12}>
+											<Form.Item
+												label="Y-axis"
+												name="y"
+												rules={[
+													{
+														required: true,
+														message:
+															"Please input y-axis!"
+													}
+												]}
+											>
+												<Input
+													type="number"
+													placeholder="Y"
+												/>
+											</Form.Item>
+										</Col>
+									</Row>
+									<Form.Item
+										label="Font size"
+										name="size"
+										rules={[
+											{
+												required: true,
+												message:
+													"Please input font size!"
+											}
+										]}
+									>
+										<Input
+											type="number"
+											placeholder="Size"
+										/>
+									</Form.Item>
+									<Row gutter={24}>
+										<Col span={8}>
+											<Form.Item
+												label="Red"
+												name="red"
+												rules={[
+													{
+														required: true,
+														message:
+															"Please input red value of RGB"
+													}
+												]}
+											>
+												<Input
+													type="number"
+													placeholder="Red"
+													min={0}
+													max={255}
+												/>
+											</Form.Item>
+										</Col>
+										<Col span={8}>
+											<Form.Item
+												label="Green"
+												name="green"
+												rules={[
+													{
+														required: true,
+														message:
+															"Please input green value of RGB"
+													}
+												]}
+											>
+												<Input
+													type="number"
+													placeholder="Green"
+													min={0}
+													max={255}
+												/>
+											</Form.Item>
+										</Col>
+										<Col span={8}>
+											<Form.Item
+												label="Blue"
+												name="blue"
+												rules={[
+													{
+														required: true,
+														message:
+															"Please input blue value of RGB"
+													}
+												]}
+											>
+												<Input
+													type="number"
+													placeholder="Blue"
+													min={0}
+													max={255}
+												/>
+											</Form.Item>
+										</Col>
+									</Row>
+									<Form.Item
+										label="Upload Font"
+										name="fontfile"
+										rules={[
+											{
+												required: true,
+												message:
+													"Please select font file"
+											}
+										]}
+									>
+										<Upload
+											// listType="ttf"
+											{...fontprops}
+										>
+											<Button type="primary">
+												<UploadOutlined />
+												Upload
+											</Button>
+										</Upload>
 									</Form.Item>
 									<div
 										style={{
@@ -403,7 +367,8 @@ const AddCertificate = props => {
 											style={{
 												width: "100%"
 											}}
-											onClick={handlePreview}
+											// onClick={handlePreview}
+											htmlType="submit"
 										>
 											Preview
 										</CustomButton>
@@ -523,9 +488,9 @@ const AddCertificate = props => {
 									<Form.Item>
 										<Button
 											type="primary"
-											htmlType="submit"
-											className="login-form-button"
+											onClick={handleSubmit}
 											loading={isSubmitBtnLoading}
+											className="login-form-button"
 										>
 											Add Certificate
 										</Button>
@@ -540,8 +505,4 @@ const AddCertificate = props => {
 	);
 };
 
-const AddCertificateForm = Form.create({ name: "certificate_form" })(
-	AddCertificate
-);
-
-export default AddCertificateForm;
+export default AddCertificate;
