@@ -175,7 +175,7 @@ const CreateEvent = props => {
 			>
 				<RangePicker
 					style={{ width: "100%" }}
-					// disabledDate={disabledDate}
+					disabledDate={disabledDate}
 				/>
 			</Form.Item>
 
