@@ -102,6 +102,7 @@ export const resetPassService = async data => {
 
 /******************EVENT SERVICES********************/
 export async function getEventsService() {
+	setUserToken();
 	try {
 		const response = await axios.get(GET_EVENTS);
 		if (response.status === 200 && response.data.error === false) {
@@ -114,6 +115,7 @@ export async function getEventsService() {
 }
 
 export async function getEventService(id) {
+	setUserToken();
 	try {
 		const response = await axios.get(`${GET_EVENT}?eid=${id}`);
 		if (response.status === 200 && response.data.error === false) {

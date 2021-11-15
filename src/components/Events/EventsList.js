@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PageTitle from "../Layout/PageTitle";
 import EventOptions from "./EventOptions";
 import { Table, Divider, Tag, Card, Drawer, Popconfirm } from "antd";
-import Icon from "@ant-design/icons";
+import { RedoOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import "./style.css";
 import {
 	getEventsService,
@@ -148,7 +148,7 @@ const EventsList = props => {
 						okText="Yes"
 						cancelText="No"
 					>
-						<Icon type="redo" />
+						<RedoOutlined />
 					</Popconfirm>
 				</>
 			)
@@ -170,7 +170,7 @@ const EventsList = props => {
 							okText="Yes"
 							cancelText="No"
 						>
-							<Icon type="redo" />
+							<RedoOutlined />
 						</Popconfirm>
 					</>
 				);
@@ -181,6 +181,18 @@ const EventsList = props => {
 			dataIndex: "maxRegister",
 			key: "maxRegister",
 			className: "registrations"
+		},
+		{
+			title: "Total Registrations",
+			dataIndex: "totalRegistrations",
+			key: "totalRegistrations",
+			className: "registrations"
+		},
+		{
+			title: "Total RSVPs",
+			dataIndex: "totalRsvps",
+			key: "totalRsvps",
+			className: "rsvps"
 		},
 		{
 			title: "Registration",
@@ -208,7 +220,7 @@ const EventsList = props => {
 							setEventId(_id);
 						}}
 					>
-						<Icon type="edit" style={{ color: "#F4B400" }} />
+						<EditOutlined style={{ color: "#F4B400" }} />
 					</Link>
 					<Divider type="vertical" />
 					<Popconfirm
@@ -218,12 +230,14 @@ const EventsList = props => {
 						okText="Yes"
 						cancelText="No"
 					>
-						<Icon style={{ color: "#DB4437" }} type="delete" />
+						<DeleteOutlined style={{ color: "#DB4437" }} />
 					</Popconfirm>
 				</span>
 			)
 		}
 	];
+
+	console.log(events);
 
 	const data = events
 		? events.map((event, id) => {
@@ -237,7 +251,9 @@ const EventsList = props => {
 					code,
 					isRegistrationRequired,
 					isRegistrationOpened,
-					maxRegister
+					maxRegister,
+					registrations,
+					rsvps
 				} = event;
 				return {
 					index: ++id,
@@ -251,7 +267,9 @@ const EventsList = props => {
 					status: [isRegistrationOpened, _id],
 					reg: isRegistrationRequired,
 					action: _id,
-					maxRegister
+					maxRegister,
+					totalRegistrations: registrations,
+					totalRsvps: rsvps
 				};
 		  })
 		: null;

@@ -141,6 +141,17 @@ const ParticipantsOptions = props => {
 						>
 							<Option value="CSE">CSE</Option>
 							<Option value="IT">IT</Option>
+							<Option value="ME">ME</Option>
+							<Option value="CO">CO</Option>
+							<Option value="CSI">CSI</Option>
+							<Option value="ECE">ECE</Option>
+							<Option value="CI">CI</Option>
+							<Option value="EN">EN</Option>
+							<Option value="EI">EI</Option>
+							<Option value="MCA">MCA</Option>
+							<Option value="B.PHARMA">B.PHARMA</Option>
+							<Option value="M.PHARMA">M.PHARMA</Option>
+							<Option value="MBA">MBA</Option>
 						</Select>
 						<Divider type="vertical" />
 						<Select

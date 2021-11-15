@@ -17,6 +17,7 @@ import { AiOutlineLeft, AiOutlineLock, AiOutlineRight } from "react-icons/ai";
 import ManageGroups from "../Groups/ManageGroups";
 import ManageTasks from "../Tasks/ManageTasks";
 import Task from "../Tasks/Task";
+import AddCertificate from "./../Certificates/AddCertificate";
 
 const { Content, Sider } = Layout;
 
@@ -206,6 +207,12 @@ const Navigator = props => {
 								exact
 								path="/groups"
 								component={ManageGroups}
+								data={Creds}
+							/>
+							<PrivateRoute
+								exact
+								path="/certificate"
+								component={AddCertificate}
 								data={Creds}
 							/>
 							<PrivateRoute
