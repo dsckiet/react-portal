@@ -7,12 +7,13 @@ import Profile from "../components/Profile/Profile";
 import {
 	AiOutlineAppstore,
 	AiOutlineSmile,
-	AiOutlineTeam
-	//AiOutlineUsergroupAdd
+	AiOutlineTeam,
+	AiOutlineSafetyCertificate,
+	AiOutlineUsergroupAdd
 } from "react-icons/ai";
 import { MdEvent } from "react-icons/md";
 import { RiContactsLine } from "react-icons/ri";
-//import ManageGroups from "../components/Groups/ManageGroups";
+import ManageGroups from "../components/Groups/ManageGroups";
 
 let routes = [
 	{
@@ -61,20 +62,20 @@ let routes = [
 		component: AddCertificate,
 		name: "Certificates",
 		key: "certificates",
-		icon: "file",
+		icon: AiOutlineSafetyCertificate,
 		description: "Add certificates for Events",
 		color: "#F4B400"
 	},
-	// {
-	// 	path: "/groups",
-	// 	exact: true,
-	// 	component: ManageGroups,
-	// 	name: "Groups",
-	// 	key: "groups",
-	// 	icon: AiOutlineUsergroupAdd,
-	// 	description: "Manage Groups",
-	// 	color: "#DB4437"
-	// },
+	{
+		path: "/groups",
+		exact: true,
+		component: ManageGroups,
+		name: "Groups",
+		key: "groups",
+		icon: AiOutlineUsergroupAdd,
+		description: "Manage Groups",
+		color: "#DB4437"
+	},
 	{
 		path: "/profile",
 		exact: true,

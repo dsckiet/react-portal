@@ -23,6 +23,7 @@ const ManageTasks = props => {
 				if (!res.error && res.message === "success") {
 					setTaskData(res.data);
 				}
+				console.log(res);
 			} catch (err) {
 				console.log(err);
 			}

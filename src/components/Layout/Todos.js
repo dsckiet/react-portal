@@ -165,108 +165,103 @@ const Todos = () => {
 				<div>
 					{todos && todos.length > 0
 						? todos.map(todo => (
-								<>
-									<Row
-										key={todo._id}
-										style={
-											todo.status !== "pending"
-												? {
-														display: "flex",
-														flexDirection: "row",
-														overflowWrap:
-															"anywhere",
-														alignItems: "center",
-														margin: "5px 0px",
-														padding: "2px 5px",
-														borderRadius: "4px",
-														border: "1px solid rgb(24,144,255,0.3)",
-														backgroundColor:
-															"rgb(24,144,255,0.05)"
-												  }
-												: {
-														display: "flex",
-														flexDirection: "row",
-														overflowWrap:
-															"anywhere",
-														alignItems: "center",
-														margin: "5px 0px",
-														padding: "2px 5px",
-														borderRadius: "4px",
-														border: "1px solid rgb(191,191,191,.3)",
-														backgroundColor:
-															"rgb(191,191,191,.05)"
-												  }
-										}
-									>
-										<Col span={20}>
-											<Checkbox
-												style={{
+								<Row
+									key={todo._id}
+									style={
+										todo.status !== "pending"
+											? {
 													display: "flex",
 													flexDirection: "row",
 													overflowWrap: "anywhere",
 													alignItems: "center",
-													paddingBottom: "3px"
-												}}
-												checked={
+													margin: "5px 0px",
+													padding: "2px 5px",
+													borderRadius: "4px",
+													border: "1px solid rgb(24,144,255,0.3)",
+													backgroundColor:
+														"rgb(24,144,255,0.05)"
+											  }
+											: {
+													display: "flex",
+													flexDirection: "row",
+													overflowWrap: "anywhere",
+													alignItems: "center",
+													margin: "5px 0px",
+													padding: "2px 5px",
+													borderRadius: "4px",
+													border: "1px solid rgb(191,191,191,.3)",
+													backgroundColor:
+														"rgb(191,191,191,.05)"
+											  }
+									}
+								>
+									<Col span={20}>
+										<Checkbox
+											style={{
+												display: "flex",
+												flexDirection: "row",
+												overflowWrap: "anywhere",
+												alignItems: "center",
+												paddingBottom: "3px"
+											}}
+											checked={
+												todo.status === "complete"
+													? true
+													: false
+											}
+											onChange={() =>
+												handleTodoCompletion(todo)
+											}
+										>
+											<span
+												style={
 													todo.status === "complete"
-														? true
-														: false
-												}
-												onChange={() =>
-													handleTodoCompletion(todo)
+														? {
+																textDecoration:
+																	"line-through"
+														  }
+														: {}
 												}
 											>
-												<span
-													style={
-														todo.status ===
-														"complete"
-															? {
-																	textDecoration:
-																		"line-through"
-															  }
-															: {}
-													}
-												>
-													{todo.title}
-												</span>
-											</Checkbox>
-										</Col>
-										<Col span={2}>
-											<AiOutlineEdit
-												type="edit"
-												onClick={() => {
-													setVisible(true);
-													setEdit(todo);
-												}}
+												{todo.title}
+											</span>
+										</Checkbox>
+									</Col>
+									<Col span={2}>
+										<AiOutlineEdit
+											type="edit"
+											onClick={() => {
+												setVisible(true);
+												setEdit(todo);
+											}}
+											style={{
+												fontSize: "16px",
+												color: "#F4B400",
+												float: "right",
+												cursor: "pointer"
+											}}
+										/>
+									</Col>
+									<Col span={2}>
+										<Popconfirm
+											title="Do you want to delete this Todo ?"
+											onConfirm={() =>
+												handleDeleteTodo(todo)
+											}
+											okText="Yes"
+											cancelText="No"
+										>
+											<AiOutlineDelete
 												style={{
-													fontSize: "16px",
-													color: "#F4B400",
+													fonTSize: "16px",
+													color: "#DB4437",
 													float: "right",
 													cursor: "pointer"
 												}}
 											/>
-										</Col>
-										<Col span={2}>
-											<Popconfirm
-												title="Do you want to delete this Todo ?"
-												onConfirm={() =>
-													handleDeleteTodo(todo)
-												}
-												okText="Yes"
-												cancelText="No"
-											>
-												<AiOutlineDelete
-													style={{
-														fonTSize: "16px",
-														color: "#DB4437",
-														float: "right",
-														cursor: "pointer"
-													}}
-												/>
-											</Popconfirm>
-										</Col>
-									</Row>
-								</>
+										</Popconfirm>
+									</Col>
+								</Row>
 						  ))
 						: "No Todo"}
 				</div>
