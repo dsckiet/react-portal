@@ -3,6 +3,7 @@ import { Select, Input, Divider, TreeSelect, Row, Col } from "antd";
 import { getEventsService } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
 import styled from "styled-components";
+import { ReloadOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 const { TreeNode } = TreeSelect;
@@ -130,7 +131,12 @@ const ParticipantsOptions = props => {
 						allowClear
 					/>
 				</Col>
-				<Col span={12}>
+				<Col span={4} style={{ display: "flex", alignItems: "center" }}>
+					<ReloadOutlined
+						onClick={() => props.toggleRefresh(!props.refresh)}
+					/>
+				</Col>
+				<Col span={8}>
 					<Container>
 						<Select
 							placeholder="Branch"

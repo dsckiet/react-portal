@@ -270,6 +270,8 @@ const ParticipantsList = props => {
 					onQuery={handleQuery}
 					onBranchChange={handleBranchChange}
 					onYearChange={handleYearChange}
+					refresh={refresh}
+					toggleRefresh={toggleRefresh}
 				/>
 
 				<Card
