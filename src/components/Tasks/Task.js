@@ -21,8 +21,7 @@ const Task = () => {
 	const [userData] = useState(getRole());
 	const [assigneeData, setAssigneeData] = useState({});
 	const [refresh, setRefresh] = useState(false);
-
-	let info;
+	const [info, setInfo] = useState();
 
 	const handleShow = id => {
 		setId(id);
@@ -52,9 +51,16 @@ const Task = () => {
 		}
 	};
 
-	info = data.taskAssigneeData.filter(
-		assignee => assignee.userData[0]._id === userData.id
-	)[0];
+	useEffect(() => {
+		if (info) return;
+
+		setInfo(
+			data.taskAssigneeData.filter(
+				assignee => assignee.userData[0]._id === userData.id
+			)[0]
+		);
+		//eslint-disable-next-line
+	}, [info]);
 
 	useEffect(() => {
 		info &&
@@ -62,7 +68,6 @@ const Task = () => {
 				try {
 					const res = await getTaskAssignee(info._id);
 					if (!res.error && res.message === "success") {
-						console.log(res.data);
 						setAssigneeData(res.data);
 					}
 				} catch (err) {
@@ -70,7 +75,7 @@ const Task = () => {
 				}
 			})();
 		//eslint-disable-next-line
-	}, [refresh]);
+	}, [refresh, info]);
 
 	return (
 		<>
@@ -99,11 +104,11 @@ const Task = () => {
 					</div>
 				)}
 			</Row>
-			{
-				<Text code style={{ display: "flex", fontSize: "1.1rem" }}>
-					{data.description}
-				</Text>
-			}
+
+			<Text code style={{ display: "flex", fontSize: "1.1rem" }}>
+				{data.description}
+			</Text>
+
 			<br />
 			{(userData.role === "lead" ||
 				data.headIds.includes(userData.id)) && (

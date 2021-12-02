@@ -117,7 +117,7 @@ const ManageGroups = () => {
 	return (
 		<>
 			<PageTitle title="Groups" bgColor="#DB4437" />
-			{userData.role === "lead" ? (
+			{userData?.role === "lead" ? (
 				<>
 					<Tabs
 						defaultActiveKey="all"
@@ -127,7 +127,7 @@ const ManageGroups = () => {
 						<TabPane tab="All Groups" key="all">
 							<Row gutter={[16, 16]}>
 								{groups &&
-									groups[`All Groups`].map((info, idx) => (
+									groups[`All Groups`]?.map((info, idx) => (
 										<Col lg={6} key={idx}>
 											<GroupInfoCard
 												{...getInfoCardProps(info)}
@@ -147,7 +147,7 @@ const ManageGroups = () => {
 										)}
 									<Row gutter={[16, 16]}>
 										{groups &&
-											groups[`Head Groups`].map(
+											groups[`Head Groups`]?.map(
 												(info, idx) => (
 													<Col lg={6} key={idx}>
 														<GroupInfoCard
@@ -171,7 +171,7 @@ const ManageGroups = () => {
 
 									<Row gutter={[16, 16]}>
 										{groups &&
-											groups[`Member Groups`].map(
+											groups[`Member Groups`]?.map(
 												(info, idx) => (
 													<Col lg={6} key={idx}>
 														<GroupInfoCard
@@ -198,7 +198,7 @@ const ManageGroups = () => {
 						)}
 						<Row gutter={[16, 16]}>
 							{groups &&
-								groups[`Head Groups`].map((info, idx) => (
+								groups[`Head Groups`]?.map((info, idx) => (
 									<Col lg={6} key={idx}>
 										<GroupInfoCard
 											{...getInfoCardProps(info)}
@@ -208,14 +208,14 @@ const ManageGroups = () => {
 						</Row>
 					</>
 					<>
-						{groups && groups[`Member Groups`].length !== 0 && (
+						{groups && groups[`Member Groups`]?.length !== 0 && (
 							<Row style={{ marginTop: "16px" }}>
 								<h3>Member Groups</h3>
 							</Row>
 						)}
 						<Row gutter={[16, 16]}>
 							{groups &&
-								groups[`Member Groups`].map((info, idx) => (
+								groups[`Member Groups`]?.map((info, idx) => (
 									<Col lg={6} key={idx}>
 										<GroupInfoCard
 											{...getInfoCardProps(info)}

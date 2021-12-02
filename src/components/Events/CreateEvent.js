@@ -10,20 +10,27 @@ import {
 	Col,
 	Upload,
 	message,
-	InputNumber
+	InputNumber,
+	Modal
 } from "antd";
-import Icon from "@ant-design/icons";
+import { VerticalAlignTopOutlined } from "@ant-design/icons";
 import moment from "moment";
 import "./style.css";
 import { addEventService } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
+import ReactMarkdown from "react-markdown";
+
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
 const CreateEvent = props => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [fileList, setFileList] = useState(null);
+	const [mdx, setMdx] = useState("");
+	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [form] = Form.useForm();
+	const [title, setTitle] = useState("");
+	const [slug, setSlug] = useState("");
 
 	useEffect(() => {
 		form.setFieldsValue({
@@ -34,7 +41,7 @@ const CreateEvent = props => {
 
 	const uploadprops = {
 		name: "file",
-		action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
+		action: "https://www.api.dsckiet.com/dev",
 		headers: {
 			authorization: "authorization-text"
 		},
@@ -65,7 +72,8 @@ const CreateEvent = props => {
 				values.endTime.format("h:mm a");
 			const formData = new FormData();
 			formData.append("image", values.image.file.originFileObj);
-			formData.append("title", values.title);
+			formData.append("title", title);
+			formData.append("slug", slug);
 			formData.append("description", values.description);
 			formData.append("time", xtime);
 			formData.append("venue", values.venue);
@@ -102,169 +110,233 @@ const CreateEvent = props => {
 		}
 	};
 
+	const handlePreview = () => {
+		setIsModalVisible(!isModalVisible);
+	};
+
+	const slugify = text => {
+		return text
+			.replace(/ /g, "-")
+			.replace(/[^\w-]+/g, "-")
+			.replace(/-+/g, "-");
+	};
+
 	return (
-		<Form onFinish={handleSubmit} layout="vertical" form={form}>
-			<Form.Item
-				label="Event Title"
-				required
-				name="title"
-				rules={[
-					{
-						required: true,
-						message: "Please input event title!"
-					}
-				]}
-			>
-				<Input type="text" placeholder="Event title" />
-			</Form.Item>
-			<Form.Item
-				label="Description"
-				required
-				name="description"
-				rules={[
-					{
-						required: true,
-						message: "Please enter description!"
-					}
-				]}
-			>
-				<TextArea rows={4} placeholder="Enter event description" />
-			</Form.Item>
-			<Form.Item
-				label="Upload Picture"
-				required
-				name="image"
-				rules={[
-					{
-						required: true,
-						message: "Please select image!"
-					}
-				]}
-			>
-				<Upload {...uploadprops} fileList={fileList} listType="picture">
-					<Button>
-						<Icon type="upload" /> Click to Upload
-					</Button>
-				</Upload>
-			</Form.Item>
+		<>
+			<Form onFinish={handleSubmit} layout="vertical" form={form}>
+				{/* <Form.Item
+					label="Event Title"
+					required
+					name="title"
+					rules={[
+						{
+							required: true,
+							message: "Please input event title!"
+						}
+					]}
+				> */}
 
-			<Form.Item
-				label="Event Venue"
-				required
-				name="venue"
-				rules={[
-					{
-						required: true,
-						message: "Please input event venue!"
-					}
-				]}
-			>
-				<Input type="text" placeholder="Event venue" />
-			</Form.Item>
-
-			<Form.Item
-				label="Event Dates"
-				required
-				name="dates"
-				rules={[
-					{
-						required: true,
-						message: "Please select event dates!"
-					}
-				]}
-			>
-				<RangePicker
-					style={{ width: "100%" }}
-					disabledDate={disabledDate}
+				<Input
+					required
+					value={title ? title : ""}
+					type="text"
+					placeholder="Event title"
+					onChange={e => {
+						setTitle(e.target.value);
+						setSlug(slugify(e.target.value));
+					}}
+					style={{ marginBottom: "20px" }}
 				/>
-			</Form.Item>
-
-			<Row gutter={16}>
-				<Col span={12}>
-					<Form.Item
-						label="Start Time"
-						required
-						name="startTime"
-						rules={[
-							{
-								required: true,
-								message: "Please select event timings!"
-							}
-						]}
-					>
-						<TimePicker
-							use12Hours
-							format="h:mm a"
-							style={{ width: "100%" }}
-						/>
-					</Form.Item>
-				</Col>
-				<Col span={12}>
-					<Form.Item
-						label="End Time"
-						required
-						name="endTime"
-						rules={[
-							{
-								required: true,
-								message: "Please select event timings!"
-							}
-						]}
-					>
-						<TimePicker
-							use12Hours
-							format="h:mm a"
-							style={{ width: "100%" }}
-						/>
-					</Form.Item>
-				</Col>
-			</Row>
-
-			<Row gutter={16}>
-				<Col span={12}>
-					<Form.Item
-						valuePropName="checked"
-						name="isRegistrationRequired"
-					>
-						<Checkbox>Is Registration Required?</Checkbox>
-					</Form.Item>
-				</Col>
-				<Col span={12}>
-					<Checkbox.Group>
-						<Form.Item
-							name="isRegistrationCompleted"
-							valuePropName="checked"
-						>
-							<Checkbox>Is Registration Open?</Checkbox>
-						</Form.Item>
-					</Checkbox.Group>
-				</Col>
-			</Row>
-
-			<Form.Item
-				label="Max Registration"
-				name="maxRegister"
-				rules={[
-					{
-						required: true,
-						message: "Please enter maximum registrations."
-					}
-				]}
-			>
-				<InputNumber min={1} />
-			</Form.Item>
-
-			<Form.Item>
-				<Button
-					type="primary"
-					htmlType="submit"
-					className="login-form-button"
-					loading={isLoading}
+				{/* </Form.Item> */}
+				{/* <Form.Item
+					label="Event Slug"
+					required
+					name="slug"
+					rules={[
+						{
+							required: true,
+							message: "Please input event slug!"
+						}
+					]}
+				> */}
+				<Input
+					value={slug ? slug : ""}
+					type="text"
+					placeholder="Event slug"
+					onChange={e => setSlug(slugify(e.target.value))}
+					style={{ marginBottom: "20px" }}
+				/>
+				{/* </Form.Item> */}
+				<Form.Item
+					label="Description"
+					required
+					name="description"
+					rules={[
+						{
+							required: true,
+							message: "Please enter description!"
+						}
+					]}
 				>
-					Add Event
-				</Button>
-			</Form.Item>
-		</Form>
+					<TextArea
+						rows={4}
+						placeholder="Enter event description"
+						onChange={e => setMdx(e.target.value)}
+					/>
+				</Form.Item>
+				<Form.Item>
+					<Button type="primary" onClick={handlePreview}>
+						Preview Event
+					</Button>
+				</Form.Item>
+				<Form.Item
+					label="Upload Picture"
+					required
+					name="image"
+					rules={[
+						{
+							required: true,
+							message: "Please select image!"
+						}
+					]}
+				>
+					<Upload
+						{...uploadprops}
+						fileList={fileList}
+						listType="picture"
+					>
+						<Button>
+							<VerticalAlignTopOutlined /> Click to Upload
+						</Button>
+					</Upload>
+				</Form.Item>
+
+				<Form.Item
+					label="Event Venue"
+					required
+					name="venue"
+					rules={[
+						{
+							required: true,
+							message: "Please input event venue!"
+						}
+					]}
+				>
+					<Input type="text" placeholder="Event venue" />
+				</Form.Item>
+
+				<Form.Item
+					label="Event Dates"
+					required
+					name="dates"
+					rules={[
+						{
+							required: true,
+							message: "Please select event dates!"
+						}
+					]}
+				>
+					<RangePicker
+						style={{ width: "100%" }}
+						disabledDate={disabledDate}
+					/>
+				</Form.Item>
+
+				<Row gutter={16}>
+					<Col span={12}>
+						<Form.Item
+							label="Start Time"
+							required
+							name="startTime"
+							rules={[
+								{
+									required: true,
+									message: "Please select event timings!"
+								}
+							]}
+						>
+							<TimePicker
+								use12Hours
+								format="h:mm a"
+								style={{ width: "100%" }}
+							/>
+						</Form.Item>
+					</Col>
+					<Col span={12}>
+						<Form.Item
+							label="End Time"
+							required
+							name="endTime"
+							rules={[
+								{
+									required: true,
+									message: "Please select event timings!"
+								}
+							]}
+						>
+							<TimePicker
+								use12Hours
+								format="h:mm a"
+								style={{ width: "100%" }}
+							/>
+						</Form.Item>
+					</Col>
+				</Row>
+
+				<Row gutter={16}>
+					<Col span={12}>
+						<Form.Item
+							valuePropName="checked"
+							name="isRegistrationRequired"
+						>
+							<Checkbox>Is Registration Required?</Checkbox>
+						</Form.Item>
+					</Col>
+					<Col span={12}>
+						<Checkbox.Group>
+							<Form.Item
+								name="isRegistrationCompleted"
+								valuePropName="checked"
+							>
+								<Checkbox>Is Registration Open?</Checkbox>
+							</Form.Item>
+						</Checkbox.Group>
+					</Col>
+				</Row>
+
+				<Form.Item
+					label="Max Registration"
+					name="maxRegister"
+					rules={[
+						{
+							required: true,
+							message: "Please enter maximum registrations."
+						}
+					]}
+				>
+					<InputNumber min={1} />
+				</Form.Item>
+
+				<Form.Item>
+					<Button
+						type="primary"
+						htmlType="submit"
+						className="login-form-button"
+						loading={isLoading}
+					>
+						Add Event
+					</Button>
+				</Form.Item>
+			</Form>
+			<Modal
+				title="Desription Preview"
+				visible={isModalVisible}
+				footer={null}
+				onCancel={() => setIsModalVisible(!isModalVisible)}
+			>
+				<ReactMarkdown>{mdx}</ReactMarkdown>
+			</Modal>
+		</>
 	);
 };
 

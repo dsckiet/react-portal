@@ -89,8 +89,7 @@ const Navigator = props => {
 						{routes.map(route => {
 							if (
 								Creds.role === "member" &&
-								(route.key === "participants" ||
-									route.key === "groups")
+								route.key === "participants"
 							) {
 								return null;
 							} else {

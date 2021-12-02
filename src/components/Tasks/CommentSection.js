@@ -30,19 +30,21 @@ const CommentSection = ({ details }) => {
 	};
 
 	useEffect(() => {
-		(async () => {
-			try {
-				const res = await getCommentService(details._id);
-				setUser((await getUserService(userData.id)).data);
-				if (!res.error && res.message === "success") {
-					setComments(res.data);
+		details &&
+			(async () => {
+				try {
+					const res = await getCommentService(details._id);
+					console.log(res.data);
+					setUser((await getUserService(userData.id)).data);
+					if (!res.error && res.message === "success") {
+						setComments(res.data);
+					}
+				} catch (err) {
+					console.log(err);
 				}
-			} catch (err) {
-				console.log(err);
-			}
-		})();
+			})();
 		//eslint-disable-next-line
-	}, [refresh]);
+	}, [refresh, details]);
 
 	const onSubmit = async val => {
 		let data = { text: val.comment };
@@ -59,7 +61,7 @@ const CommentSection = ({ details }) => {
 
 	return (
 		<div className="comment-section-container">
-			{comments.map((comment, id) => (
+			{comments?.map((comment, id) => (
 				<div key={id}>
 					<Comment
 						className={`comment-container ${

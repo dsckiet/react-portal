@@ -11,9 +11,11 @@ import {
 	Skeleton,
 	Upload,
 	message,
-	InputNumber
+	InputNumber,
+	Modal
 } from "antd";
 import Icon from "@ant-design/icons";
+import ReactMarkdown from "react-markdown";
 import moment from "moment";
 
 import "./style.css";
@@ -25,13 +27,20 @@ const { RangePicker } = DatePicker;
 const UpdateEvent = props => {
 	const format = "h:mm a";
 	const [event, setEvent] = useState(null);
+	const [mdx, setMdx] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const [showSkeleton, setShowSkeleton] = useState(false);
 	const [fileList, setFileList] = useState(null);
 	const [form] = Form.useForm();
+	const [isModalVisible, setIsModalVisible] = useState(false);
+
+	const handlePreview = () => {
+		setIsModalVisible(!isModalVisible);
+	};
+
 	const uploadprops = {
 		name: "file",
-		action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
+		action: "https://www.api.dsckiet.com/dev",
 		headers: {
 			authorization: "authorization-text"
 		},
@@ -80,6 +89,8 @@ const UpdateEvent = props => {
 
 			startDate = startDate.split("T")[0];
 			endDate = endDate.split("T")[0];
+
+			setMdx(description);
 
 			form.setFieldsValue({
 				startTime: moment(time.split(" to ")[0], format),
@@ -182,7 +193,16 @@ const UpdateEvent = props => {
 						}
 					]}
 				>
-					<TextArea rows={4} placeholder="Enter event description" />
+					<TextArea
+						rows={4}
+						placeholder="Enter event description"
+						onChange={e => setMdx(e.target.value)}
+					/>
+				</Form.Item>
+				<Form.Item>
+					<Button type="primary" onClick={handlePreview}>
+						Preview Event
+					</Button>
 				</Form.Item>
 
 				{event ? (
@@ -336,16 +356,26 @@ const UpdateEvent = props => {
 				</Form.Item>
 
 				<Form.Item>
-					<Button
-						type="primary"
-						htmlType="submit"
-						className="login-form-button"
-						loading={isLoading}
-					>
-						Modify Event Details
-					</Button>
+					<Form.Item>
+						<Button
+							type="primary"
+							htmlType="submit"
+							className="login-form-button"
+							loading={isLoading}
+						>
+							Add Event
+						</Button>
+					</Form.Item>
 				</Form.Item>
 			</Form>
+			<Modal
+				title="Desription Preview"
+				visible={isModalVisible}
+				footer={null}
+				onCancel={() => setIsModalVisible(!isModalVisible)}
+			>
+				<ReactMarkdown>{mdx}</ReactMarkdown>
+			</Modal>
 		</Skeleton>
 	);
 };
