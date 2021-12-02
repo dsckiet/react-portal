@@ -148,6 +148,7 @@ const UpdateEvent = props => {
 				values.isRegistrationOpened
 			);
 			formData.append("maxRegister", values.maxRegister);
+			formData.append("slug", slugify(event.slug));
 
 			let params = props.eventId;
 			console.log(formData, "yeh h final");
@@ -164,6 +165,13 @@ const UpdateEvent = props => {
 			_notification("error", "Error", err.message);
 			setIsLoading(false);
 		}
+	};
+
+	const slugify = text => {
+		return text
+			.replace(/ /g, "-")
+			.replace(/[^\w-]+/g, "-")
+			.replace(/-+/g, "-");
 	};
 
 	return (
@@ -363,7 +371,7 @@ const UpdateEvent = props => {
 							className="login-form-button"
 							loading={isLoading}
 						>
-							Add Event
+							Update Event
 						</Button>
 					</Form.Item>
 				</Form.Item>
