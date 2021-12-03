@@ -186,6 +186,29 @@ const UpdateEvent = props => {
 					marginTop: "12px"
 				}}
 			/>
+		),
+		h2: ({ node }) => (
+			<h2
+				style={{
+					fontSize: "28px",
+					fontWeight: "600",
+					textTransform: "capitalize",
+					marginTop: "24px",
+					color: "rgba(0, 0, 0, 0.65)"
+				}}
+			>
+				{node.children[0].value}
+			</h2>
+		),
+		h3: ({ node }) => (
+			<h3
+				style={{
+					color: "rgba(0, 0, 0, 0.65)",
+					fontWeight: 600
+				}}
+			>
+				{node.children[0].value}
+			</h3>
 		)
 	};
 
