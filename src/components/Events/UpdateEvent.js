@@ -174,6 +174,21 @@ const UpdateEvent = props => {
 			.replace(/-+/g, "-");
 	};
 
+	const renderers = {
+		img: ({ alt, src, title }) => (
+			<img
+				alt={alt}
+				src={src}
+				title={title}
+				style={{
+					maxWidth: "100%",
+					borderRadius: "8px",
+					marginTop: "12px"
+				}}
+			/>
+		)
+	};
+
 	return (
 		<Skeleton loading={showSkeleton} active>
 			<Form onFinish={handleSubmit} layout="vertical" form={form}>
@@ -382,7 +397,7 @@ const UpdateEvent = props => {
 				footer={null}
 				onCancel={() => setIsModalVisible(!isModalVisible)}
 			>
-				<ReactMarkdown>{mdx}</ReactMarkdown>
+				<ReactMarkdown components={renderers}>{mdx}</ReactMarkdown>
 			</Modal>
 		</Skeleton>
 	);
