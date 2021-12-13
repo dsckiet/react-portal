@@ -46,7 +46,10 @@ const EditTodoModal = ({
 	const handleEditTodo = async data => {
 		if (!data || data.length < 7) return;
 		try {
-			const res = await editTodo(todo._id, { title: data });
+			const res = await editTodo(todo._id, {
+				title: data,
+				status: todo.status
+			});
 			if (!res.error && res.message === "success") {
 				handleVisible(!visible);
 				setRefresh(!refresh);

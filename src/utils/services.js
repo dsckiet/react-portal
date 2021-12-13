@@ -342,8 +342,7 @@ export const updateTodo = async (id, data) => {
 export const editTodo = async (id, data) => {
 	setUserToken();
 	try {
-		deleteTodo(id);
-		const response = await axios.post(ADD_TODO, data);
+		const response = await axios.put(`${UPDATE_TODO}/${id}`, data);
 		if (response.status === 200 && response.data.error === false) {
 			return response.data;
 		} else return response.data;
