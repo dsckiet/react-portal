@@ -104,7 +104,7 @@ const EditTodoModal = ({
 						<SaveButton
 							type="primary"
 							htmlType="submit"
-							onClick={e => handleEditTodo(e.target.value)}
+							onClick={e => handleEditTodo(data)}
 						>
 							Save
 						</SaveButton>
