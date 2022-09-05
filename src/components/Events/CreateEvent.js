@@ -15,6 +15,7 @@ import {
 } from "antd";
 import { VerticalAlignTopOutlined } from "@ant-design/icons";
 import moment from "moment";
+import gfm from "remark-gfm";
 import "./style.css";
 import { addEventService } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
@@ -349,7 +350,9 @@ const CreateEvent = props => {
 				footer={null}
 				onCancel={() => setIsModalVisible(!isModalVisible)}
 			>
-				<ReactMarkdown components={renderers}>{mdx}</ReactMarkdown>
+				<ReactMarkdown remarkPlugins={[gfm]} components={renderers}>
+					{mdx}
+				</ReactMarkdown>
 			</Modal>
 		</>
 	);

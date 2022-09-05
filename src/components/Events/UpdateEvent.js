@@ -17,7 +17,7 @@ import {
 import Icon from "@ant-design/icons";
 import ReactMarkdown from "react-markdown";
 import moment from "moment";
-
+import gfm from "remark-gfm";
 import "./style.css";
 import { getEventService, updateEventService } from "../../utils/services";
 import { _notification } from "../../utils/_helpers";
@@ -420,7 +420,9 @@ const UpdateEvent = props => {
 				footer={null}
 				onCancel={() => setIsModalVisible(!isModalVisible)}
 			>
-				<ReactMarkdown components={renderers}>{mdx}</ReactMarkdown>
+				<ReactMarkdown remarkPlugins={[gfm]} components={renderers}>
+					{mdx}
+				</ReactMarkdown>
 			</Modal>
 		</Skeleton>
 	);
