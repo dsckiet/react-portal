@@ -4,7 +4,7 @@ import routes from "../../utils/_routes";
 import { getRole } from "../../utils/services";
 import { Switch, Link, Redirect } from "react-router-dom";
 import logo from "../../utils/assets/images/logo-white.svg";
-import logoCollapse from "../../utils/assets/images/logo_collapse.svg";
+import logoCollapse from "../../utils/assets/images/logo_collapse.png";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import styled from "styled-components";
 import PrivateRoute from "./PrivateRoute";
@@ -74,7 +74,8 @@ const Navigator = props => {
 						<img
 							onClick={() => setIsCollapsed(!isCollapsed)}
 							src={isCollapsed ? logoCollapse : logo}
-							width={`${isCollapsed ? "80" : "160"}`}
+							width={`${isCollapsed ? "90" : "200"}`}
+							height={`${isCollapsed ? "60" : "80"}`}
 							style={{ padding: "12px 24px", cursor: "pointer" }}
 							alt=""
 						/>

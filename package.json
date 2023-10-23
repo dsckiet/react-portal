@@ -27,6 +27,7 @@
 	},
 	"scripts": {
 		"start": "react-scripts start",
+		"start-dev":"react-scripts --openssl-legacy-provider start",
 		"build": "react-scripts build",
 		"deploy": "react-scripts build && cp _redirects ./build && netlify deploy --prod",
 		"test": "react-scripts test",
@@ -62,7 +63,23 @@
 			"name": "Aniket Padmaansh",
 			"email": "pudmaansh@gmail.com",
 			"url": "https://github.com/padmansh"
+		},
+		{
+			"name": "Akhil Raj Srivastava",
+			"email": "akhilrajsrivastava.lko@gmail.com",
+			"url": "https://github.com/geekCoderRaj"
+		},
+		{
+			"name": "Ananya Punia",
+			"email": "ananyapunia12@gmail.com",
+			"url": "https://github.com/ananyapunia28"
+		},
+		{
+			"name": "Harshit ai",
+			"email": "1012harshit@gmail.com",
+			"url": "https://github.com/Harshitr10"
 		}
+		
 	],
 	"license": "MIT",
 	"bugs": {

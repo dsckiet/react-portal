@@ -61,8 +61,8 @@ const ForgotPassword = props => {
 		<div style={{ height: "100vh", overflow: "hidden" }}>
 			<img
 				src={logo}
-				width={160}
-				height={27.23}
+				width={320}
+				height={160}
 				className="vidgyor-logo"
 				alt=""
 			/>
