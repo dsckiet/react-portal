@@ -146,18 +146,16 @@ const ParticipantsOptions = props => {
 							allowClear
 						>
 							<Option value="CSE">CSE</Option>
+							<Option value="CS">CS</Option>
 							<Option value="IT">IT</Option>
-							<Option value="ME">ME</Option>
-							<Option value="CO">CO</Option>
-							<Option value="CSI">CSI</Option>
+							<Option value="CSAI">CSAI</Option>
+							<Option value="CSIT">CSIT</Option>
+							<Option value="CSAI&ML">CSAI&ML</Option>
 							<Option value="ECE">ECE</Option>
-							<Option value="CI">CI</Option>
 							<Option value="EN">EN</Option>
-							<Option value="EI">EI</Option>
+							<Option value="ME">ME</Option>
+							<Option value="Civil">Civil</Option>
 							<Option value="MCA">MCA</Option>
-							<Option value="B.PHARMA">B.PHARMA</Option>
-							<Option value="M.PHARMA">M.PHARMA</Option>
-							<Option value="MBA">MBA</Option>
 						</Select>
 						<Divider type="vertical" />
 						<Select

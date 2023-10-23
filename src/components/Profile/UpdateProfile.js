@@ -359,14 +359,16 @@ const UpdateProfile = props => {
 					<Col xs={10} sm={24} md={12} lg={12}>
 						<Form.Item label="Branch" required name="branch">
 							<Select placeholder="Select Branch">
+								<Option value="CSE">CSE</Option>
 								<Option value="CS">CS</Option>
-								<Option value="CO">CO</Option>
 								<Option value="IT">IT</Option>
-								<Option value="CSI">CSI</Option>
-								<Option value="EC">EC</Option>
-								<Option value="ME">ME</Option>
+								<Option value="CSAI">CSAI</Option>
+								<Option value="CSIT">CSIT</Option>
+								<Option value="CSAI&ML">CSAI&ML</Option>
+								<Option value="ECE">ECE</Option>
 								<Option value="EN">EN</Option>
-								<Option value="CE">CE</Option>
+								<Option value="ME">ME</Option>
+								<Option value="Civil">Civil</Option>
 								<Option value="MCA">MCA</Option>
 							</Select>
 						</Form.Item>
