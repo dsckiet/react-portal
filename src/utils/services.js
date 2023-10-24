@@ -43,7 +43,9 @@ import {
 	UPDATE_TASK
 } from "./routes";
 
-const BASE_URL = "https://api.dsckiet.com/prod";
+const BASE_URL = window.location.host === "events.dsckiet.com"
+		? "https://api.dsckiet.com/prod"
+		: "https://api.dsckiet.com/dev";
 axios.defaults.baseURL = BASE_URL;
 
 function setUserToken(token) {
