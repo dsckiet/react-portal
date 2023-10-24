@@ -43,8 +43,7 @@ import {
 	UPDATE_TASK
 } from "./routes";
 
-const BASE_URL =
-	window.location.host === "portal.dsckiet.com"
+const BASE_URL = window.location.host === "events.dsckiet.com"
 		? "https://api.dsckiet.com/prod"
 		: "https://api.dsckiet.com/dev";
 axios.defaults.baseURL = BASE_URL;
